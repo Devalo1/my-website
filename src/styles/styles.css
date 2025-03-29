@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lupul și Corbul - Prăjituri & Suplimente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #fff8f0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            height: 400px;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        header video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        header h1, header p, .menu-toggle {
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            margin: 0;
+            padding: 1rem;
+            font-size: 3rem;
+        }
+
+        header p {
+            margin: 0;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .menu-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background-color: #8b5a2b;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav.active {
+            display: block;
+        }
+
+        /* Sectiuni principale */
+        .hero {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .section {
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+        }
+
+        /* Sectiune ONG */
+        .ong {
+            background-color: #f5e6d3;
+            text-align: center;
+        }
+
+        /* Terapie */
+        .terapie {
+            background-color: #e8d5c4;
+            padding: 2rem;
+        }
+
+        /* Produse */
+        .produse-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .produs-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .produs-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Formular */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #6b4423;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Efecte generale de interactivitate */
+        button, .produs-card, nav a {
+            transition: all 0.3s ease-in-out;
+            transform-origin: center;
+        }
+
+        /* Iluminare la hover */
+        button:hover, .produs-card:hover, nav a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(107, 68, 35, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* Efect special pentru butoane */
+        button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        button:hover::after {
+            opacity: 0.4;
+        }
+
+        /* Animatie la click */
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Focus vizual pentru accesibilitate */
+        button:focus, input:focus, textarea:focus {
+            outline: 2px solid #8b5a2b;
+            outline-offset: 2px;
+        }
+
+        /* Efect special pentru carduri */
+        .produs-card:hover {
+            border: 1px solid #8b5a2b;
+        }
+
+        /* Adaptare pentru mobile (touch) */
+        @media (max-width: 768px) {
+            button:active, .produs-card:active {
+                transform: scale(0.95);
+                filter: brightness(0.95);
+            }
+            
+            /* Umbră mai vizibilă pe mobile */
+            .produs-card {
+                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            }
+        }
+
+        /* Mobile First Adjustments */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 0.5rem;
+                text-align: center;
+                display: none; /* Ascunde meniul pe mobile inițial */
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+                background: #8b5a2b;
+                color: white;
+                border: none;
+                padding: 1rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .hero {
+                height: 300px;
+                padding: 1rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .produse-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .produs-card {
+                margin: 0.5rem 0;
+            }
+
+            .contact-form {
+                padding: 1rem;
+            }
+
+            input, textarea {
+                font-size: 16px; /* Mărește pentru a preveni zoom-ul automat */
+            }
+
+            button {
+                padding: 12px 24px; /* Face butoanele mai mari pentru atingere */
+            }
+        }
+
+        /* Optimizări pentru ecrane foarte mici */
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .terapie h2 {
+                font-size: 1.3rem;
+            }
+
+            footer p {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Meniu hamburger */
+        .menu-toggle {
+            display: none; /* Ascunde inițial */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <video autoplay muted loop>
+            <source src="images/background.mov" type="video/mp4">
+            Browserul tău nu suportă elementul video.
+        </video>
+        <h1>Lupul și Corbul</h1>
+        <p>Prăjituri artizanale & Suplimente naturale</p>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </header>
+
+    <nav id="main-nav">
+        <a href="#acasa">Acasă</a>
+        <a href="#produse">Produse</a>
+        <a href="#ong">Făuritorii de Destin</a>
+        <a href="#terapie">Terapie Personalizată</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h2>Prăjituri coapte cu dragoste</h2>
+            <button>Comandă acum</button>
+        </div>
+    </section>
+
+    <!-- Sectiune Produse -->
+    <section id="produse" class="section">
+        <h2>Produsele noastre</h2>
+        <div class="produse-grid">
+            <div class="produs-card">
+                <h3>Prăjituri tradiționale</h3>
+                <p>Descriere produs...</p>
+                <p class="pret">25 RON</p>
+            </div>
+            <!-- Repeta pentru alte produse -->
+        </div>
+    </section>
+
+    <!-- Sectiune ONG -->
+    <section id="ong" class="section ong">
+        <h2>Făuritorii de Destin</h2>
+        <p>Misiunea noastră este să... Lorem ipsum dolor sit amet</p>
+        <button>Află mai multe</button>
+    </section>
+
+    <!-- Terapie Personalizată -->
+    <section id="terapie" class="section terapie">
+        <h2>Terapie Personalizată</h2>
+        <p>Oferim consultanță nutrițională și suport emotional</p>
+        <div class="contact-form">
+            <form>
+                <input type="text" placeholder="Nume">
+                <input type="email" placeholder="Email">
+                <input type="tel" placeholder="Telefon">
+                <textarea placeholder="Mesajul tău"></textarea>
+                <button type="submit">Trimite cerere</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <footer id="contact">
+        <h3>Contact</h3>
+        <p>Adresă: Strada Exemplu nr. 1, București</p>
+        <p>Telefon: 0722 000 000</p>
+        <div class="social">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>© 2023 Lupul și Corbul. Toate drepturile rezervate.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('main-nav');
+            nav.classList.toggle('active');
+        }
+
+        // Închide meniul la click în afara lui
+        document.addEventListener('click', function(event) {
+            const nav = document.getElementById('main-nav');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+                nav.classList.remove('active');
+            }
+        });
+
+        // Adaptare automata dimensiune text
+        function adjustFontSize() {
+            const viewportWidth = window.innerWidth;
+            const baseSize = viewportWidth < 480 ? 14 : 16;
+            document.documentElement.style.fontSize = baseSize + 'px';
+        }
+
+        window.addEventListener('resize', adjustFontSize);
+        adjustFontSize(); // Inițializează
+
+        // Efect sonor optional la click (adaugă un fișier audio 'click.mp3' în folderul 'sounds')
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('click', () => {
+                const audio = new Audio('sounds/click.mp3');
+                audio.volume = 0.3;
+                audio.play().catch(e => console.log("Eroare redare sunet"));
+            });
+            
+            // Feedback vizual la touch
+            element.addEventListener('touchstart', function() {
+                this.classList.add('touched');
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.classList.remove('touched');
+            });
+        });
+    </script>
+</body>
+</html>/* ...existing code... */
+
+/* Mobile First Adjustments */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        padding: 0.5rem;
+        text-align: center;
+        display: none; /* Ascunde meniul pe mobile inițial */
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+        background: #8b5a2b;
+        color: white;
+        border: none;
+        padding: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .hero {
+        height: 300px;
+        padding: 1rem;
+    }
+
+    .hero h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .section {
+        padding: 2rem 1rem;
+    }
+
+    .produse-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .produs-card {
+        margin: 0.5rem 0;
+    }
+
+    .contact-form {
+        padding: 1rem;
+    }
+
+    input, textarea {
+        font-size: 16px; /* Mărește pentru a preveni zoom-ul automat */
+    }
+
+    button {
+        padding: 12px 24px; /* Face butoanele mai mari pentru atingere */
+    }
+}
+
+/* Optimizări pentru ecrane foarte mici */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+
+    .terapie h2 {
+        font-size: 1.3rem;
+    }
+
+    footer p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Meniu hamburger */
+.menu-toggle {
+    display: none; /* Ascunde inițial */
+}

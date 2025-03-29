@@ -1,0 +1,201 @@
+/* Core Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  /* Vom elimina încărcarea imaginii de fundal de aici și o vom face în componenta React */
+  background-color: #121212; /* Backup color if image fails to load */
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header and Navigation */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+@media (min-width: 768px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+nav {
+  width: 100%;
+  margin-top: 15px;
+}
+
+@media (min-width: 768px) {
+  nav {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  nav ul {
+    flex-direction: row;
+  }
+}
+
+nav ul li {
+  margin: 5px 0;
+}
+
+@media (min-width: 768px) {
+  nav ul li {
+    margin: 0 15px;
+  }
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+  display: block;
+  padding: 5px 0;
+}
+
+nav ul li a:hover {
+  color: #646cff;
+}
+
+nav ul li.active a {
+  color: #646cff;
+  font-weight: bold;
+}
+
+/* Main Content */
+main {
+  min-height: 500px;
+  padding: 20px 0;
+}
+
+/* Page Styles */
+.acasa-page,
+.terapia-page,
+.consiliere-page,
+.contact-page,
+.lupul-si-corbul-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+  color: #666;
+}
+
+/* Add responsive styles */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+  }
+  
+  nav ul li {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* App Styles */
+.App {
+  text-align: center;
+  height: 100vh;
+  color: white;
+  position: relative;
+}
+
+.content {
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin: 50px auto;
+  max-width: 800px;
+}
+
+/* Background styles */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}

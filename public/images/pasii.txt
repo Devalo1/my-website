@@ -1,0 +1,60 @@
+PAȘI PENTRU REZOLVAREA PROBLEMELOR CU MENIUL MOBIL - VERSIUNEA 3.0
+==================================================================
+
+IMPORTANT: Acest script acum va funcționa DOAR pe dispozitive mobile, 
+nu va afecta în niciun fel experiența pe desktop.
+
+1. ÎNLOCUIȚI conținutul fișierului auto-inject.js cu versiunea nouă (V3.0)
+   furnizată - acum optimizată pentru a funcționa DOAR pe mobil.
+
+2. În FIECARE fișier HTML, asigurați-vă că:
+   
+   a) Prima linie după <head> este:
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+   b) A doua linie este:
+      <script src="auto-inject.js"></script>
+   
+   c) ȘTERGEȚI COMPLET următoarele elemente când le găsiți:
+      - <style id="emergency-mobile-menu-styles">...</style>
+      - <script id="emergency-mobile-menu-script">...</script>
+      - <script src="mobile-force.js"></script>
+
+3. VERIFICAȚI că aceste fișiere imagine există:
+   - images/Logo.png (pentru logo-ul din centru)
+   - images/profi.png (pentru butonul de profil)
+   - images/bag.png (pentru butonul de coș)
+
+4. TESTARE:
+   - Pe DESKTOP: Asigurați-vă că site-ul arată normal, fără meniu duplicat
+   - Pe MOBIL sau simulare mobilă (F12 apoi Ctrl+Shift+M în browser):
+     - Verificați că butonul hamburger apare în stânga sus
+     - Verificați că logo-ul apare în centru
+     - Verificați că butoanele de profil și coș apar în dreapta sus
+     - Verificați că meniul se deschide când apăsați butonul hamburger
+
+Exemplu corect de implementare în HTML:
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="auto-inject.js"></script>
+    
+    <!-- Restul stilurilor și scripturilor -->
+    <title>Pagina ta</title>
+    <link rel="stylesheet" href="styles.css">
+    ...
+</head>
+<body>
+    <!-- Păstrați header-ul original pentru desktop -->
+    <header>...</header>
+    
+    <!-- Restul conținutului paginii -->
+    ...
+</body>
+</html>
+
+NOTĂ: Scriptul va detecta automat când este pe mobil și va injecta 
+interfața mobilă DOAR în acel caz, păstrând experiența desktop intactă.
