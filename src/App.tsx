@@ -31,4 +31,8 @@ const App: React.FC = () => {
   );
 };
 
+// Asigură-te că toate căile încep cu '/my-website/'
+// Exemplu: în loc de <img src="/imagini/poza.jpg" />
+// folosește <img src="/my-website/imagini/poza.jpg" />
+
 export default App;
