@@ -1,22 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+// filepath: c:\Proiect\my-website\vite.config.tsx
+import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+  base: '/my-website/',
+  server: {
+    port: 3000,
   },
-  // Asigură-te că Vite prioritizează fișierele .tsx
-  build: {
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-      },
-    },
-  },
-})
+});
