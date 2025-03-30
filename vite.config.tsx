@@ -3,12 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/my-website/',
+  base: '/my-website/', // Setează baza pentru GitHub Pages
   server: {
     port: 3000,
   },
   build: {
-    assetsInclude: ['**/*.jpg', '**/*.jpeg'], // Include fișierele JPG/JPEG
     rollupOptions: {
       input: {
         main: './index.html', // Asigură-te că index.html este punctul de intrare
