@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react';
 import './styles/styles.css'; // Importă fișierul CSS
 
-// Obține baza URL pentru resurse
-const getBasePath = () => {
-  // În producție, folosește calea de bază definită în Vite
-  if (import.meta.env.PROD) {
-    return import.meta.env.BASE_URL;
-  }
-  // În dezvoltare, folosim root path
-  return '/';
+// Definim o funcție auxiliară pentru a obține calea corectă bazată pe mediu
+const getPublicPath = (path: string) => {
+  // Asigură-te că calea începe doar cu un singur slash
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+  // În mod dezvoltare, folosește calea corectă
+  return `/my-website/${cleanPath}`;
 };
 
-// Definim constanta pentru calea către imagine cu un fallback
-const BASE_PATH = getBasePath();
-const coverImagePath = `${BASE_PATH}images/cover.jpeg`;
-const placeholderImagePath = `${BASE_PATH}images/placeholder.jpeg`;
-const productImage1Path = `${BASE_PATH}images/product1.jpg`;
-const productImage2Path = `${BASE_PATH}images/product2.jpg`;
-const productImage3Path = `${BASE_PATH}images/product3.jpg`;
+// Definim căile către imagini folosind funcția auxiliară
+const coverImagePath = getPublicPath('images/cover.jpeg');
+const placeholderImagePath = getPublicPath('images/placeholder.jpeg');
+const productImage1Path = getPublicPath('images/product1.jpg');
+const productImage2Path = getPublicPath('images/product2.jpg');
+const productImage3Path = getPublicPath('images/product3.jpg');
+const videoSource = getPublicPath('images/background.mov');
+const videoSourceMP4 = getPublicPath('images/background.mp4');
 
 // Definim paginile disponibile în aplicație
 type PageType = 'home' | 'products' | 'ong' | 'therapy' | 'contact';
@@ -48,6 +47,25 @@ const App = () => {
     };
 
     verifyImage();
+  }, []);
+
+  useEffect(() => {
+    const appContainer = document.querySelector('.app-container');
+    if (appContainer) {
+      setTimeout(() => {
+        appContainer.classList.add('loaded');
+      }, 100);
+    }
+    
+    // Logging pentru a verifica încărcarea
+    console.log('Aplicația s-a încărcat');
+    console.log('Path-uri imagini:', {
+      coverImagePath,
+      placeholderImagePath,
+      productImage1Path,
+      productImage2Path,
+      productImage3Path
+    });
   }, []);
 
   const backgroundStyle = {
@@ -132,9 +150,6 @@ const App = () => {
       window.removeEventListener('resize', adjustFontSize);
     };
   }, []);
-
-  const videoSource = `${BASE_PATH}images/background.mov`;
-  const videoSourceMP4 = `${BASE_PATH}images/background.mp4`;
 
   return (
     <div style={backgroundStyle} className="app-container">

@@ -4,16 +4,18 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "skipLibCheck": true, // Ignoră erorile din fișierele de definiții externe
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": false, // Setăm la false pentru a nu permite extensii TS în importuri
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx", // Asigură-te că această opțiune este setată pentru React 17+
-
+    "jsx": "react-jsx",
+    /* Eliminăm types pentru node deoarece avem probleme cu el */
+    
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

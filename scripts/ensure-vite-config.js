@@ -90,4 +90,54 @@ export default defineConfig({
   }
 }
 
+// Verifică fișierul vite.config.ts
+try {
+  console.log('Verificarea configurației în vite.config.ts...');
+  const viteConfigPath = path.join(process.cwd(), 'vite.config.ts');
+  
+  if (fs.existsSync(viteConfigPath)) {
+    let viteConfig = fs.readFileSync(viteConfigPath, 'utf8');
+    
+    // Verifică dacă există chei duplicate
+    const baseCount = (viteConfig.match(/base:/g) || []).length;
+    
+    if (baseCount > 1) {
+      console.log('⚠️ S-au detectat chei duplicate! Se repară configurația...');
+      
+      // Încearcă să repare configurația înlocuind-o complet
+      const newConfig = `import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: '/my-website/', 
+  build: {
+    assetsInlineLimit: 0,
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true
+  },
+  server: {
+    host: true,
+    open: true
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src')
+    }
+  },
+  publicDir: 'public'
+})`;
+      
+      fs.writeFileSync(viteConfigPath, newConfig);
+      console.log('✅ vite.config.ts a fost reparat complet.');
+    }
+  }
+} catch (error) {
+  console.error('❌ Eroare la verificarea/actualizarea vite.config.ts:', error);
+  process.exit(1);
+}
+
 console.log('Verificare completă!');

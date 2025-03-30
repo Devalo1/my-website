@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "composite": true,
+    "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
+    /* Eliminăm types pentru node deoarece avem probleme cu el */
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "scripts/**/*.ts", "scripts/**/*.js", "scripts/**/*.cjs"]
 }
