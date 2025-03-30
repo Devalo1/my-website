@@ -1,21 +1,26 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+import { HashRouter } from 'react-router-dom';
 
-// Asigură-te că elementul 'root' există
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  const newRoot = document.createElement('div');
-  newRoot.id = 'root';
-  document.body.appendChild(newRoot);
-}
+// Setare variabilă CSS pentru base path
+const setBasePath = () => {
+  // Detectează dacă este pe GitHub Pages sau local
+  const isGitHubPages = window.location.hostname === 'devalo1.github.io';
+  const basePath = isGitHubPages ? '/my-website' : '';
+  
+  // Setează variabila CSS
+  document.documentElement.style.setProperty('--base-url', basePath);
+};
+
+// Apelează funcția pentru a seta calea de bază
+setBasePath();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <App />
     </HashRouter>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

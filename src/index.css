@@ -6,12 +6,14 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-  background-image: url('/my-website/background.jpg'); /* GitHub Pages absolute path */
+  background-image: url(var(--base-url) + '/background.jpg'); /* Updated to use base-url */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --base-url: ''; /* Va fi actualizat de JS */
 }
 
 body {
@@ -20,14 +22,14 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-image: url('/my-website/background.jpg');  /* GitHub Pages absolute path */
+  background-image: url(var(--base-url) + '/background.jpg'); /* Updated to use base-url */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
 
 .home-container {
-  background-image: url('/my-website/images/cover.jpeg');  /* GitHub Pages absolute path */
+  background-image: url(var(--base-url) + '/images/cover.jpeg'); /* Updated to use base-url */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
