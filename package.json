@@ -26,9 +26,16 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
-    "terser": "^5.39.0",
+    "terser": "^5.17.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
+  },
+  "notes": {
+    "/my-website/background.jpg": "referenced in /my-website/background.jpg didn't resolve at build time, it will remain unchanged to be resolved at runtime"
+  },
+  "with": {
+    "github_token": "${{ secrets.GITHUB_TOKEN }}",
+    "publish_dir": "dist"
   }
 }
