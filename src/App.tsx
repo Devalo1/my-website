@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles/styles.css'; // Importă fișierul CSS
 
-// Definim constanta pentru calea către imagine cu un fallback
-const coverImagePath = '/my-website/images/cover.jpeg';
-const placeholderImagePath = '/my-website/images/placeholder.jpeg';
-const productImage1Path = '/my-website/images/product1.jpg';
-const productImage2Path = '/my-website/images/product2.jpg';
-const productImage3Path = '/my-website/images/product3.jpg';
+// Definim constanta pentru calea către imagine cu un fallback - folosim calea absolută
+const coverImagePath = '/images/cover.jpeg';
+const placeholderImagePath = '/images/placeholder.jpeg';
+const productImage1Path = '/images/product1.jpg';
+const productImage2Path = '/images/product2.jpg';
+const productImage3Path = '/images/product3.jpg';
 
 // Definim paginile disponibile în aplicație
 type PageType = 'home' | 'products' | 'ong' | 'therapy' | 'contact';
