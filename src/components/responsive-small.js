@@ -28,5 +28,59 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.fontSize = '1rem';
     });
     
+    // Ajustări pentru paginile specifice
+    adjustSpecificPages();
+    
     console.log('Ajustări pentru conținut (non-header) aplicate pentru ecrane mici.');
+    
+    /**
+     * Ajustează elementele specifice pentru fiecare pagină
+     */
+    function adjustSpecificPages() {
+        const path = window.location.pathname;
+        
+        // Pagina Acasă
+        if (path.includes('home') || path === '/' || path.endsWith('/my-website/')) {
+            const heroSection = document.querySelector('.hero');
+            if (heroSection) {
+                heroSection.style.height = '300px';
+                heroSection.style.padding = '1rem';
+            }
+        }
+        
+        // Pagina Produse
+        if (path.includes('products')) {
+            const productCards = document.querySelectorAll('.produs-card');
+            productCards.forEach(card => {
+                card.style.margin = '1rem 0';
+                card.style.maxWidth = '100%';
+            });
+        }
+        
+        // Pagina ONG
+        if (path.includes('ong')) {
+            const missionCards = document.querySelectorAll('.mission-card');
+            missionCards.forEach(card => {
+                card.style.margin = '1rem 0';
+                card.style.width = '100%';
+            });
+        }
+        
+        // Pagina Terapie
+        if (path.includes('therapy')) {
+            const contactForm = document.querySelector('.contact-form');
+            if (contactForm) {
+                contactForm.style.padding = '1rem';
+            }
+        }
+        
+        // Pagina Contact
+        if (path.includes('contact')) {
+            const contactCards = document.querySelectorAll('.contact-card');
+            contactCards.forEach(card => {
+                card.style.width = '100%';
+                card.style.margin = '1rem 0';
+            });
+        }
+    }
 });

@@ -9,8 +9,6 @@
  */
 
 (function() {
-  // Only run on mobile devices
-  if (window.innerWidth > 768) return;
   
   console.log('Mobile optimization active');
   
@@ -27,7 +25,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('images/mobile-bg.jpg') center/cover no-repeat;
+        background: url('/my-website/images/mobile-bg.jpg') center/cover no-repeat;
         z-index: ${getComputedStyle(video).zIndex};
       `;
       
@@ -42,103 +40,124 @@
     });
   }
   
-  // IMPLEMENT LAZY LOADING FOR IMAGES
-  function setupLazyLoading() {
-    const images = document.querySelectorAll('img:not(.critical-image)');
-    
+  // OPTIMIZE IMAGES
+  function optimizeImages() {
+    const images = document.querySelectorAll('img');
     images.forEach(img => {
-      // Save original src and replace with placeholder
-      if (img.src && !img.dataset.src) {
-        img.dataset.src = img.src;
-        img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
-        img.style.opacity = '0.1';
-        img.style.transition = 'opacity 0.3s';
+      // Add loading="lazy" attribute to all images
+      img.setAttribute('loading', 'lazy');
+      
+      // Add decoding="async" attribute
+      img.setAttribute('decoding', 'async');
+      
+      // Ensure alt text for accessibility
+      if (!img.alt) {
+        img.alt = 'Imagine website';
       }
     });
+  }
+  
+  // DETECT CURRENT PAGE
+  function getCurrentPage() {
+    const path = window.location.pathname;
+    if (path.includes('products')) return 'products';
+    if (path.includes('ong')) return 'ong';
+    if (path.includes('therapy')) return 'therapy';
+    if (path.includes('contact')) return 'contact';
+    return 'home';
+  }
+  
+  // OPTIMIZE PAGE SPECIFIC ELEMENTS
+  function optimizeCurrentPage() {
+    const page = getCurrentPage();
+    console.log(`Optimizing for page: ${page}`);
     
-    // Setup intersection observer to load images when they enter viewport
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.onload = () => {
-              img.style.opacity = '1';
-              observer.unobserve(img);
-            };
+    // Add page-specific class to body for CSS targeting
+    document.body.classList.add(`page-${page}-mobile`);
+    
+    switch (page) {
+      case 'home':
+        // Optimize home page
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+          heroSection.style.height = '300px';
+        }
+        break;
+        
+      case 'products':
+        // Optimize products page
+        const productCards = document.querySelectorAll('.produs-card');
+        productCards.forEach(card => {
+          // Reduce image quality for better performance
+          const img = card.querySelector('img');
+          if (img && !img.src.includes('placeholder')) {
+            // Store original src for potential high-quality view
+            img.dataset.highQualitySrc = img.src;
+            
+            // Use smaller placeholder for list view
+            if (img.src.includes('product')) {
+              img.src = img.src.replace(/\.(jpg|jpeg|png)/, '-small.$1');
+            }
           }
+        });
+        break;
+        
+      case 'ong':
+        // Optimize ONG page
+        break;
+        
+      case 'therapy':
+        // Optimize therapy page
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+          // Make form inputs larger for better touch experience
+          const inputs = contactForm.querySelectorAll('input, textarea');
+          inputs.forEach(input => {
+            input.style.padding = '12px';
+            input.style.fontSize = '16px'; // Prevent zoom on iOS
+          });
         }
-      });
-    }, { rootMargin: '100px' });
-    
-    images.forEach(img => observer.observe(img));
+        break;
+        
+      case 'contact':
+        // Optimize contact page
+        break;
+    }
   }
   
-  // REDUCE ANIMATIONS AND TRANSITIONS
-  function reduceAnimations() {
-    const style = document.createElement('style');
-    style.textContent = `
-      * {
-        animation-duration: 0.001s !important;
-        animation-delay: 0s !important;
-        transition-duration: 0.001s !important;
-        transition-delay: 0s !important;
+  // Optimize font loading
+  function optimizeFonts() {
+    // Add preconnect for Google Fonts if used
+    const linkPreconnect = document.createElement('link');
+    linkPreconnect.rel = 'preconnect';
+    linkPreconnect.href = 'https://fonts.googleapis.com';
+    document.head.appendChild(linkPreconnect);
+    
+    // Add font-display: swap to any inline font styles
+    const styleElements = document.querySelectorAll('style');
+    styleElements.forEach(style => {
+      if (style.textContent.includes('@font-face')) {
+        style.textContent = style.textContent.replace(
+          /@font-face\s*{([^}]*)}/g, 
+          '@font-face{$1;font-display:swap;}'
+        );
       }
-    `;
-    document.head.appendChild(style);
-  }
-  
-  // OPTIMIZE BACKGROUND PROCESSING
-  function optimizeBackgroundProcessing() {
-    // Throttle scroll and resize events
-    let scrollTimeout;
-    const originalScrollHandler = window.onscroll;
-    
-    window.onscroll = function(e) {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(function() {
-        if (typeof originalScrollHandler === 'function') {
-          originalScrollHandler(e);
-        }
-      }, 100);
-    };
-    
-    // Delay non-critical operations
-    setTimeout(function() {
-      // Load analytics, tracking, and other non-essential scripts
-      const nonCriticalScripts = [
-        'firebase-analytics.js'
-      ];
-      
-      nonCriticalScripts.forEach(script => {
-        const scriptElement = document.createElement('script');
-        scriptElement.src = script;
-        scriptElement.async = true;
-        document.body.appendChild(scriptElement);
-      });
-    }, 3000);
+    });
   }
   
   // Execute optimizations
-  
-  // First, immediate optimizations
-  reduceAnimations();
-  
-  // Then, once DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      replaceVideos();
-      setupLazyLoading();
-      optimizeBackgroundProcessing();
-    });
-  } else {
-    // DOM already loaded
+  function runOptimizations() {
     replaceVideos();
-    setupLazyLoading();
-    optimizeBackgroundProcessing();
+    optimizeImages();
+    optimizeCurrentPage();
+    optimizeFonts();
+    console.log('Mobile optimizations complete');
   }
   
-  // Add a class to body for CSS optimizations
-  document.body.classList.add('mobile-optimized');
+  // Run optimizations on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runOptimizations);
+  } else {
+    runOptimizations();
+  }
 })();

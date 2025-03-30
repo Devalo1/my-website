@@ -4,10 +4,6 @@
  */
 
 (function() {
-  // Rulează imediat pentru a preveni FOUC (Flash of Unstyled Content)
-  if (window.innerWidth > 768) return; // Se execută doar pe mobil
-  
-  // Funcția de injectare imediată a meniului
   function injectMenuNow() {
     // Creează stilurile necesare cu prioritate absolută
     const style = document.createElement('style');
@@ -76,77 +72,106 @@
       #emergency-overlay.open {
         display: block !important;
       }
+      
+      /* Add page-specific styles to ensure consistency across all pages */
+      .page-home #emergency-menu-button,
+      .page-products #emergency-menu-button,
+      .page-ong #emergency-menu-button,
+      .page-therapy #emergency-menu-button,
+      .page-contact #emergency-menu-button {
+        display: block !important;
+      }
+      
+      /* Fix for scroll issues on certain pages */
+      body.menu-open {
+        overflow: hidden !important;
+      }
     `;
     
-    document.head.insertBefore(style, document.head.firstChild);
+    // Inject style tag into head
+    document.head.appendChild(style);
     
-    // Creează componentele meniului
-    let menuButton = document.createElement('button');
+    // Detect current page for proper menu links
+    const currentPath = window.location.pathname;
+    let currentPage = 'home';
+    
+    if (currentPath.includes('products')) currentPage = 'products';
+    if (currentPath.includes('ong')) currentPage = 'ong';
+    if (currentPath.includes('therapy')) currentPage = 'therapy';
+    if (currentPath.includes('contact')) currentPage = 'contact';
+    
+    // Add page class to body
+    document.body.classList.add(`page-${currentPage}`);
+    
+    // Create emergency menu button
+    const menuButton = document.createElement('button');
     menuButton.id = 'emergency-menu-button';
     menuButton.innerHTML = '☰';
+    menuButton.setAttribute('aria-label', 'Meniu');
     document.body.appendChild(menuButton);
     
-    let logo = document.createElement('a');
-    logo.href = 'index.html';
+    // Create emergency logo
+    const logo = document.createElement('img');
     logo.id = 'emergency-logo';
-    logo.innerHTML = '<img src="images/Logo.png" alt="Logo" style="width:100%">';
+    logo.src = '/my-website/images/Logo.png';
+    logo.setAttribute('alt', 'Lupul și Corbul Logo');
+    logo.setAttribute('onerror', 'this.style.display="none"');
     document.body.appendChild(logo);
     
-    let menu = document.createElement('div');
+    // Create emergency menu
+    const menu = document.createElement('nav');
     menu.id = 'emergency-menu';
     menu.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:15px;background:#6b4423;color:white;">
-        <span>Meniu</span>
-        <button id="emergency-close" style="background:none;border:none;color:white;font-size:24px;">×</button>
+      <div style="padding: 20px; background: #6b4423; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <strong>Meniu</strong>
+        <button id="emergency-close" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
       </div>
-      <a href="index.html" style="display:block;padding:15px;border-bottom:1px solid #eee;">Acasă</a>
-      <a href="produse.html" style="display:block;padding:15px;border-bottom:1px solid #eee;">Produse</a>
-      <a href="ong.html" style="display:block;padding:15px;border-bottom:1px solid #eee;">Făuritorii de Destin</a>
-      <a href="terapie.html" style="display:block;padding:15px;border-bottom:1px solid #eee;">Terapie Personalizată</a>
-      <a href="contact.html" style="display:block;padding:15px;border-bottom:1px solid #eee;">Contact</a>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="border-bottom: 1px solid #eee;"><a href="/my-website/" style="display: block; padding: 15px; color: #333; text-decoration: none; ${currentPage === 'home' ? 'font-weight: bold; background: #f5f5f5;' : ''}">Acasă</a></li>
+        <li style="border-bottom: 1px solid #eee;"><a href="/my-website/products" style="display: block; padding: 15px; color: #333; text-decoration: none; ${currentPage === 'products' ? 'font-weight: bold; background: #f5f5f5;' : ''}">Produse</a></li>
+        <li style="border-bottom: 1px solid #eee;"><a href="/my-website/ong" style="display: block; padding: 15px; color: #333; text-decoration: none; ${currentPage === 'ong' ? 'font-weight: bold; background: #f5f5f5;' : ''}">Făuritorii de Destin</a></li>
+        <li style="border-bottom: 1px solid #eee;"><a href="/my-website/therapy" style="display: block; padding: 15px; color: #333; text-decoration: none; ${currentPage === 'therapy' ? 'font-weight: bold; background: #f5f5f5;' : ''}">Terapie Personalizată</a></li>
+        <li><a href="/my-website/contact" style="display: block; padding: 15px; color: #333; text-decoration: none; ${currentPage === 'contact' ? 'font-weight: bold; background: #f5f5f5;' : ''}">Contact</a></li>
+      </ul>
     `;
-    
-    let overlay = document.createElement('div');
-    overlay.id = 'emergency-overlay';
-    
     document.body.appendChild(menu);
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'emergency-overlay';
     document.body.appendChild(overlay);
     
-    // Adaugă funcționalitatea
-    menuButton.addEventListener('click', () => {
+    // Add event listeners
+    menuButton.addEventListener('click', function() {
       menu.classList.add('open');
       overlay.classList.add('open');
+      document.body.classList.add('menu-open');
     });
     
-    document.getElementById('emergency-close').addEventListener('click', () => {
+    document.getElementById('emergency-close').addEventListener('click', function() {
       menu.classList.remove('open');
       overlay.classList.remove('open');
+      document.body.classList.remove('menu-open');
     });
     
-    overlay.addEventListener('click', () => {
+    overlay.addEventListener('click', function() {
       menu.classList.remove('open');
       overlay.classList.remove('open');
+      document.body.classList.remove('menu-open');
     });
+    
+    // Emergency fix for any pre-existing mobile menus
+    setTimeout(function() {
+      const existingMobileMenus = document.querySelectorAll('nav.mobile, #mobile-nav, .mobile-nav');
+      existingMobileMenus.forEach(function(mobileMenu) {
+        mobileMenu.style.display = 'none';
+      });
+    }, 500);
   }
   
-  // Execută injectarea imediată
-  injectMenuNow();
-  
-  // Verifică din nou după încărcarea paginii
-  window.addEventListener('load', function() {
-    const menuButton = document.getElementById('emergency-menu-button');
-    if (!menuButton || window.getComputedStyle(menuButton).display === 'none') {
-      console.log('Meniul de urgență a dispărut, recreez...');
-      injectMenuNow();
-    }
-  });
-  
-  // Verifică periodic
-  setInterval(function() {
-    const menuButton = document.getElementById('emergency-menu-button');
-    if (!menuButton || window.getComputedStyle(menuButton).display === 'none') {
-      console.log('Meniul de urgență a dispărut, recreez...');
-      injectMenuNow();
-    }
-  }, 2000);
+  // Check if it's a mobile device
+  if (window.innerWidth <= 768) {
+    // Execute immediately for faster display
+    injectMenuNow();
+  }
 })();

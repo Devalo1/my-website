@@ -8,22 +8,13 @@
  */
 
 (function() {
-  // Flag pentru debugging
-  const DEBUG = true;
-  function debug(message) {
-    if (DEBUG) console.log("AutoInject: " + message);
-  }
-  
-  debug("Script inițiat");
-  
-  // VERIFICARE STRICTĂ - Rulează doar pe mobil - VERIFICARE DUBLĂ
-  if (window.innerWidth > 768 || document.documentElement.clientWidth > 768) {
-    debug('Ecran desktop detectat, script oprit.');
+  // Execute only on mobile devices
+  if (window.innerWidth > 768) {
+    console.log('Auto-inject: Desktop detected, script not executed');
     return;
   }
   
-  // Folosește un ID specific pentru a verifica dacă meniul e deja injectat
-  if (document.getElementById('hamburger-mobile-menu-v7')) return;
+  console.log('Auto-inject: Mobile detected, initializing mobile interface');
   
   // Creează și adaugă stilurile direct
   const style = document.createElement('style');
@@ -229,317 +220,238 @@
         z-index: 100000 !important;
         pointer-events: auto !important;
       }
+      
+      /* Page specific adjustments */
+      .page-home-mobile .hero,
+      .page-products-mobile .products-page,
+      .page-ong-mobile .ong-page,
+      .page-therapy-mobile .therapy-page,
+      .page-contact-mobile .contact-page {
+        margin-top: 60px !important;
+      }
     }
   `;
+  
   document.head.appendChild(style);
   
-  // Funcție pentru crearea interfeței mobile
-  function createMobileInterface() {
-    debug("Creare interfață mobilă");
+  // Create mobile UI elements
+  function createMobileUI() {
+    // Hamburger button
+    const hamburgerButton = document.createElement('button');
+    hamburgerButton.id = 'hamburger-button-v7';
+    hamburgerButton.innerHTML = '☰';
+    hamburgerButton.setAttribute('aria-label', 'Menu');
+    document.body.appendChild(hamburgerButton);
     
-    // Container principal
-    const container = document.createElement('div');
-    container.id = 'hamburger-mobile-menu-v7';
-    
-    // 1. Buton hamburger
-    const menuButton = document.createElement('button');
-    menuButton.id = 'hamburger-button-v7';
-    menuButton.innerHTML = '☰';
-    menuButton.setAttribute('aria-label', 'Deschide meniul');
-    container.appendChild(menuButton);
-    
-    // 2. Logo central
+    // Logo
     const logo = document.createElement('a');
     logo.id = 'site-logo-v7';
-    logo.href = 'index.html';
+    logo.href = '/my-website/';
     
     const logoImg = document.createElement('img');
-    logoImg.src = 'images/Logo.png';
-    logoImg.alt = 'Logo';
+    logoImg.src = '/my-website/images/Logo.png';
+    logoImg.alt = 'Site Logo';
+    logoImg.onerror = function() {
+      // Fallback if logo image doesn't exist
+      this.style.display = 'none';
+      logo.style.display = 'none';
+    };
     
     logo.appendChild(logoImg);
-    container.appendChild(logo);
+    document.body.appendChild(logo);
     
-    // 3. Butoane dreapta
+    // Right buttons (profile and cart)
     const rightButtons = document.createElement('div');
     rightButtons.id = 'right-buttons-v7';
     
-    // Buton profil
-    const profileBtn = document.createElement('div');
-    profileBtn.className = 'action-button-v7';
-    profileBtn.id = 'profile-button-v7';
+    // Profile button
+    const profileButton = document.createElement('div');
+    profileButton.className = 'action-button-v7';
+    profileButton.id = 'profile-button-v7';
     
     const profileImg = document.createElement('img');
-    profileImg.src = 'images/profi.png';
-    profileImg.alt = 'Profil';
+    profileImg.src = '/my-website/images/profi.png';
+    profileImg.alt = 'Profile';
+    profileImg.onerror = function() {
+      this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236b4423"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+    };
     
-    profileBtn.appendChild(profileImg);
-    rightButtons.appendChild(profileBtn);
+    profileButton.appendChild(profileImg);
+    rightButtons.appendChild(profileButton);
     
-    // Buton coș
-    const cartBtn = document.createElement('div');
-    cartBtn.className = 'action-button-v7';
-    cartBtn.id = 'cart-button-v7';
+    // Cart button
+    const cartButton = document.createElement('div');
+    cartButton.className = 'action-button-v7';
+    cartButton.id = 'cart-button-v7';
     
     const cartImg = document.createElement('img');
-    cartImg.src = 'images/bag.png';
-    cartImg.alt = 'Coș';
+    cartImg.src = '/my-website/images/bag.png';
+    cartImg.alt = 'Cart';
+    cartImg.onerror = function() {
+      this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236b4423"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>';
+    };
     
-    const cartCount = document.createElement('span');
-    cartCount.id = 'cart-count-v7';
-    cartCount.textContent = '0';
+    // Get cart count from localStorage
+    let cartCount = 0;
+    try {
+      const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+      cartCount = cartItems.reduce((total, item) => total + (item.quantity || 0), 0);
+    } catch (error) {
+      console.error('Error loading cart data:', error);
+    }
     
-    cartBtn.appendChild(cartImg);
-    cartBtn.appendChild(cartCount);
-    rightButtons.appendChild(cartBtn);
+    // Add count badge if needed
+    if (cartCount > 0) {
+      const countBadge = document.createElement('div');
+      countBadge.id = 'cart-count-v7';
+      countBadge.textContent = cartCount > 9 ? '9+' : cartCount;
+      cartButton.appendChild(countBadge);
+    }
     
-    container.appendChild(rightButtons);
+    cartButton.appendChild(cartImg);
+    rightButtons.appendChild(cartButton);
+    document.body.appendChild(rightButtons);
     
-    // 4. Meniu de navigare
-    const navMenu = document.createElement('div');
-    navMenu.id = 'navigation-menu-v7';
+    // Create navigation menu
+    const navigationMenu = document.createElement('nav');
+    navigationMenu.id = 'navigation-menu-v7';
     
-    navMenu.innerHTML = `
+    // Detect current page for menu highlighting
+    const path = window.location.pathname;
+    const isHomePage = path === '/' || path.endsWith('/my-website/') || path.includes('/index.html');
+    const isProductsPage = path.includes('/products');
+    const isOngPage = path.includes('/ong');
+    const isTherapyPage = path.includes('/therapy');
+    const isContactPage = path.includes('/contact');
+    
+    // Set appropriate page class on body
+    document.body.classList.add(isHomePage ? 'page-home-mobile' : 
+                                isProductsPage ? 'page-products-mobile' :
+                                isOngPage ? 'page-ong-mobile' :
+                                isTherapyPage ? 'page-therapy-mobile' :
+                                isContactPage ? 'page-contact-mobile' : 'page-other-mobile');
+    
+    navigationMenu.innerHTML = `
       <div class="menu-header">
-        <span>Meniu</span>
-        <button id="close-menu-v7">×</button>
+        <h3>Meniu</h3>
+        <button id="close-menu-v7">&times;</button>
       </div>
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="ong.html">Făuritorii de Destin</a>
-      <a href="terapie.html">Terapie Personalizată</a>
-      <a href="contact.html">Contact</a>
+      <a href="/my-website/" class="${isHomePage ? 'active' : ''}">Acasă</a>
+      <a href="/my-website/products" class="${isProductsPage ? 'active' : ''}">Produse</a>
+      <a href="/my-website/ong" class="${isOngPage ? 'active' : ''}">Făuritorii de Destin</a>
+      <a href="/my-website/therapy" class="${isTherapyPage ? 'active' : ''}">Terapie Personalizată</a>
+      <a href="/my-website/contact" class="${isContactPage ? 'active' : ''}">Contact</a>
     `;
     
-    container.appendChild(navMenu);
+    document.body.appendChild(navigationMenu);
     
-    // 5. Overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'menu-overlay-v7';
-    container.appendChild(overlay);
+    // Create overlay
+    const menuOverlay = document.createElement('div');
+    menuOverlay.id = 'menu-overlay-v7';
+    document.body.appendChild(menuOverlay);
     
-    // Adaugă elementele la body
-    document.body.appendChild(container);
-    
-    // Verifică dacă suntem pe pagina ONG și modifică stilurile pentru această pagină
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    if (currentPage === 'ong.html') {
-      debug('Pagina ONG detectată - aplicare stiluri specifice pentru mobil');
-      
-      // Adăugăm atribut data pentru CSS mai specific
-      document.body.setAttribute('data-page', 'ong');
-      
-      // Simplificăm funcția de ascundere pentru ONG - doar ascundem headerul original
-      function optimizeOngHeaderForMobile() {
-        const header = document.querySelector('header');
-        if (header) {
-          // Doar resetăm stilurile header-ului în loc să ascundem fiecare element
-          header.style.cssText = `
-            height: 60px !important;
-            min-height: 60px !important;
-            background: transparent !important;
-            position: relative !important;
-            z-index: 1 !important;
-          `;
-          
-          // Ascundem doar navigația desktop și elementele care ar putea cauza probleme
-          const desktopNav = header.querySelector('nav:not(#navigation-menu-v7)');
-          if (desktopNav) {
-            desktopNav.style.display = 'none';
-          }
-          
-          // Eliminăm stilurile care ar putea interfera
-          const conflictingStyles = document.querySelectorAll('style[id*="emergency"], style[id*="mobile-menu"]');
-          conflictingStyles.forEach(style => {
-            style.disabled = true;
-          });
-        }
-      }
-      
-      // Aplicăm optimizarea de mai multe ori pentru a ne asigura că funcționează
-      optimizeOngHeaderForMobile();
-      setTimeout(optimizeOngHeaderForMobile, 100);
-      window.addEventListener('load', optimizeOngHeaderForMobile);
-    }
-    
-    // Funcționalitate buton hamburger - deschide meniul
-    menuButton.addEventListener('click', function() {
-      navMenu.classList.add('open');
-      overlay.classList.add('open');
+    // Add event listeners
+    hamburgerButton.addEventListener('click', function() {
+      navigationMenu.classList.add('open');
+      menuOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
     });
     
-    // Funcționalitate buton închidere - închide meniul
     document.getElementById('close-menu-v7').addEventListener('click', function() {
-      navMenu.classList.remove('open');
-      overlay.classList.remove('open');
+      navigationMenu.classList.remove('open');
+      menuOverlay.classList.remove('open');
+      document.body.style.overflow = '';
     });
     
-    // Overlay închide meniul
-    overlay.addEventListener('click', function() {
-      navMenu.classList.remove('open');
-      overlay.classList.remove('open');
+    menuOverlay.addEventListener('click', function() {
+      navigationMenu.classList.remove('open');
+      menuOverlay.classList.remove('open');
+      document.body.style.overflow = '';
     });
     
-    // Marcarea link-ului activ
-    const links = navMenu.querySelectorAll('a');
-    links.forEach(function(link) {
-      if (link.getAttribute('href') === currentPage) {
-        link.classList.add('active');
-      }
+    // Profile and cart button functionality
+    profileButton.addEventListener('click', function() {
+      // Check if user is logged in
+      let user = null;
+      try {
+        user = JSON.parse(localStorage.getItem('user'));
+      } catch (e) {}
       
-      // Închide meniul la click pe link
-      link.addEventListener('click', function() {
-        navMenu.classList.remove('open');
-        overlay.classList.remove('open');
-      });
-    });
-    
-    // Actualizare număr elemente coș
-    try {
-      const items = JSON.parse(localStorage.getItem('cartItems')) || [];
-      const count = items.reduce((total, item) => total + parseInt(item.quantity || 0), 0);
-      cartCount.textContent = count.toString();
-    } catch(e) {
-      console.error('Eroare la citirea coșului', e);
-    }
-    
-    // Funcționalitate buton profil - ÎMBUNĂTĂȚITĂ
-    profileBtn.addEventListener('click', function(e) {
-      debug("Click pe butonul de profil");
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Verifică dacă funcția globală există direct
-      if (typeof window.openMobileProfileMenu === 'function') {
-        debug("Folosesc funcția globală openMobileProfileMenu");
-        window.openMobileProfileMenu();
-        return;
-      }
-      
-      // Verifică dacă există un controller dedicat
-      if (window.MobileUserButton && typeof window.MobileUserButton.handleProfileButtonClick === 'function') {
-        debug("Folosesc MobileUserButton.handleProfileButtonClick");
-        window.MobileUserButton.handleProfileButtonClick(e);
-        return;
-      }
-      
-      // Verifică dacă scriptul dedicat există dar nu s-a inițializat complet
-      if (typeof window.MobileUserButton !== 'undefined') {
-        debug("Controller buton profil detectat dar incomplet");
-        
-        // Încearcă inițializarea explicită dacă funcția este disponibilă
-        if (typeof window.MobileUserButton.initialize === 'function') {
-          debug("Inițializez MobileUserButton");
-          window.MobileUserButton.initialize();
-          
-          // Reîncearcă deschiderea după inițializare
-          if (typeof window.MobileUserButton.openProfileMenu === 'function') {
-            debug("Deschid meniu după inițializare");
-            window.MobileUserButton.openProfileMenu();
-            return;
-          }
+      if (user) {
+        // Show profile options
+        alert(`Bun venit, ${user.name || user.email}!`);
+      } else {
+        // Show login options
+        if (confirm('Trebuie să fii autentificat pentru a vedea profilul tău. Vrei să te autentifici?')) {
+          window.location.href = '/my-website/login';
         }
       }
-      
-      // Comportament de rezervă - încărcare script dacă nu există
-      debug("Scriptul dedicat nu există, încerc să-l încarc");
-      
-      // Verifică dacă scriptul e deja în curs de încărcare
-      if (!document.querySelector('script[src="utilizator-button-function.js"]')) {
-        const script = document.createElement('script');
-        script.src = 'utilizator-button-function.js';
-        script.onload = function() {
-          debug("Script încărcat cu succes");
-          // Încearcă deschiderea meniului după încărcare
-          setTimeout(function() {
-            if (typeof window.openMobileProfileMenu === 'function') {
-              window.openMobileProfileMenu();
-            } else if (window.MobileUserButton && typeof window.MobileUserButton.openProfileMenu === 'function') {
-              window.MobileUserButton.openProfileMenu();
-            } else {
-              debug("Nu am putut găsi funcțiile necesare după încărcare");
-              // Fallback extrem - alertă
-              alert("Vă rugăm să vă conectați pentru a continua");
-            }
-          }, 300);
-        };
-        document.head.appendChild(script);
-      }
-      
-      // Comportament de rezervă doar dacă scriptul dedicat nu e disponibil deloc
-      debug("Folosesc comportament de rezervă pentru butonul de profil");
-      const profileDetails = document.querySelector('.profile-details');
-      if (profileDetails) {
-        profileDetails.style.display = profileDetails.style.display === 'block' ? 'none' : 'block';
-      } else {
-        // Fallback extrem - alertă
-        alert("Vă rugăm să vă conectați pentru a continua");
-      }
     });
     
-    // Funcționalitate buton coș
-    cartBtn.addEventListener('click', function() {
-      const cartDetails = document.querySelector('.cart-details');
-      if (cartDetails) {
-        cartDetails.style.display = cartDetails.style.display === 'block' ? 'none' : 'block';
+    cartButton.addEventListener('click', function() {
+      // Show cart
+      let cartItems = [];
+      try {
+        cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+      } catch (e) {}
+      
+      if (cartItems.length === 0) {
+        alert('Coșul tău este gol.');
+      } else {
+        // Redirect to cart page or show cart popup
+        window.location.href = '/my-website/cart';
       }
     });
   }
   
-  // Execută crearea interfeței după încărcarea documentului
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createMobileInterface);
-  } else {
-    // Dacă documentul e deja încărcat, creează interfața imediat
-    createMobileInterface();
-  }
-  
-  // Cleanup any visible code on the page that shouldn't be there
-  function cleanupMobilePageDebris() {
-    // Text fragments that shouldn't be visible
-    const problematicFragments = [
-      "ad> n ong-container",
-      "ent.querySelector",
-      "fo').style.display",
-      "overlay.id",
-      "document.body.appendChild",
-      "Header L.js",
-      "createMobileMenu",
-      "setInterval"
+  // Hide any existing mobile menus to avoid conflicts
+  function hideExistingMobileMenus() {
+    const selectors = [
+      'nav.mobile', 
+      '#mobile-nav', 
+      '.mobile-nav',
+      '#mobile-menu',
+      '.hamburger-menu',
+      '#navigation-menu:not(#navigation-menu-v7)',
+      '.menu-toggle',
+      '.mobile-menu-toggle'
     ];
     
-    // Find and remove problematic text nodes
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      null,
-      false
-    );
-    
-    const nodesToRemove = [];
-    let node;
-    while (node = walker.nextNode()) {
-      // Skip script and style elements
-      if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') {
-        continue;
-      }
-      
-      // Check for problematic content
-      if (problematicFragments.some(fragment => node.textContent.includes(fragment))) {
-        nodesToRemove.push(node);
-      }
-    }
-    
-    // Remove the problematic nodes
-    nodesToRemove.forEach(node => {
-      if (node.parentNode) {
-        node.parentNode.removeChild(node);
-      }
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        if (el) {
+          el.style.display = 'none';
+          el.style.visibility = 'hidden';
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        }
+      });
     });
-    
-    debug(`Mobile cleanup: removed ${nodesToRemove.length} problematic text nodes`);
   }
   
-  // Run cleanup after page load
-  window.addEventListener('load', cleanupMobilePageDebris);
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      createMobileUI();
+      hideExistingMobileMenus();
+    });
+  } else {
+    createMobileUI();
+    hideExistingMobileMenus();
+  }
+  
+  // Ensure mobile menu is visible even after script interference
+  window.addEventListener('load', function() {
+    hideExistingMobileMenus();
+    
+    // Ensure our buttons are visible
+    const hamburgerButton = document.getElementById('hamburger-button-v7');
+    const siteLogoV7 = document.getElementById('site-logo-v7');
+    const rightButtonsV7 = document.getElementById('right-buttons-v7');
+    
+    if (hamburgerButton) hamburgerButton.style.display = 'block';
+    if (siteLogoV7) siteLogoV7.style.display = 'block';
+    if (rightButtonsV7) rightButtonsV7.style.display = 'flex';
+  });
 })();

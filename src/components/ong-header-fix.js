@@ -1,71 +1,86 @@
 /**
- * Script special pentru a asigura funcționarea corectă a meniului mobil pe pagina ONG
- * Acest script ajută la eliminarea conflictelor între diferitele implementări
+ * Script pentru fixarea header-ului pe pagina ONG - Făuritorii de Destin
+ * 
+ * Acest script asigură că header-ul este afișat corect pe pagina ONG
+ * și menține consistența cu celelalte pagini ale site-ului.
  */
 
-(function() {
-  // Execută doar pe mobil și doar pe pagina ONG
-  if (window.innerWidth > 768) return;
-  
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  if (currentPage !== 'ong.html') return;
-  
-  console.log('ONG Header Fix: Inițiere corectare meniu mobil pentru pagina ONG');
-  
-  // Funcție pentru a verifica și corecta meniul mobil
-  function fixMobileMenu() {
-    // 1. Verifică dacă meniul din auto-inject.js a fost injectat corect
-    const hamburgerMenu = document.getElementById('hamburger-mobile-menu-v7');
-    const hamburgerButton = document.getElementById('hamburger-button-v7');
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.innerWidth > 768) {
+    console.log('Ecran mare detectat, se aplică corecțiile pentru header pe pagina ONG');
     
-    if (!hamburgerMenu || !hamburgerButton || window.getComputedStyle(hamburgerButton).display === 'none') {
-      console.log('ONG Header Fix: Meniul mobil lipsește sau este ascuns, se forțează reconstrucția');
-      
-      // Șterge orice meniuri de urgență existente pentru a evita duplicatele
-      document.querySelectorAll('[id*="emergency"], [id*="instant-mobile"]').forEach(el => el.remove());
-      
-      // Forțează reîncărcarea auto-inject.js
-      const script = document.createElement('script');
-      script.src = 'auto-inject.js?nocache=' + new Date().getTime();
-      document.head.appendChild(script);
-    }
+    // Verifică dacă suntem pe pagina ONG
+    const isOngPage = window.location.pathname.includes('ong');
     
-    // 2. Ascunde elementele de header care nu sunt necesare pe mobil
-    const header = document.querySelector('header');
-    if (header) {
-      // Simplifică header-ul pentru mobil
-      header.style.cssText = `
-        height: 60px !important;
-        min-height: 60px !important;
-        max-height: 60px !important;
-        background: transparent !important;
-        position: relative !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      `;
-      
-      // Ascunde toate elementele din header în afară de cele create de auto-inject.js
-      Array.from(header.children).forEach(child => {
-        // Nu ascunde elementele create de auto-inject.js
-        if (!child.id || 
-            !child.id.includes('v7')) {
-          child.style.display = 'none';
-        }
-      });
+    if (isOngPage) {
+      fixOngHeader();
+    } else {
+      // Pe alte pagini, aplicăm fix-ul general
+      console.log('Nu suntem pe pagina ONG, se aplică fix-ul general pentru header');
     }
+  } else {
+    console.log('Ecran mic detectat, nu sunt necesare corecții pentru header-ul desktop.');
+  }
+});
+
+// Funcție pentru a corecta header-ul pe pagina ONG
+function fixOngHeader() {
+  const header = document.querySelector('header');
+  if (!header) {
+    console.warn('Header-ul nu a fost găsit pe pagina ONG, se creează un nou header');
+    createOngHeader();
+    return;
   }
   
-  // Execută verificarea de mai multe ori pentru a prinde toate cazurile
-  // Imediat
-  setTimeout(fixMobileMenu, 0);
+  // Asigură vizibilitatea
+  header.style.display = 'block';
+  header.style.visibility = 'visible';
   
-  // După încărcarea DOM-ului
-  document.addEventListener('DOMContentLoaded', fixMobileMenu);
+  // Actualizează titlul pentru pagina ONG
+  const headerTitle = header.querySelector('h1');
+  const headerDesc = header.querySelector('p');
   
-  // După încărcarea completă a paginii
-  window.addEventListener('load', fixMobileMenu);
+  if (headerTitle) headerTitle.textContent = 'Făuritorii de Destin';
+  if (headerDesc) headerDesc.textContent = 'Organizația noastră non-profit';
   
-  // Periodic pentru a prinde orice modificări ulterioare
-  setInterval(fixMobileMenu, 1000);
-})();
+  // Asigură-te că navigația este vizibilă pe desktop
+  const nav = document.getElementById('main-nav');
+  if (nav) {
+    nav.style.display = 'flex';
+    
+    // Marchează link-ul ONG ca activ
+    const ongLink = Array.from(nav.querySelectorAll('a')).find(a => 
+      a.textContent.toLowerCase().includes('făuritori') || 
+      a.textContent.toLowerCase().includes('destin') ||
+      a.textContent.toLowerCase().includes('ong')
+    );
+    
+    if (ongLink) {
+      // Elimină clasa active de pe toate link-urile
+      nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+      // Adaugă clasa active pe link-ul ONG
+      ongLink.classList.add('active');
+    }
+  }
+}
+
+// Funcție pentru a crea un header nou specific pentru pagina ONG
+function createOngHeader() {
+  const header = document.createElement('header');
+  header.innerHTML = `
+    <h1>Făuritorii de Destin</h1>
+    <p>Organizația noastră non-profit</p>
+  `;
+  
+  // Adaugă header-ul la începutul body
+  document.body.insertBefore(header, document.body.firstChild);
+  console.log('Header nou creat și adăugat la pagina ONG');
+}
+
+// Verifică header-ul și după încărcarea completă a paginii
+window.addEventListener('load', function() {
+  if (window.innerWidth > 768 && window.location.pathname.includes('ong')) {
+    console.log('Verificare finală pentru header ONG după încărcarea completă a paginii');
+    fixOngHeader();
+  }
+});

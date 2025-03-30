@@ -1,198 +1,86 @@
 /**
- * SCRIPT ULTRA-SIMPLIFICAT - SOLUȚIE DEFINITIVĂ
- * Rezolvă problemele de performanță și header-ul lipsă pe produse.html
+ * ultra-fix.js - Script de compatibilitate pentru toate paginile site-ului
+ * 
+ * Acest script asigură compatibilitatea între diferitele pagini ale site-ului,
+ * detectează și rezolvă probleme comune și uniformizează experiența utilizatorului.
  */
 
-(function() {
-  // Execută imediat - nu aștepta încărcarea
-  console.log('ULTRA-FIX: Script în execuție');
-  
-  // FIXARE HEADER PENTRU PRODUSE.HTML
-  function fixProduseHeader() {
-    // Verifică dacă suntem pe pagina produse.html și pe desktop
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    if (currentPage === 'produse.html' && window.innerWidth > 768) {
-      console.log('ULTRA-FIX: Reparare header pentru produse.html');
-      
-      // Adaugă stiluri directe pentru header
-      const style = document.createElement('style');
-      style.textContent = `
-        @media (min-width: 769px) {
-          header {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            height: auto !important;
-            min-height: 60px !important;
-            width: 100% !important;
-            background-color: rgba(0, 0, 0, 0.8) !important;
-            z-index: 1000 !important;
-            padding: 1rem 0 !important;
-            margin-bottom: 20px !important;
-          }
-          
-          header a.logo {
-            position: fixed !important;
-            top: 10px !important;
-            left: 10px !important;
-            max-width: 100px !important;
-            z-index: 1001 !important;
-          }
-          
-          header a.logo img {
-            max-width: 100% !important;
-            height: auto !important;
-          }
-          
-          #main-nav {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 2rem !important;
-            padding: 1rem 2rem !important;
-            background-color: #8b5a2b !important;
-            width: 100% !important;
-          }
-          
-          #main-nav a {
-            display: inline-block !important;
-            color: white !important;
-            text-decoration: none !important;
-            font-weight: bold !important;
-            padding: 0.5rem 1rem !important;
-            border-radius: 5px !important;
-          }
-          
-          #main-nav a[href="produse.html"] {
-            background-color: #6b4423 !important;
-          }
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('ultra-fix.js încărcat - asigurare compatibilitate între pagini');
+    
+    // Funcție pentru a aplica stiluri consistente pe toate paginile
+    function applyConsistentStyles() {
+        const pages = ['home', 'products', 'ong', 'therapy', 'contact'];
+        const currentPage = getCurrentPage();
+        
+        // Adaugă clasa pentru pagina curentă pe body
+        document.body.classList.add(`page-${currentPage}`);
+        
+        // Asigură-te că header-ul este vizibil și formatat corect
+        const header = document.querySelector('header');
+        if (header) {
+            header.style.display = 'block';
+            header.style.visibility = 'visible';
         }
-      `;
-      document.head.appendChild(style);
-      
-      // Verifică și creează/repară header-ul
-      let header = document.querySelector('header');
-      if (!header) {
-        header = document.createElement('header');
-        document.body.insertBefore(header, document.body.firstChild);
-      }
-      
-      // Verifică conținutul header-ului
-      if (!header.querySelector('#main-nav')) {
-        header.innerHTML = `
-          <a href="index.html" class="logo">
-            <img src="images/Logo.png" alt="Lupul și Corbul">
-          </a>
-          <nav id="main-nav">
-            <a href="index.html">Acasă</a>
-            <a href="produse.html">Produse</a>
-            <a href="ong.html">Făuritorii de Destin</a>
-            <a href="terapie.html">Terapie Personalizată</a>
-            <a href="contact.html">Contact</a>
-          </nav>
-        `;
-      }
+        
+        // Verifică dacă imaginea de fundal este încărcată corect
+        ensureBackgroundImage();
     }
-  }
-  
-  // ASCUNDE LOGO MARE PE ONG.HTML ÎN VERSIUNEA MOBILĂ
-  function fixOngMobile() {
-    // Verifică dacă suntem pe pagina ong.html și pe mobil
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    if (currentPage === 'ong.html' && window.innerWidth <= 768) {
-      console.log('ULTRA-FIX: Ascundere logo mare pentru ong.html pe mobil');
-      
-      // Adaugă stiluri pentru a ascunde logo mare
-      const style = document.createElement('style');
-      style.textContent = `
-        @media (max-width: 768px) {
-          header img:not(#site-logo-v7 img), 
-          header > a > img,
-          header .logo:not(#site-logo-v7),
-          .hero-image,
-          img[width="500"],
-          img[width="600"],
-          img[width="700"],
-          img[width="800"],
-          img[width="900"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            width: 0 !important;
-            position: absolute !important;
-            left: -9999px !important;
-          }
-          
-          header, .header {
-            height: 60px !important;
-            min-height: 60px !important;
-            max-height: 60px !important;
-            background: none !important;
-          }
+    
+    // Funcție pentru a asigura încărcarea imaginii de fundal
+    function ensureBackgroundImage() {
+        // Verifică dacă imaginea de fundal este încărcată
+        const body = document.body;
+        const computedStyle = window.getComputedStyle(body);
+        const backgroundImage = computedStyle.backgroundImage;
+        
+        if (!backgroundImage || backgroundImage === 'none' || backgroundImage.includes('undefined')) {
+            console.log('Imaginea de fundal nu este încărcată, se aplică fallback');
+            body.style.backgroundImage = 'url("/my-website/images/cover.jpeg")';
         }
-      `;
-      document.head.appendChild(style);
     }
-  }
-  
-  // OPTIMIZĂRI DE PERFORMANȚĂ
-  function improvePerformance() {
-    console.log('ULTRA-FIX: Aplicare optimizări de performanță');
     
-    // 1. Eliminare script-uri redundante
-    const scriptIds = [
-      'emergency-mobile-menu-script', 
-      'force-mobile-menu-styles'
-    ];
-    
-    scriptIds.forEach(id => {
-      const script = document.getElementById(id);
-      if (script) {
-        script.remove();
-        console.log(`ULTRA-FIX: Script eliminat: ${id}`);
-      }
-    });
-    
-    // 2. Setarea priorităților pentru scripturile importante
-    document.querySelectorAll('script').forEach(script => {
-      if (script.src && (
-        script.src.includes('auto-inject.js') || 
-        script.src.includes('ultra-fix.js')
-      )) {
-        // Dă prioritate scripturilor esențiale
-        script.async = false;
-        script.defer = true;
-      } else if (!script.src) {
-        // Este un script inline, nu face nimic
-      } else {
-        // Scripturile externe non-esențiale pot fi async
-        script.async = true;
-      }
-    });
-  }
-  
-  // Execută imediat reparațiile
-  fixProduseHeader();
-  fixOngMobile();
-  improvePerformance();
-  
-  // Execută din nou după încărcarea DOM
-  document.addEventListener('DOMContentLoaded', function() {
-    fixProduseHeader();
-    fixOngMobile();
-    improvePerformance();
-  });
-  
-  // Execută din nou după încărcarea completă a paginii
-  window.addEventListener('load', function() {
-    fixProduseHeader();
-    fixOngMobile();
-    
-    // Verifică din nou header-ul produse.html după o secundă
-    if (window.location.pathname.split('/').pop() === 'produse.html') {
-      setTimeout(fixProduseHeader, 1000);
+    // Funcție pentru a detecta pagina curentă
+    function getCurrentPage() {
+        const path = window.location.pathname;
+        if (path.includes('products')) return 'products';
+        if (path.includes('ong')) return 'ong';
+        if (path.includes('therapy')) return 'therapy';
+        if (path.includes('contact')) return 'contact';
+        return 'home';
     }
-  });
-})();
+    
+    // Asigură consistența navigației
+    function ensureNavigation() {
+        const currentPage = getCurrentPage();
+        
+        // Selectează toate link-urile din meniu
+        document.querySelectorAll('nav a').forEach(link => {
+            const href = link.getAttribute('href');
+            
+            // Determină pagina asociată link-ului
+            let pageName = 'home';
+            if (href.includes('products')) pageName = 'products';
+            if (href.includes('ong')) pageName = 'ong';
+            if (href.includes('therapy')) pageName = 'therapy';
+            if (href.includes('contact')) pageName = 'contact';
+            
+            // Marchează link-ul activ
+            if (pageName === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+    
+    // Aplică toate funcțiile de compatibilitate
+    applyConsistentStyles();
+    ensureNavigation();
+    
+    // Reaplică la schimbarea dimensiunii ferestrei
+    window.addEventListener('resize', () => {
+        applyConsistentStyles();
+        ensureNavigation();
+    });
+});

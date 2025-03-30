@@ -90,220 +90,189 @@
       .emergency-overlay.visible {
         display: block !important;
       }
+      
+      /* Page specific adjustments */
+      .page-home .page-content,
+      .page-products .produse-grid,
+      .page-ong .ong-content,
+      .page-therapy .therapy-page,
+      .page-contact .contact-info {
+        margin-top: 60px !important;
+      }
+      
+      /* Profile and cart buttons position */
+      .profile-cart-buttons {
+        position: fixed !important;
+        top: 10px !important;
+        right: 60px !important;
+        display: flex !important;
+        gap: 10px !important;
+        z-index: 9999999 !important;
+      }
+      
+      /* Adjust for page-specific elements */
+      .page-products .produs-card {
+        width: 100% !important;
+        margin: 10px 0 !important;
+      }
+      
+      .page-ong .mission-card {
+        width: 100% !important;
+        margin: 10px 0 !important;
+      }
     }
   `;
   
-  // Adaugă stilurile în HEAD
   document.head.appendChild(criticalStyles);
   
-  // Funcție pentru a crea butonul de urgență
-  function createEmergencyButton() {
-    if (document.querySelector('.force-mobile-button')) return;
+  // Detect current page for proper styling
+  function detectCurrentPage() {
+    const path = window.location.pathname;
+    let pageName = 'home';
     
-    console.log('Mobile-force: Creare buton de urgență pentru meniu');
+    if (path.includes('products')) pageName = 'products';
+    else if (path.includes('ong')) pageName = 'ong';
+    else if (path.includes('therapy')) pageName = 'therapy';
+    else if (path.includes('contact')) pageName = 'contact';
     
-    const emergencyButton = document.createElement('button');
-    emergencyButton.className = 'force-mobile-button';
-    emergencyButton.innerHTML = '☰';
-    emergencyButton.setAttribute('title', 'Meniu de urgență');
-    
-    document.body.appendChild(emergencyButton);
-    
-    // Adaugă eveniment de click
-    emergencyButton.addEventListener('click', function() {
-      // Încearcă să folosească funcția existentă dacă există
-      if (typeof window.openMobileMenu === 'function') {
-        window.openMobileMenu();
-        return;
-      }
+    document.body.classList.add(`page-${pageName}`);
+    return pageName;
+  }
+  
+  // Ensure menu button exists
+  function ensureMobileMenu() {
+    if (!document.querySelector('.force-mobile-button')) {
+      // Create menu button
+      const menuButton = document.createElement('button');
+      menuButton.className = 'force-mobile-button';
+      menuButton.innerHTML = '☰';
+      menuButton.setAttribute('aria-label', 'Meniu');
+      document.body.appendChild(menuButton);
       
-      // Altfel, creează un meniu de urgență
-      showEmergencyMenu();
+      // Create menu structure
+      createMobileMenuStructure();
+    }
+  }
+  
+  // Create full menu structure
+  function createMobileMenuStructure() {
+    const currentPage = detectCurrentPage();
+    
+    // Create logo
+    if (!document.querySelector('.force-mobile-logo')) {
+      const logoContainer = document.createElement('div');
+      logoContainer.className = 'force-mobile-logo';
+      
+      const logo = document.createElement('img');
+      logo.src = '/my-website/images/Logo.png';
+      logo.alt = 'Lupul și Corbul';
+      logo.onerror = function() {
+        this.style.display = 'none';
+      };
+      
+      logoContainer.appendChild(logo);
+      document.body.appendChild(logoContainer);
+    }
+    
+    // Create panel for menu
+    if (!document.querySelector('.emergency-menu-panel')) {
+      const menuPanel = document.createElement('div');
+      menuPanel.className = 'emergency-menu-panel';
+      
+      menuPanel.innerHTML = `
+        <div style="padding: 15px; background: #6b4423; color: white; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: bold;">Meniu</span>
+          <button class="close-menu-button" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
+        </div>
+        <div style="padding: 15px;">
+          <nav>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="margin-bottom: 10px;"><a href="/my-website/" style="color: ${currentPage === 'home' ? '#6b4423' : '#333'}; text-decoration: none; font-weight: ${currentPage === 'home' ? 'bold' : 'normal'};">Acasă</a></li>
+              <li style="margin-bottom: 10px;"><a href="/my-website/products" style="color: ${currentPage === 'products' ? '#6b4423' : '#333'}; text-decoration: none; font-weight: ${currentPage === 'products' ? 'bold' : 'normal'};">Produse</a></li>
+              <li style="margin-bottom: 10px;"><a href="/my-website/ong" style="color: ${currentPage === 'ong' ? '#6b4423' : '#333'}; text-decoration: none; font-weight: ${currentPage === 'ong' ? 'bold' : 'normal'};">Făuritorii de Destin</a></li>
+              <li style="margin-bottom: 10px;"><a href="/my-website/therapy" style="color: ${currentPage === 'therapy' ? '#6b4423' : '#333'}; text-decoration: none; font-weight: ${currentPage === 'therapy' ? 'bold' : 'normal'};">Terapie Personalizată</a></li>
+              <li><a href="/my-website/contact" style="color: ${currentPage === 'contact' ? '#6b4423' : '#333'}; text-decoration: none; font-weight: ${currentPage === 'contact' ? 'bold' : 'normal'};">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      `;
+      
+      document.body.appendChild(menuPanel);
+    }
+    
+    // Create overlay
+    if (!document.querySelector('.emergency-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'emergency-overlay';
+      document.body.appendChild(overlay);
+    }
+    
+    // Create profile and cart buttons
+    if (!document.querySelector('.profile-cart-buttons')) {
+      const buttonsContainer = document.createElement('div');
+      buttonsContainer.className = 'profile-cart-buttons';
+      
+      const profileButton = document.createElement('button');
+      profileButton.className = 'profile-button';
+      profileButton.innerHTML = '<i style="font-family: sans-serif;">👤</i>';
+      profileButton.style.cssText = 'width: 40px; height: 40px; border-radius: 50%; background: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer;';
+      
+      const cartButton = document.createElement('button');
+      cartButton.className = 'cart-button';
+      cartButton.innerHTML = '<i style="font-family: sans-serif;">🛒</i>';
+      cartButton.style.cssText = 'width: 40px; height: 40px; border-radius: 50%; background: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer;';
+      
+      buttonsContainer.appendChild(profileButton);
+      buttonsContainer.appendChild(cartButton);
+      document.body.appendChild(buttonsContainer);
+    }
+  }
+  
+  // Add event listeners
+  function addEventListeners() {
+    // Menu toggle
+    document.querySelector('.force-mobile-button').addEventListener('click', function() {
+      const menuPanel = document.querySelector('.emergency-menu-panel');
+      const overlay = document.querySelector('.emergency-overlay');
+      
+      menuPanel.classList.add('visible');
+      overlay.classList.add('visible');
+    });
+    
+    // Close button
+    document.querySelector('.close-menu-button').addEventListener('click', function() {
+      const menuPanel = document.querySelector('.emergency-menu-panel');
+      const overlay = document.querySelector('.emergency-overlay');
+      
+      menuPanel.classList.remove('visible');
+      overlay.classList.remove('visible');
+    });
+    
+    // Overlay click
+    document.querySelector('.emergency-overlay').addEventListener('click', function() {
+      const menuPanel = document.querySelector('.emergency-menu-panel');
+      const overlay = document.querySelector('.emergency-overlay');
+      
+      menuPanel.classList.remove('visible');
+      overlay.classList.remove('visible');
     });
   }
   
-  // Funcție pentru a crea logo-ul de urgență
-  function createEmergencyLogo() {
-    if (document.querySelector('.force-mobile-logo')) return;
+  // Initialize
+  function init() {
+    detectCurrentPage();
+    ensureMobileMenu();
     
-    console.log('Mobile-force: Creare logo de urgență');
-    
-    const logoLink = document.createElement('a');
-    logoLink.href = 'index.html';
-    logoLink.className = 'force-mobile-logo';
-    
-    const logoImg = document.createElement('img');
-    logoImg.src = 'images/Logo.png';
-    logoImg.alt = 'Lupul și Corbul';
-    
-    logoLink.appendChild(logoImg);
-    document.body.appendChild(logoLink);
-  }
-  
-  // Funcție pentru a afișa meniul de urgență
-  function showEmergencyMenu() {
-    console.log('Mobile-force: Afișare meniu de urgență');
-    
-    // Verifică dacă există deja meniul de urgență
-    let menuPanel = document.querySelector('.emergency-menu-panel');
-    let overlay = document.querySelector('.emergency-overlay');
-    
-    if (!menuPanel) {
-      // Creează overlay-ul
-      overlay = document.createElement('div');
-      overlay.className = 'emergency-overlay';
-      document.body.appendChild(overlay);
-      
-      // Creează panoul de meniu
-      menuPanel = document.createElement('div');
-      menuPanel.className = 'emergency-menu-panel';
-      menuPanel.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:#6b4423; color:white;">
-          <span>Meniu de urgență</span>
-          <button style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">×</button>
-        </div>
-        <a href="index.html" style="display:block; padding:15px; border-bottom:1px solid #eee; color:#333; text-decoration:none;">Acasă</a>
-        <a href="produse.html" style="display:block; padding:15px; border-bottom:1px solid #eee; color:#333; text-decoration:none;">Produse</a>
-        <a href="ong.html" style="display:block; padding:15px; border-bottom:1px solid #eee; color:#333; text-decoration:none;">Făuritorii de Destin</a>
-        <a href="terapie.html" style="display:block; padding:15px; border-bottom:1px solid #eee; color:#333; text-decoration:none;">Terapie Personalizată</a>
-        <a href="contact.html" style="display:block; padding:15px; border-bottom:1px solid #eee; color:#333; text-decoration:none;">Contact</a>
-      `;
-      document.body.appendChild(menuPanel);
-      
-      // Adaugă funcționalitatea de închidere
-      const closeButton = menuPanel.querySelector('button');
-      closeButton.addEventListener('click', function() {
-        menuPanel.classList.remove('visible');
-        overlay.classList.remove('visible');
+    // Add event listeners when DOM is fully loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        addEventListeners();
       });
-      
-      overlay.addEventListener('click', function() {
-        menuPanel.classList.remove('visible');
-        overlay.classList.remove('visible');
-      });
-      
-      // Adaugă funcționalitatea de închidere la click pe link-uri
-      menuPanel.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function() {
-          menuPanel.classList.remove('visible');
-          overlay.classList.remove('visible');
-        });
-      });
-    }
-    
-    // Fă meniul vizibil
-    menuPanel.classList.add('visible');
-    overlay.classList.add('visible');
-  }
-  
-  // Verificare inițială
-  setTimeout(function() {
-    // Verifică dacă există deja un buton de meniu funcțional
-    const existingButton = document.querySelector('.menu-toggle, .mobile-menu-button');
-    const isButtonVisible = existingButton && 
-                           window.getComputedStyle(existingButton).display !== 'none' &&
-                           window.getComputedStyle(existingButton).visibility !== 'hidden';
-    
-    if (!isButtonVisible) {
-      console.log('Mobile-force: Nu există buton de meniu vizibil, se creează unul de urgență');
-      createEmergencyButton();
-      createEmergencyLogo();
     } else {
-      console.log('Mobile-force: Buton de meniu existent și vizibil, nu este necesară intervenția');
-    }
-  }, 1000); // Verifică după 1 secundă pentru a permite încărcarea altor scripturi
-  
-  // Verificare periodică
-  setInterval(function() {
-    const existingButton = document.querySelector('.menu-toggle, .mobile-menu-button');
-    const isButtonVisible = existingButton && 
-                           window.getComputedStyle(existingButton).display !== 'none' &&
-                           window.getComputedStyle(existingButton).visibility !== 'hidden';
-    
-    if (!isButtonVisible) {
-      console.log('Mobile-force: Butonul de meniu a dispărut sau este ascuns, se recreează');
-      createEmergencyButton();
-      createEmergencyLogo();
-    }
-  }, 3000); // Verifică la fiecare 3 secunde
-})();
-
-/**
- * FORȚEAZĂ INJECTAREA ȘI AFIȘAREA MENIULUI PE MOBIL
- * 
- * Acest script încearcă să forțeze apariția meniului pe mobil
- * chiar dacă alte scripturi încearcă să îl suprime
- */
-
-(function() {
-  // Rulează la intervale pentru a asigura afișarea
-  function forceMenuDisplay() {
-    // Verifică dacă suntem pe un ecran mic (mobil)
-    if (window.innerWidth > 768) {
-      return;
-    }
-
-    console.log('Force-Menu: Forțare afișare meniu mobil');
-    
-    // Forțează afișarea butonului de meniu
-    const menuButton = document.querySelector('.mobile-menu-button');
-    if (menuButton) {
-      menuButton.style.display = 'block !important';
-      menuButton.style.visibility = 'visible !important';
-      menuButton.style.opacity = '1 !important';
-      menuButton.style.zIndex = '2147483647 !important';
-    } else {
-      console.log('Force-Menu: Butonul de meniu nu a fost găsit!');
-    }
-    
-    // Forțează afișarea acțiunilor (profil & coș)
-    const actionsContainer = document.querySelector('.mobile-actions');
-    if (actionsContainer) {
-      actionsContainer.style.display = 'flex !important';
-      actionsContainer.style.visibility = 'visible !important';
-      actionsContainer.style.opacity = '1 !important';
-      actionsContainer.style.zIndex = '2147483646 !important';
-    } else {
-      console.log('Force-Menu: Containerul de acțiuni nu a fost găsit!');
-    }
-    
-    // Re-adaugă event listener la butonul de meniu
-    if (menuButton) {
-      menuButton.addEventListener('click', function() {
-        const panel = document.getElementById('mobile-menu-panel');
-        const overlay = document.querySelector('.mobile-overlay');
-        
-        if (panel && overlay) {
-          panel.classList.add('open');
-          overlay.classList.add('open');
-          console.log('Force-Menu: Meniul a fost deschis prin forțare');
-        } else {
-          console.log('Force-Menu: Panoul de meniu sau overlay-ul nu au fost găsite!');
-        }
-      });
+      addEventListeners();
     }
   }
   
-  // Rulează imediat
-  setTimeout(forceMenuDisplay, 500);
-  
-  // Rulează periodic pentru a se asigura că meniul e vizibil
-  setInterval(forceMenuDisplay, 2000);
-  
-  // Rulează după ce pagina e complet încărcată
-  window.addEventListener('load', function() {
-    forceMenuDisplay();
-    
-    // Adaugă rezistență la suprascrierea funcționalității
-    document.querySelector('.mobile-menu-button')?.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const panel = document.getElementById('mobile-menu-panel');
-      const overlay = document.querySelector('.mobile-overlay');
-      
-      if (panel && overlay) {
-        panel.classList.add('open');
-        overlay.classList.add('open');
-      }
-    }, true);
-  });
+  // Start the process
+  init();
 })();

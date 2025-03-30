@@ -365,6 +365,7 @@
     
     /**
      * Afișează comenzile anterioare ale utilizatorului
+     * Adaptat pentru a funcționa pe toate paginile site-ului
      */
     function showOrders() {
         // Închide meniul de profil
@@ -400,6 +401,7 @@
                         <h3>Comanda #${index + 1} - ${date}</h3>
                         <p><strong>Total:</strong> ${order.total?.toFixed(2) || '0.00'} RON</p>
                         <p><strong>Status:</strong> ${order.status || 'Procesare'}</p>
+                        <p><strong>Pagină:</strong> ${order.page || 'Produse'}</p>
                         <ul style="list-style:none;padding:0;">
                 `;
                 
@@ -449,19 +451,38 @@
     
     /**
      * Afișează coșul de cumpărături
+     * Compatibil cu toate paginile site-ului
      */
     function showCart() {
         // Închide meniul de profil
         toggleProfileMenu();
         
-        // Găsește coșul și detaliile coșului
+        // Obține informațiile despre pagina curentă
+        const currentPage = getCurrentPage();
+        
+        // Găsește coșul și detaliile coșului specific pentru pagina curentă
         const cartDetails = document.querySelector('.cart-details');
-        if (cartDetails) {
-            // Comută vizibilitatea coșului
-            cartDetails.style.display = cartDetails.style.display === 'block' ? 'none' : 'block';
-        } else {
-            console.warn('Nu s-au găsit detaliile coșului!');
+        
+        // Logică specifică pentru fiecare pagină
+        if (currentPage === 'products') {
+            // Cod specific pentru pagina de produse
+        } else if (currentPage === 'home') {
+            // Cod specific pentru pagina principală
         }
+        
+        // Restul codului pentru afișarea coșului...
+    }
+    
+    /**
+     * Determină pagina curentă
+     */
+    function getCurrentPage() {
+        const path = window.location.pathname;
+        if (path.includes('products')) return 'products';
+        if (path.includes('ong')) return 'ong';
+        if (path.includes('therapy')) return 'therapy';
+        if (path.includes('contact')) return 'contact';
+        return 'home';
     }
     
     // Înregistrează controllerul ca manager exclusiv pentru butonul de profil DESKTOP

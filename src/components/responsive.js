@@ -66,7 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Se încarcă scripturile pentru ecran mare...');
                 await loadScript('Header L.js');
                 await loadScript('responsive-large.js');
+                await loadScript('utilizator-button-function-desktop.js');
                 console.log('Scripturile pentru ecran mare au fost încărcate.');
+                
+                // Activează navigația pentru toate paginile
+                setupDesktopNavigation();
             } else {
                 // Ecrane mici - curățăm orice stiluri desktop care ar putea persista
                 const desktopMenu = document.querySelector('#main-nav');
@@ -76,25 +80,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 removeScript('Header L.js');
                 removeScript('responsive-large.js');
                 
-                // IMPORTANT: Încarcă DOAR Header M.js pentru ecrane mici
-                // Acesta va gestiona tot comportamentul header-ului pe mobil
-                console.log('Se încarcă doar Header M.js pentru ecran mic...');
+                // Încarcă scripturile pentru ecran mic
                 await loadScript('Header M.js');
-                console.log('Header M.js încărcat cu succes - acesta va gestiona tot header-ul pe mobil.');
+                await loadScript('responsive-small.js');
+                await loadScript('MobileProfile/mobile-optimize.js');
                 
-                // Verifică dacă butonul de meniu este vizibil după o scurtă întârziere
-                setTimeout(() => {
-                    const menuToggle = document.querySelector('.menu-toggle');
-                    if (menuToggle && window.getComputedStyle(menuToggle).display === 'none') {
-                        console.log('Butonul de meniu este ascuns! Se așteaptă ca Header M.js să îl gestioneze...');
-                    }
-                }, 500);
+                // Activează navigația pentru ecrane mici
+                setupMobileNavigation();
             }
         } catch (error) {
-            console.error('Eroare la încărcarea scripturilor:', error);
+            console.error('Eroare la gestionarea dimensiunii ecranului:', error);
         }
     };
 
+    // Funcție pentru navigația pe desktop
+    function setupDesktopNavigation() {
+        const pages = ['home', 'products', 'ong', 'therapy', 'contact'];
+        const currentPage = getCurrentPage();
+        
+        document.querySelectorAll('#main-nav a').forEach(link => {
+            const pageName = link.getAttribute('data-page');
+            if (pageName === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    // Funcție pentru navigația pe mobil
+    function setupMobileNavigation() {
+        // Implementare specifică pentru mobil
+    }
+    
+    // Detectează pagina curentă
+    function getCurrentPage() {
+        const path = window.location.pathname;
+        if (path.includes('products')) return 'products';
+        if (path.includes('ong')) return 'ong';
+        if (path.includes('therapy')) return 'therapy';
+        if (path.includes('contact')) return 'contact';
+        return 'home';
+    }
+    
     // Inițializare
     handleScreenSize();
 

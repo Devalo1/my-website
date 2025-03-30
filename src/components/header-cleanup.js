@@ -58,23 +58,26 @@
       // Ignoră nodurile din script și style
       if (node.parentNode.tagName === 'SCRIPT' || 
           node.parentNode.tagName === 'STYLE') {
-        continue;
+          continue;
       }
       
-      // Verifică dacă textul conține fragmente problematice
-      if (problematicFragments.some(fragment => node.textContent.includes(fragment))) {
+      // Verifică dacă nodul conține vreun fragment problematic
+      const text = node.textContent;
+      if (problematicFragments.some(fragment => text.includes(fragment))) {
         nodesToRemove.push(node);
       }
     }
     
     // Elimină nodurile problematice
     nodesToRemove.forEach(node => {
-      if (node.parentNode) {
+      try {
         node.parentNode.removeChild(node);
+      } catch (e) {
+        console.warn('Nu s-a putut elimina un nod text problematic:', e);
       }
     });
     
-    console.log(`Cleanup: ${nodesToRemove.length} fragmente de cod au fost eliminate din conținutul vizibil.`);
+    console.log(`Header cleanup: ${nodesToRemove.length} fragmente problematice eliminate`);
   }
   
   // Funcție pentru eliminarea scripturilor și stilurilor duplicat
@@ -168,4 +171,8 @@
   
   // Execută curățarea periodică pentru a prinde probleme ulterioare
   setInterval(performCleanup, 2000);
+  
+  // Reexecută curățarea pentru a prinde elementele adăugate dinamic
+  setTimeout(cleanupCodeFragments, 1000);
+  setTimeout(cleanupCodeFragments, 3000);
 })();
