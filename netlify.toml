@@ -6,4 +6,4 @@
   framework = "vite"
 
 [context.production]
-  environment = { NODE_VERSION = "18" }
+  environment = { NODE_VERSION = "22" }
