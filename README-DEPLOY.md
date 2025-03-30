@@ -1,59 +1,84 @@
-# Ghid de Troubleshooting pentru Deploy
+# Instrucțiuni pentru publicarea pe GitHub Pages
 
-Dacă site-ul tău local (http://localhost:5173/my-website/) arată diferit față de versiunea publicată pe GitHub Pages (https://devalo1.github.io/my-website/), verifică aceste aspecte:
+## Utilizator GitHub
 
-## 1. Verifică fișierele din directorul /public
+- **Username**: Devalo1
+- **Email**: dani_popa21@yahoo.ro
 
-Imaginile și alte resurse statice trebuie să fie în directorul `/public` al proiectului. Când folosești aceste resurse în cod, utilizează path-uri relative la baza site-ului:
+## Metoda simplă (recomandată)
 
-```jsx
-// Corect - Funcționează local și pe GitHub Pages
-<img src="/my-website/images/poza.jpg" alt="Descriere" />
+Folosește scriptul inclus:
 
-// Incorect - Funcționează doar local
-<img src="/images/poza.jpg" alt="Descriere" />
+```bash
+publish-github-pages.bat
 ```
 
-## 2. Verifică referințele de imagini și resurse
+Acest script va:
+1. Verifica dacă există modificări necommise
+2. Oferi opțiunea de a face commit la aceste modificări
+3. Construi proiectul (npm run build)
+4. Publica pe GitHub Pages (npm run deploy)
 
-Asigură-te că toate referințele la imagini și alte resurse includ base path-ul `/my-website/`:
+## Metoda manuală (pentru utilizatori avansați)
 
-```jsx
-// În fișierele CSS
-background-image: url('/my-website/images/fundal.jpg');
+1. **Commit modificări locale**:
+   ```bash
+   git add .
+   git commit -m "Descrierea modificărilor"
+   ```
 
-// În atributele style inline
-style={{ backgroundImage: `url('/my-website/images/fundal.jpg')` }}
-```
+2. **Construiește proiectul**:
+   ```bash
+   npm run build
+   ```
 
-## 3. Verifică workflow-ul GitHub Actions
+3. **Publică pe GitHub Pages**:
+   ```bash
+   npm run deploy
+   ```
 
-Workflow-ul de GitHub Actions trebuie să construiască și să publice site-ul corect. Verifică fișierul `.github/workflows/deploy.yml` și asigură-te că:
-- Instalează dependențele corect
-- Rulează comanda de build cu base path configurat
-- Publică conținutul directorului `dist`
+## Verificare configurație
 
-## 4. Forțează o rebuild completă
+Înainte de publicare, asigură-te că:
 
-Uneori, cache-ul poate cauza probleme. Încearcă să forțezi o rebuild completă:
+1. Fișierul `vite.config.ts` conține configurația corectă:
+   ```typescript
+   export default defineConfig({
+     plugins: [react()],
+     base: '/my-website/',  // Necesar pentru GitHub Pages
+     server: {
+       base: '/my-website/'
+     }
+   })
+   ```
 
-1. Șterge directoarele `node_modules` și `dist` local
-2. Rulează `npm install` 
-3. Rulează `npm run build`
-4. Fă un commit și push
-5. Verifică acțiunea GitHub din tab-ul Actions
+2. Package.json conține script-ul deploy:
+   ```json
+   "scripts": {
+     "deploy": "gh-pages -d dist"
+   }
+   ```
 
-## 5. Verifică conținutul directorului dist după build
+## Soluționarea problemelor
 
-După ce rulezi `npm run build` local, verifică directorul `dist` pentru a te asigura că toate resursele tale sunt incluse corect.
+Dacă întâmpini probleme:
 
-## 6. Verifică configurația Vite
+1. **Configurație Vite incorectă**:
+   ```bash
+   fix-vite-config.bat
+   ```
 
-Confirmă că `vite.config.tsx` include corect baza:
+2. **Probleme cu referința HEAD Git**:
+   ```bash
+   fix-git-head.bat
+   ```
 
-```js
-export default defineConfig({
-  plugins: [react()],
-  base: '/my-website/',
-});
-```
+3. **Pentru o resetare completă**:
+   ```bash
+   reset-total-git.bat
+   ```
+
+## URL site
+
+După publicare, site-ul va fi disponibil la:
+https://devalo1.github.io/my-website/
