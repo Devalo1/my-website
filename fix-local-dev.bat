@@ -1,54 +1,54 @@
 @echo off
-echo *** SINCRONIZARE DEZVOLTARE LOCALĂ CU GITHUB PAGES ***
-echo.
-echo Acest script face ca dezvoltarea locală să fie identică cu GitHub Pages
+echo *** GHID PENTRU DEZVOLTAREA ȘI PUBLICAREA SITE-ULUI ***
 echo.
 
-echo 1. Verificare configurații Vite...
-node scripts/ensure-vite-config.js
+echo === PASUL 1: DEZVOLTARE LOCALĂ ===
 echo.
-
-echo 2. Pregătire directoare statice...
-if not exist "public" (
-    mkdir public
-    echo Director public creat.
-)
-
+echo Pentru a modifica site-ul local:
+echo 1. Deschide proiectul în VS Code:
+echo    code .
 echo.
-echo 3. Verificare package.json pentru script corect de dezvoltare...
-findstr "dev" package.json
+echo 2. Modifică fișierele sursă în directorul src/
+echo    - Editează App.tsx pentru componente și structură
+echo    - Editează CSS-ul pentru stilizare
+echo    - Adaugă imagini în directorul public/images/
 echo.
-echo Dacă vezi "dev": "vite --base=/my-website/", configurația este corectă.
-echo.
-
-echo 4. Acum poți rula dezvoltarea locală cu:
+echo 3. Rulează server-ul de dezvoltare:
 echo    npm run dev
 echo.
-echo Site-ul va fi disponibil la: http://localhost:5173/my-website/
+echo 4. Deschide browser-ul la adresa:
+echo    http://localhost:5173/my-website/
 echo.
-echo 5. Când termini modificările și vrei să le publici:
-echo    a) Folosește auto-commit.bat pentru a face commit
-echo    b) Folosește publish-github-pages.bat pentru publicare
-echo.
-echo IMPORTANT: Pentru a fi identic cu GitHub Pages, trebuie să accesezi:
-echo http://localhost:5173/my-website/
-echo NU http://localhost:5173/
+echo 5. Verifică că toate resursele (imagini, CSS, etc.) folosesc calea corectă:
+echo    /my-website/...
 echo.
 
-echo *** CHECKLIST PROBLEME FRECVENTE ***
+echo === PASUL 2: COMMIT MODIFICĂRI ===
 echo.
-echo 1. Verifică dacă în codul sursă toate căile încep cu /my-website/:
-echo    - Imagini: src="/my-website/imagini/poza.jpg"
-echo    - CSS: url('/my-website/assets/style.css')
-echo    - Link-uri: href="/my-website/about"
-echo.
-echo 2. Verifică dacă imaginile statice sunt în directorul public:
-echo    - public/images/poza.jpg va fi /my-website/images/poza.jpg
-echo.
-echo 3. Verifică package.json:
-echo    - "dev": "vite --base=/my-website/" pentru dezvoltare identică
+echo După ce ai finalizat modificările și site-ul arată bine local:
+echo 1. Închide VS Code
+echo 2. Execută script-ul pentru commit:
+echo    auto-commit.bat
 echo.
 
-echo Apasă orice tastă pentru a deschide VS Code...
+echo === PASUL 3: PUBLICARE PE GITHUB PAGES ===
+echo.
+echo Pentru a publica modificările pe GitHub Pages:
+echo 1. Execută script-ul pentru publicare:
+echo    publish-github-pages.bat
+echo.
+echo 2. Așteaptă câteva minute pentru ca GitHub Actions să proceseze modificările
+echo 3. Verifică site-ul la adresa:
+echo    https://devalo1.github.io/my-website/
+echo.
+
+echo === RECOMANDĂRI IMPORTANTE ===
+echo.
+echo 1. Asigură-te că toate căile pentru resurse (imagini, CSS) încep cu /my-website/
+echo 2. Adaugă toate fișierele statice (imagini, fonturi, etc.) în directorul public/
+echo 3. Folosește întotdeauna auto-commit.bat pentru commit și publish-github-pages.bat pentru publicare
+echo.
+
+echo Apasă orice tastă pentru a deschide VS Code și a începe dezvoltarea...
 pause >nul
 code .

@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+# My Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Dezvoltare
 
-Currently, two official plugins are available:
+Pentru a dezvolta site-ul local:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Instalează dependențele
+npm install
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# Pornește serverul de dezvoltare
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Accesează site-ul la http://localhost:5173/my-website/
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Structura proiectului
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- `src/` - Codul sursă React
+- `public/` - Fișiere statice (imagini, fonturi, etc.)
+- `.github/workflows/` - Configurație GitHub Actions pentru deploy
+
+## Workflow pentru modificări
+
+1. Dezvoltare locală:
+   - Modifică fișierele din `src/`
+   - Testează modificările local
+
+2. Commit:
+   - Rulează `auto-commit.bat` pentru a face commit la modificări
+
+3. Publicare:
+   - Rulează `publish-github-pages.bat` pentru a publica pe GitHub Pages
+
+## Verificare site publicat
+
+Site-ul este publicat automat la: https://devalo1.github.io/my-website/
+
+## Scripturi utile
+
+- `fix-local-dev.bat` - Ghid interactiv pentru dezvoltare
+- `auto-commit.bat` - Salvează modificările în Git
+- `publish-github-pages.bat` - Publică site-ul pe GitHub Pages
