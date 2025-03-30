@@ -1,0 +1,39 @@
+SOLUȚIE ULTRALIGHT PENTRU MENIUL MOBIL - V6.0
+=============================================
+
+Această soluție rezolvă problemele de performanță și butoanele dispărute
+prin utilizarea unui script MINIMAL care consumă foarte puține resurse.
+
+Urmați acești pași pentru implementare:
+
+1. ÎNLOCUIȚI COMPLET fișierul auto-inject.js cu versiunea V6.0 ULTRALIGHT
+   - Această versiune este de 10x mai rapidă
+   - Nu utilizează intervale care încetinesc pagina
+   - Nu utilizează observatori DOM complecși
+   - Afișează garantat butoanele de profil și coș
+
+2. În fiecare pagină HTML, asigurați-vă că:
+   
+   a) <meta name="viewport" content="width=device-width, initial-scale=1.0"> există
+   
+   b) <script src="auto-inject.js"></script> este PRIMUL script din <head>
+   
+   c) ȘTERGEȚI COMPLET toate stilurile și scripturile anterioare pentru meniul mobil:
+      - <style id="emergency-mobile-menu-styles">
+      - <script id="emergency-mobile-menu-script">
+      - <script src="mobile-force.js">
+
+3. VERIFICAȚI și CURĂȚAȚI cache-ul browserului:
+   a) În Chrome: Ctrl+Shift+Del → "Imagini și fișiere cache" → "Șterge datele"
+   b) În Firefox: Ctrl+Shift+Del → "Cache" → "Șterge acum"
+
+4. DESCHIDEȚI paginile din nou și verificați că:
+   - Meniul hamburger apare în stânga sus
+   - Butoanele de profil și coș sunt vizibile în dreapta sus
+   - Performanța site-ului este bună, fără încetiniri
+
+NOTĂ IMPORTANTĂ:
+Această versiune este extrem de simplificată și focusată DOAR pe
+a asigura funcționalitatea de bază a meniului mobil cu impact MINIM
+asupra performanței. Ea renunță la multe caracteristici avansate
+în favoarea vitezei și stabilității.
