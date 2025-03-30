@@ -6,14 +6,15 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-  background-image: url(var(--base-url) + '/background.jpg'); /* Updated to use base-url */
+  
+  /* Variabile pentru căi imagine */
+  --background-url: '/background.jpg';
+  --cover-url: '/images/cover.jpeg';
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  --base-url: ''; /* Va fi actualizat de JS */
 }
 
 body {
@@ -22,14 +23,14 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-image: url(var(--base-url) + '/background.jpg'); /* Updated to use base-url */
+  background-image: url(var(--background-url));
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
 
 .home-container {
-  background-image: url(var(--base-url) + '/images/cover.jpeg'); /* Updated to use base-url */
+  background-image: url(var(--cover-url));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
