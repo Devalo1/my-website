@@ -29,19 +29,13 @@ jobs:
           git config --global user.email "actions@github.com"
 
       - name: Commit and Push changes
-        run: npm run deploy
+        run: |
+          git add .
+          git commit -m "Update site"
+          git push origin main
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
-
-"scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "lint": "eslint . --ext js,jsx,ts,tsx --fix",
-  "preview": "vite preview",
-  "prestart": "node scripts/ensure-vite-config.js",
-  "prebuild": "node scripts/ensure-vite-config.js"
-}
