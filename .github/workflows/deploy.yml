@@ -24,12 +24,7 @@ jobs:
         run: npm run build
 
       - name: Commit and Push changes
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Update site" || echo "No changes to commit"
-          git push origin main
+        run: npm run deploy
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
