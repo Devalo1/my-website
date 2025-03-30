@@ -9,14 +9,15 @@
     "dev": "vite --base=/my-website/",
     "prebuild": "node scripts/ensure-vite-config.js && node scripts/setup-project.cjs",
     "build": "tsc && vite build",
-    "build-netlify": "tsc && vite build --base=/",
-    "build-github": "tsc && vite build --base=/my-website/",
+    "build-netlify": "cross-env BASE_PATH=/ tsc && vite build --base=/",
+    "build-github": "cross-env BASE_PATH=/my-website/ tsc && vite build --base=/my-website/",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --base=/my-website/",
     "deploy": "gh-pages -d dist",
     "clean-config": "node scripts/clean-vite-config.js",
     "prebuild-github": "node scripts/setup-project.cjs",
-    "prebuild-netlify": "node scripts/setup-project.cjs"
+    "prebuild-netlify": "node scripts/setup-project.cjs",
+    "publish-netlify": "node scripts/publish-netlify.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -28,6 +29,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",

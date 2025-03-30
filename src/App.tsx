@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react';
 import './styles/styles.css'; // Importă fișierul CSS
 
-// Definim constanta pentru calea către imagine cu un fallback - folosim calea absolută
-const coverImagePath = '/images/cover.jpeg';
-const placeholderImagePath = '/images/placeholder.jpeg';
-const productImage1Path = '/images/product1.jpg';
-const productImage2Path = '/images/product2.jpg';
-const productImage3Path = '/images/product3.jpg';
+// Obține baza URL pentru resurse
+const getBasePath = () => {
+  // În producție, folosește calea de bază definită în Vite
+  if (import.meta.env.PROD) {
+    return import.meta.env.BASE_URL;
+  }
+  // În dezvoltare, folosim root path
+  return '/';
+};
+
+// Definim constanta pentru calea către imagine cu un fallback
+const BASE_PATH = getBasePath();
+const coverImagePath = `${BASE_PATH}images/cover.jpeg`;
+const placeholderImagePath = `${BASE_PATH}images/placeholder.jpeg`;
+const productImage1Path = `${BASE_PATH}images/product1.jpg`;
+const productImage2Path = `${BASE_PATH}images/product2.jpg`;
+const productImage3Path = `${BASE_PATH}images/product3.jpg`;
 
 // Definim paginile disponibile în aplicație
 type PageType = 'home' | 'products' | 'ong' | 'therapy' | 'contact';
@@ -122,6 +133,9 @@ const App = () => {
     };
   }, []);
 
+  const videoSource = `${BASE_PATH}images/background.mov`;
+  const videoSourceMP4 = `${BASE_PATH}images/background.mp4`;
+
   return (
     <div style={backgroundStyle} className="app-container">
       <header>
@@ -131,8 +145,8 @@ const App = () => {
             videoElement.style.display = 'none';
           }
         }}>
-          <source src="/my-website/images/background.mov" type="video/mp4" />
-          <source src="/my-website/images/background.mp4" type="video/mp4" />
+          <source src={videoSource} type="video/mp4" />
+          <source src={videoSourceMP4} type="video/mp4" />
         </video>
 
         <div className="header-buttons right">

@@ -6,14 +6,20 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // Folosim un singur mod de a defini baza
   base: process.env.NODE_ENV === 'production' 
-    ? '/my-website/' 
+    ? (process.env.BASE_PATH || '/my-website/') 
     : '/',
   build: {
     assetsInlineLimit: 0, // Asigură că toate fișierele sunt emise ca fișiere separate
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true
   },
   server: {
-    base: '/my-website/'
+    host: true,
+    port: 3000,
+    open: true
   },
   resolve: {
     alias: {
