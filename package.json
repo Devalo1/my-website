@@ -8,6 +8,7 @@
     "dev": "vite --base=/my-website/",
     "prebuild": "node scripts/ensure-vite-config.js",
     "build": "tsc && vite build",
+    "build-netlify": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --base=/my-website/",
     "deploy": "gh-pages -d dist",
