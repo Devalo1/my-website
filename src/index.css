@@ -19,14 +19,12 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-image: url(var(--background-url));
+  padding: 0;
+  background-image: url('/my-website/images/cover.jpeg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  min-height: 100vh;
 }
 
 .home-container {
