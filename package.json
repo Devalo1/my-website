@@ -9,7 +9,8 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --fix",
     "preview": "vite preview",
     "prestart": "node scripts/ensure-vite-config.js",
-    "prebuild": "node scripts/ensure-vite-config.js"
+    "prebuild": "node scripts/ensure-vite-config.js",
+    "deploy": "git add . && git commit -m \"Update site\" && git push"
   },
   "dependencies": {
     "react": "^18.2.0",
