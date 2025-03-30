@@ -25,3 +25,6 @@ dist-ssr
 
 # Exclude vite.config.js to prevent accidental commits
 vite.config.js
+# Exclude empty Vite config files
+vite.config.tsx.tsx
+vite.config.tsx

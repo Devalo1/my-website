@@ -7,13 +7,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Ștergem fișierele de configurație nedorite
+// Lista de fișiere de configurație nedorite
 const unwantedConfigFiles = [
   'vite.config.js',
   'vite.config.tsx.tsx',
   'vite.config.tsx'
 ];
 
+// Verifică și șterge fiecare fișier nedorit
 unwantedConfigFiles.forEach(configFile => {
   const filePath = path.join(rootDir, configFile);
   
@@ -25,10 +26,12 @@ unwantedConfigFiles.forEach(configFile => {
     } catch (error) {
       console.error(`❌ Eroare la ștergerea ${configFile}:`, error.message);
     }
+  } else {
+    console.log(`${configFile} nu există, nu este necesară ștergerea.`);
   }
 });
 
-// Verifică și asigură existența vite.config.ts corect
+// Verifică dacă vite.config.ts există, dacă nu, îl creează
 const viteConfigTs = path.join(rootDir, 'vite.config.ts');
 
 if (!fs.existsSync(viteConfigTs)) {
@@ -54,40 +57,6 @@ export default defineConfig({
   } catch (error) {
     console.error('❌ Eroare la crearea vite.config.ts:', error.message);
   }
-} else {
-  // Verifică conținutul vite.config.ts existent
-  console.log('Verificarea configurației în vite.config.ts...');
-  
-  let configContent = fs.readFileSync(viteConfigTs, 'utf8');
-  let modified = false;
-  
-  // Verifică dacă conține configurația base pentru GitHub Pages
-  if (!configContent.includes("base: '/my-website/'")) {
-    console.log('Adăugare configurație base pentru GitHub Pages...');
-    configContent = configContent.replace(
-      /defineConfig\(\s*{\s*/,
-      "defineConfig({\n  base: '/my-website/', // Necesar pentru GitHub Pages\n  "
-    );
-    modified = true;
-  }
-  
-  // Verifică dacă conține configurația server pentru dezvoltare locală
-  if (!configContent.includes("server: {")) {
-    console.log('Adăugare configurație server pentru dezvoltare locală...');
-    configContent = configContent.replace(
-      /}\s*\)\s*$/,
-      ",\n  server: {\n    base: '/my-website/'\n  }\n})"
-    );
-    modified = true;
-  }
-  
-  // Salvează modificările dacă există
-  if (modified) {
-    fs.writeFileSync(viteConfigTs, configContent, 'utf8');
-    console.log('✅ vite.config.ts a fost actualizat cu succes.');
-  } else {
-    console.log('vite.config.ts este deja corect configurat.');
-  }
 }
 
-console.log('Verificare completă!');
+console.log('Proces complet! Acum ar trebui să aveți doar fișierul vite.config.ts corect.');
