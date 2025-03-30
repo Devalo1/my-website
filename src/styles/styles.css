@@ -16,6 +16,9 @@
         body {
             background-color: #fff8f0;
             animation: fadeIn 0.5s ease-out;
+            background-image: url('../assets/background.jpg'); /* Imaginea este în src/assets */
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
         @keyframes fadeIn {
@@ -422,87 +425,4 @@
         });
     </script>
 </body>
-</html>/* ...existing code... */
-
-/* Mobile First Adjustments */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        padding: 0.5rem;
-        text-align: center;
-        display: none; /* Ascunde meniul pe mobile inițial */
-    }
-
-    nav.active {
-        display: flex;
-    }
-
-    .menu-toggle {
-        display: block;
-        background: #8b5a2b;
-        color: white;
-        border: none;
-        padding: 1rem;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-    .hero {
-        height: 300px;
-        padding: 1rem;
-    }
-
-    .hero h2 {
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-
-    .section {
-        padding: 2rem 1rem;
-    }
-
-    .produse-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .produs-card {
-        margin: 0.5rem 0;
-    }
-
-    .contact-form {
-        padding: 1rem;
-    }
-
-    input, textarea {
-        font-size: 16px; /* Mărește pentru a preveni zoom-ul automat */
-    }
-
-    button {
-        padding: 12px 24px; /* Face butoanele mai mari pentru atingere */
-    }
-}
-
-/* Optimizări pentru ecrane foarte mici */
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.8rem;
-    }
-
-    .hero h2 {
-        font-size: 1.5rem;
-    }
-
-    .terapie h2 {
-        font-size: 1.3rem;
-    }
-
-    footer p {
-        font-size: 0.9rem;
-    }
-}
-
-/* Meniu hamburger */
-.menu-toggle {
-    display: none; /* Ascunde inițial */
-}
+</html>

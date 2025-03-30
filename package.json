@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --config vite.config.tsx",
+    "build": "vite build --config vite.config.tsx",
+    "custom-build": "node scripts/build.js",
+    "preview": "vite preview --config vite.config.tsx",
     "lint": "eslint . --ext js,jsx,ts,tsx --fix",
-    "preview": "vite preview",
     "prestart": "node scripts/ensure-vite-config.js",
     "prebuild": "node scripts/ensure-vite-config.js",
     "deploy": "git diff --quiet || (git add . && git commit -m 'Update site' && git push)"

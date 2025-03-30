@@ -1,0 +1,6 @@
+/* filepath: c:\Proiect\my-website\src\styles.css */
+body {
+  background-image: url('/background.jpg'); /* Imaginea este în public/background.jpg */
+  background-size: cover;
+  background-repeat: no-repeat;
+}
