@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --base=/my-website/",
+    "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext js,jsx,ts,tsx --fix",
     "preview": "vite preview",
     "prestart": "node scripts/ensure-vite-config.js",
     "prebuild": "node scripts/ensure-vite-config.js"
