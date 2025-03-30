@@ -7,22 +7,19 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Git user
-      run: |
-        git config --global user.name "Devalo1"
-        git config --global user.email "dani_popa21@yahoo.ro"
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
     - name: Install dependencies
-      run: npm install
-
-    - name: Run pre-build cleanup
-      run: npm run clean-config
+      run: npm ci || npm install
 
     - name: Build project
       run: npm run build
