@@ -5,9 +5,13 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/my-website/',  // Necesar pentru GitHub Pages
+  base: process.env.NODE_ENV === 'production' 
+    ? '/my-website/' 
+    : '/',
+  build: {
+    assetsInlineLimit: 0 // Asigură că toate fișierele sunt emise ca fișiere separate
+  },
   server: {
-    // Acest lucru va asigura că în dezvoltare locală, calea de bază este aceeași
     base: '/my-website/'
   }
 })

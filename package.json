@@ -4,15 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/ensure-vite-config.js",
+    "setup": "node scripts/setup-project.cjs",
+    "predev": "node scripts/ensure-vite-config.js && node scripts/setup-project.cjs",
     "dev": "vite --base=/my-website/",
-    "prebuild": "node scripts/ensure-vite-config.js",
+    "prebuild": "node scripts/ensure-vite-config.js && node scripts/setup-project.cjs",
     "build": "tsc && vite build",
-    "build-netlify": "tsc && vite build",
+    "build-netlify": "tsc && vite build --base=/",
+    "build-github": "tsc && vite build --base=/my-website/",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --base=/my-website/",
     "deploy": "gh-pages -d dist",
-    "clean-config": "node scripts/clean-vite-config.js"
+    "clean-config": "node scripts/clean-vite-config.js",
+    "prebuild-github": "node scripts/setup-project.cjs",
+    "prebuild-netlify": "node scripts/setup-project.cjs"
   },
   "dependencies": {
     "react": "^18.2.0",
