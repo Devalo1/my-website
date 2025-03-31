@@ -1,6 +1,6 @@
 [build]
   publish = "static-build"
-  command = "./build-netlify.sh"
+  command = "bash -c 'chmod +x build-netlify.sh && ./build-netlify.sh'"
 
 # Configure redirects for Single Page Application
 [[redirects]]
