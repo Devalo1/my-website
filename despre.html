@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despre Noi - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .about-section {
+            padding: 3rem 0;
+        }
+
+        .about-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .about-intro h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .about-intro p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .about-content p {
+            margin-bottom: 1rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .about-values {
+            background-color: #f8f9fa;
+            padding: 4rem 0;
+            margin-bottom: 4rem;
+        }
+
+        .values-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .values-title h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #3a86ff;
+            color: white;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .value-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .team-section {
+            padding-bottom: 4rem;
+        }
+
+        .team-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .team-title h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-info {
+            padding: 1.5rem;
+        }
+
+        .member-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .member-role {
+            color: #3a86ff;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .member-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .member-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            color: #3a86ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .member-social a:hover {
+            background-color: #3a86ff;
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .about-image {
+                order: 1;
+            }
+            
+            .about-content {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .about-intro h2, .about-content h3, .values-title h3, .team-title h3 {
+                font-size: 1.8rem;
+            }
+            
+            .about-intro p, .about-content p {
+                font-size: 1rem;
+            }
+            
+            .about-values {
+                padding: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html" class="active">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html">Magazin</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Coșul Tău</h2>
+                <span class="close-cart">&times;</span>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be added here dynamically -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <p>Total: <span id="cart-total-price">0.00</span> Lei</p>
+                </div>
+                <button id="checkout-btn" class="btn">Finalizează Comanda</button>
+                <button id="clear-cart" class="btn-secondary">Golește Coșul</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Despre Noi</h1>
+                <p>Află povestea noastră și viziunea care ne ghidează</p>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-intro">
+                    <h2>Povestea noastră</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec. Nullam euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="https://via.placeholder.com/600x400" alt="Despre noi">
+                    </div>
+                    <div class="about-content">
+                        <h3>Cum a început totul</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec.</p>
+                        <p>Nullam euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec.</p>
+                    </div>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-content">
+                        <h3>Viziunea noastră</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec.</p>
+                        <p>Nullam euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec. Donec euismod, nisl eget ultricies ultrices, nisl nisl ultricies nisl, nec ultricies nisl nisl nec.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://via.placeholder.com/600x400" alt="Viziunea noastră">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-values">
+            <div class="container">
+                <div class="values-title">
+                    <h3>Valorile noastre</h3>
+                    <p>Principiile care ne ghidează în tot ceea ce facem</p>
+                </div>
+
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h4>Calitate</h4>
+                        <p>Livrăm întotdeauna produse și servicii de cea mai înaltă calitate, fără compromisuri.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>Pasiune</h4>
+                        <p>Suntem pasionați de ceea ce facem și această pasiune se reflectă în fiecare aspect al muncii noastre.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4>Integritate</h4>
+                        <p>Acționăm cu onestitate și transparență în toate interacțiunile cu clienții și partenerii noștri.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>Inovație</h4>
+                        <p>Căutăm constant modalități noi și inovatoare de a ne îmbunătăți produsele și serviciile.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team-section">
+            <div class="container">
+                <div class="team-title">
+                    <h3>Echipa noastră</h3>
+                    <p>Oamenii pasionați din spatele succesului nostru</p>
+                </div>
+
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-image">
+                            <img src="https://via.placeholder.com/300x300" alt="Membru echipă">
+                        </div>
+                        <div class="member-info">
+                            <h4>Ion Popescu</h4>
+                            <div class="member-role">CEO & Fondator</div>
+                            <p class="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices.</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-image">
+                            <img src="https://via.placeholder.com/300x300" alt="Membru echipă">
+                        </div>
+                        <div class="member-info">
+                            <h4>Maria Ionescu</h4>
+                            <div class="member-role">Director Marketing</div>
+                            <p class="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices.</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-image">
+                            <img src="https://via.placeholder.com/300x300" alt="Membru echipă">
+                        </div>
+                        <div class="member-info">
+                            <h4>Andrei Popa</h4>
+                            <div class="member-role">Director Tehnic</div>
+                            <p class="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices.</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-image">
+                            <img src="https://via.placeholder.com/300x300" alt="Membru echipă">
+                        </div>
+                        <div class="member-info">
+                            <h4>Elena Marin</h4>
+                            <div class="member-role">Manager Relații Clienți</div>
+                            <p class="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices.</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -9,27 +9,16 @@
     "check-resources": "node scripts/resource-checker.js",
     "free-ports": "node scripts/free-ports.js",
     "start-clean": "node scripts/run-dev.js",
-    "build": "node scripts/fix-css-urls.js && node scripts/ensure-cover-image.js && vite build && node scripts/fix-html-paths.js && node scripts/verify-build.js",
+    "build": "tsc && node scripts/fix-image-paths.js && vite build && node scripts/verify-build.js",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "node scripts/run-dev.js",
-    "build-netlify": "NODE_ENV=production DISABLE_SHARP=true node build-netlify.js",
-    "debug": "vite --debug --base=/my-website/",
+    "start": "vite",
+    "type-check": "tsc --noEmit",
     "update-deps": "node scripts/update-dependencies.js",
-    "fix-package": "node scripts/fix-package-json.js",
-    "free-all-ports": "node scripts/free-all-ports.js",
-    "create-placeholders": "node scripts/create-placeholder-images.js",
-    "convert-images": "node scripts/convert-svg-to-img.js",
-    "ensure-images": "node scripts/ensure-images.js",
-    "repair-images": "node scripts/repair-images.js",
-    "predev": "npm run copy-cover && powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
-    "predev-npm": "npm run ensure-images && npm run repair-images",
-    "preinstall": "",
-    "prebuild": "npm run copy-cover",
-    "build:netlify": "npm run copy-cover && NODE_OPTIONS=\"--max-old-space-size=4096\" node build-netlify.js",
-    "copy-cover": "node scripts/copy-cover-image.js"
+    "upload-products": "node scripts/upload-products-to-firebase.js"
   },
   "dependencies": {
+    "firebase": "10.14.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "6.30.0"
@@ -38,18 +27,16 @@
     "@types/node": "^20.12.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "4.3.4",
     "eslint": "8.57.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "glob": "^10.3.10",
-    "sharp": "0.33.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
-  },
-  "optionalDependencies": {
-    "@img/sharp-linux-x64": "^0.33.0"
   },
   "engines": {
     "node": ">=18"

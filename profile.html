@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilizator - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Stiluri pentru pagina profil */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .profile-sidebar {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            position: sticky;
+            top: 100px;
+            align-self: start;
+        }
+        
+        .profile-user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 3px solid #f1f5f9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-user-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .profile-user-info p {
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .profile-menu {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-menu li {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-menu li i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .profile-menu li:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .profile-menu li.active {
+            background-color: #3a86ff;
+            color: white;
+        }
+        
+        .profile-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .profile-tab {
+            display: none;
+        }
+        
+        .profile-tab.active {
+            display: block;
+        }
+        
+        .profile-tab h2 {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            color: #3a86ff;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-info h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .stat-info p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .recent-activity {
+            margin-bottom: 2rem;
+        }
+        
+        .recent-activity h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .activity-list {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            background-color: #e9ecef;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: #3a86ff;
+        }
+        
+        .activity-content p {
+            margin-bottom: 0.3rem;
+        }
+        
+        .activity-content small {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .orders-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .order-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-card-header {
+            padding: 1.5rem;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .order-status.processing {
+            background-color: #fff7e6;
+            color: #ff9800;
+        }
+        
+        .order-status.shipping {
+            background-color: #e6f7ff;
+            color: #0099ff;
+        }
+        
+        .order-status.delivered {
+            background-color: #e6fff0;
+            color: #28a745;
+        }
+        
+        .order-status.canceled {
+            background-color: #ffe6e6;
+            color: #dc3545;
+        }
+        
+        .order-card-body {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .order-card-footer {
+            padding: 1.5rem;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+        
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .wishlist-item {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .wishlist-image {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .wishlist-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .wishlist-details {
+            padding: 1rem;
+        }
+        
+        .wishlist-details h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .wishlist-details .price {
+            font-size: 1.1rem;
+        }
+        
+        .wishlist-actions {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        .remove-from-wishlist {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .addresses-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .address-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .address-card.default-address {
+            border: 2px solid #3a86ff;
+        }
+        
+        .address-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .address-card-header {
+            padding: 1.5rem;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .default-badge {
+            background-color: #3a86ff;
+            color: #fff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        
+        .address-card-body {
+            padding: 1.5rem;
+        }
+        
+        .address-card-body p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .address-card-footer {
+            padding: 1.5rem;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .account-form {
+            max-width: 600px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            color: #aaa;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .modal-form {
+            padding: 1.5rem;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .no-activity,
+        .no-orders,
+        .no-wishlist,
+        .no-addresses {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            
+            .profile-user-info {
+                flex-direction: row;
+                text-align: left;
+                align-items: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 1rem;
+                margin-bottom: 0;
+            }
+            
+            .profile-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .profile-menu li {
+                flex: 1 0 auto;
+                margin-bottom: 0;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .profile-user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html">Magazin</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Profilul meu</h1>
+                <p>Gestionează-ți contul și comenzile</p>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <div class="container">
+                <div class="profile-grid">
+                    <!-- Sidebar with profile navigation -->
+                    <div class="profile-sidebar">
+                        <div class="profile-user-info">
+                            <div class="profile-avatar">
+                                <img id="user-avatar" src="https://via.placeholder.com/100" alt="Avatar">
+                            </div>
+                            <h3 id="user-name">...</h3>
+                            <p id="user-email">...</p>
+                        </div>
+                        <ul class="profile-menu">
+                            <li class="active" data-tab="dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </li>
+                            <li data-tab="orders">
+                                <i class="fas fa-shopping-bag"></i> Comenzile mele
+                            </li>
+                            <li data-tab="wishlist">
+                                <i class="fas fa-heart"></i> Lista de dorințe
+                            </li>
+                            <li data-tab="addresses">
+                                <i class="fas fa-map-marker-alt"></i> Adrese
+                            </li>
+                            <li data-tab="account">
+                                <i class="fas fa-user-cog"></i> Detalii cont
+                            </li>
+                        </ul>
+                        <button id="logout-btn" class="btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Deconectare
+                        </button>
+                    </div>
+
+                    <!-- Main profile content -->
+                    <div class="profile-content">
+                        <!-- Dashboard tab -->
+                        <div class="profile-tab active" id="dashboard">
+                            <h2>Dashboard</h2>
+                            <div class="profile-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>Comenzi</h4>
+                                        <p id="order-count">0</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>Lista de dorințe</h4>
+                                        <p id="wishlist-count">0</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>Adrese</h4>
+                                        <p id="address-count">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recent-activity">
+                                <h3>Activitate recentă</h3>
+                                <div id="recent-activity-list" class="activity-list">
+                                    <p class="no-activity">Nu există activitate recentă.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders tab -->
+                        <div class="profile-tab" id="orders">
+                            <h2>Comenzile mele</h2>
+                            <div id="orders-list" class="orders-list">
+                                <p class="no-orders">Nu ai plasat încă nicio comandă.</p>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist tab -->
+                        <div class="profile-tab" id="wishlist">
+                            <h2>Lista mea de dorințe</h2>
+                            <div id="wishlist-items" class="wishlist-grid">
+                                <p class="no-wishlist">Nu ai adăugat încă produse la lista de dorințe.</p>
+                            </div>
+                        </div>
+
+                        <!-- Addresses tab -->
+                        <div class="profile-tab" id="addresses">
+                            <h2>Adresele mele</h2>
+                            <button id="add-address-btn" class="btn-small">
+                                <i class="fas fa-plus"></i> Adaugă adresă nouă
+                            </button>
+                            <div id="addresses-list" class="addresses-list">
+                                <p class="no-addresses">Nu ai adăugat încă nicio adresă.</p>
+                            </div>
+                        </div>
+
+                        <!-- Account details tab -->
+                        <div class="profile-tab" id="account">
+                            <h2>Detalii cont</h2>
+                            <form id="account-form" class="account-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-first-name">Prenume</label>
+                                        <input type="text" id="profile-first-name" placeholder="Prenumele tău">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-last-name">Nume</label>
+                                        <input type="text" id="profile-last-name" placeholder="Numele tău">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email">Email</label>
+                                    <input type="email" id="profile-email" placeholder="Adresa ta de email" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-phone">Telefon</label>
+                                    <input type="tel" id="profile-phone" placeholder="Numărul tău de telefon">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-change-password">Schimbă parola</label>
+                                    <button type="button" id="profile-change-password" class="btn-secondary">
+                                        Schimbă parola
+                                    </button>
+                                </div>
+                                <div id="profile-error" class="error-message"></div>
+                                <button type="submit" class="btn">Salvează modificările</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <!-- Password Change Modal -->
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Schimbă parola</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="password-form" class="modal-form">
+                <div class="form-group">
+                    <label for="current-password">Parola actuală</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">Parola nouă</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-password">Confirmă parola nouă</label>
+                    <input type="password" id="confirm-new-password" required>
+                </div>
+                <div id="password-error" class="error-message"></div>
+                <button type="submit" class="btn">Schimbă parola</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div id="address-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adaugă adresă nouă</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="address-form" class="modal-form">
+                <div class="form-group">
+                    <label for="address-name">Nume adresă</label>
+                    <input type="text" id="address-name" placeholder="ex. Acasă, Birou" required>
+                </div>
+                <div class="form-group">
+                    <label for="address-street">Stradă</label>
+                    <input type="text" id="address-street" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address-city">Oraș</label>
+                        <input type="text" id="address-city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address-zip">Cod poștal</label>
+                        <input type="text" id="address-zip" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address-county">Județ</label>
+                    <select id="address-county" required>
+                        <option value="">Selectează județul</option>
+                        <option value="alba">Alba</option>
+                        <option value="arad">Arad</option>
+                        <option value="arges">Argeș</option>
+                        <option value="bacau">Bacău</option>
+                        <option value="bihor">Bihor</option>
+                        <option value="bistrita-nasaud">Bistrița-Năsăud</option>
+                        <option value="botosani">Botoșani</option>
+                        <option value="brasov">Brașov</option>
+                        <option value="braila">Brăila</option>
+                        <option value="bucuresti">București</option>
+                        <option value="buzau">Buzău</option>
+                        <option value="caras-severin">Caraș-Severin</option>
+                        <option value="calarasi">Călărași</option>
+                        <option value="cluj">Cluj</option>
+                        <option value="constanta">Constanța</option>
+                        <option value="covasna">Covasna</option>
+                        <option value="dambovita">Dâmbovița</option>
+                        <option value="dolj">Dolj</option>
+                        <option value="galati">Galați</option>
+                        <option value="giurgiu">Giurgiu</option>
+                        <option value="gorj">Gorj</option>
+                        <option value="harghita">Harghita</option>
+                        <option value="hunedoara">Hunedoara</option>
+                        <option value="ialomita">Ialomița</option>
+                        <option value="iasi">Iași</option>
+                        <option value="ilfov">Ilfov</option>
+                        <option value="maramures">Maramureș</option>
+                        <option value="mehedinti">Mehedinți</option>
+                        <option value="mures">Mureș</option>
+                        <option value="neamt">Neamț</option>
+                        <option value="olt">Olt</option>
+                        <option value="prahova">Prahova</option>
+                        <option value="satu-mare">Satu Mare</option>
+                        <option value="salaj">Sălaj</option>
+                        <option value="sibiu">Sibiu</option>
+                        <option value="suceava">Suceava</option>
+                        <option value="teleorman">Teleorman</option>
+                        <option value="timis">Timiș</option>
+                        <option value="tulcea">Tulcea</option>
+                        <option value="vaslui">Vaslui</option>
+                        <option value="valcea">Vâlcea</option>
+                        <option value="vrancea">Vrancea</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="address-phone">Telefon</label>
+                    <input type="tel" id="address-phone" required>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" id="address-default">
+                    <label for="address-default">Setează ca adresă implicită</label>
+                </div>
+                <div id="address-error" class="error-message"></div>
+                <button type="submit" class="btn">Salvează adresa</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/script.js"></script>
+    <script type="module">
+        import { auth, db } from './js/firebase-config.ts';
+        import { signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateProfile } from 'firebase/auth';
+        import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificare autentificare
+            auth.onAuthStateChanged(async user => {
+                if (!user) {
+                    // Utilizator neautentificat, redirecționare la login
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Afișează informații utilizator
+                const userNameElem = document.getElementById('user-name');
+                const userEmailElem = document.getElementById('user-email');
+                const userAvatarElem = document.getElementById('user-avatar');
+                
+                if (userNameElem) userNameElem.textContent = user.displayName || 'Utilizator';
+                if (userEmailElem) userEmailElem.textContent = user.email || '';
+                if (userAvatarElem && user.photoURL) userAvatarElem.src = user.photoURL;
+
+                // Încarcă datele utilizatorului din Firestore
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        
+                        // Populează formularul de detalii cont
+                        document.getElementById('profile-first-name').value = userData.firstName || '';
+                        document.getElementById('profile-last-name').value = userData.lastName || '';
+                        document.getElementById('profile-email').value = userData.email || user.email || '';
+                        document.getElementById('profile-phone').value = userData.phone || '';
+                        
+                        // Actualizează statistici
+                        if (userData.orders) {
+                            document.getElementById('order-count').textContent = userData.orders.length;
+                            populateOrders(userData.orders);
+                        }
+                        
+                        if (userData.wishlist) {
+                            document.getElementById('wishlist-count').textContent = userData.wishlist.length;
+                            populateWishlist(userData.wishlist);
+                        }
+                        
+                        if (userData.addresses) {
+                            document.getElementById('address-count').textContent = userData.addresses.length;
+                            populateAddresses(userData.addresses);
+                        }
+                        
+                        // Populează activitate recentă
+                        populateRecentActivity(userData);
+                    }
+                } catch (error) {
+                    console.error('Eroare la încărcarea datelor utilizatorului:', error);
+                    showToast('Eroare la încărcarea datelor. Te rugăm să reîncerci.', 'error');
+                }
+            });
+            
+            // Funcții de populate UI
+            function populateRecentActivity(userData) {
+                // ...existing code...
+            }
+            
+            function formatDate(date) {
+                // ...existing code...
+            }
+            
+            function populateOrders(orders) {
+                // ...existing code...
+            }
+            
+            function getStatusClass(status) {
+                // ...existing code...
+            }
+            
+            function populateWishlist(wishlist) {
+                // ...existing code...
+            }
+            
+            function populateAddresses(addresses) {
+                // ...existing code...
+            }
+            
+            // Gestionarea taburilor de profil
+            const profileTabs = document.querySelectorAll('.profile-menu li');
+            const contentTabs = document.querySelectorAll('.profile-tab');
+            
+            profileTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Eliminare clasă active de pe toate tab-urile
+                    profileTabs.forEach(t => t.classList.remove('active'));
+                    contentTabs.forEach(c => c.classList.remove('active'));
+                    
+                    // Adăugare clasă active pe tab-ul curent
+                    this.classList.add('active');
+                    
+                    // Afișare conținut tab
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Buton de delogare
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function() {
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'index.html';
+                    } catch (error) {
+                        console.error('Eroare la delogare:', error);
+                        showToast('Eroare la delogare. Încearcă din nou.', 'error');
+                    }
+                });
+            }
+            
+            // Formular actualizare cont
+            const accountForm = document.getElementById('account-form');
+            if (accountForm) {
+                accountForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const firstName = document.getElementById('profile-first-name').value;
+                    const lastName = document.getElementById('profile-last-name').value;
+                    const phone = document.getElementById('profile-phone').value;
+                    
+                    try {
+                        const user = auth.currentUser;
+                        if (!user) return;
+                        
+                        // Actualizare date în Firestore
+                        await updateDoc(doc(db, 'users', user.uid), {
+                            firstName,
+                            lastName,
+                            phone
+                        });
+                        
+                        // Actualizare displayName în Firebase Auth
+                        await updateProfile(user, {
+                            displayName: `${firstName} ${lastName}`
+                        });
+                        
+                        // Actualizare nume afișat în profil
+                        const userNameElem = document.getElementById('user-name');
+                        if (userNameElem) {
+                            userNameElem.textContent = `${firstName} ${lastName}`;
+                        }
+                        
+                        showToast('Detaliile contului au fost actualizate cu succes!', 'success');
+                        
+                    } catch (error) {
+                        console.error('Eroare la actualizarea detaliilor contului:', error);
+                        document.getElementById('profile-error').textContent = 'Eroare la actualizarea detaliilor. Încearcă din nou.';
+                    }
+                });
+            }
+            
+            // Buton și modal de schimbare parolă
+            const changePasswordBtn = document.getElementById('profile-change-password');
+            const passwordModal = document.getElementById('password-modal');
+            const closePasswordModal = passwordModal?.querySelector('.close-modal');
+            
+            if (changePasswordBtn && passwordModal) {
+                // ...existing code...
+            }
+            
+            // Gestionare modal adresă
+            const addAddressBtn = document.getElementById('add-address-btn');
+            const addressModal = document.getElementById('address-modal');
+            const closeAddressModal = addressModal?.querySelector('.close-modal');
+            
+            if (addAddressBtn && addressModal) {
+                // ...existing code...
+            }
+            
+            // Funcție pentru afișarea notificărilor toast
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) return;
+                
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                
+                let icon = '';
+                switch(type) {
+                    case 'success':
+                        icon = '<i class="fas fa-check-circle toast-icon"></i>';
+                        break;
+                    case 'error':
+                        icon = '<i class="fas fa-exclamation-circle toast-icon"></i>';
+                        break;
+                    default:
+                        icon = '<i class="fas fa-info-circle toast-icon"></i>';
+                }
+                
+                toast.innerHTML = `
+                    ${icon}
+                    <div class="toast-message">${message}</div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Auto remove after 4 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

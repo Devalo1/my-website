@@ -7,7 +7,7 @@ import App from './App';
 import './fix-router.js';
 
 // Import path fixer early to fix duplicate paths
-import { fixAllPaths } from './utils/pathFixer';
+import { fixAllPaths } from './utils/pathFixer.js';
 
 // Fix duplicate paths immediately
 fixAllPaths();

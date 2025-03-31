@@ -339,8 +339,24 @@ function ensureCoverImagePreload() {
 export function fixAllPaths() {
   console.log('Path Fixer: Running comprehensive path fix...');
   
-  // First, make sure any explicit preload for cover.jpeg is correct
-  ensureCoverImagePreload();
+  // Get the base path from meta tag or environment
+  const basePath = document.querySelector('meta[name="base-path"]')?.getAttribute('content') || '/my-website/';
+  
+  // Find all links and update them
+  document.querySelectorAll('a[href^="/"]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith(basePath) && href !== '/') {
+      link.setAttribute('href', `${basePath}${href.substring(1)}`);
+    }
+  });
+  
+  // Find all images and update their src
+  document.querySelectorAll('img[src^="/"]').forEach(img => {
+    const src = img.getAttribute('src');
+    if (src && !src.startsWith(basePath)) {
+      img.setAttribute('src', `${basePath}${src.substring(1)}`);
+    }
+  });
   
   let totalFixed = 0;
   totalFixed += fixDuplicatePreloadPaths();

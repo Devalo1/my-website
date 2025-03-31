@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Psihoterapie = () => {
   return (
     <div className="content-card">

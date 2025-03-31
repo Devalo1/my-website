@@ -1,0 +1,128 @@
+[
+  {
+    "id": "1",
+    "name": "Produs 1",
+    "price": 99,
+    "originalPrice": 129,
+    "discount": 23,
+    "description": "Descriere scurtă a produsului. Conținut clar și concis despre caracteristicile produsului.",
+    "fullDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "images": [
+      "https://via.placeholder.com/600x600",
+      "https://via.placeholder.com/600x600?text=Image+2",
+      "https://via.placeholder.com/600x600?text=Image+3",
+      "https://via.placeholder.com/600x600?text=Image+4"
+    ],
+    "thumbnail": "https://via.placeholder.com/300x300",
+    "rating": 4.5,
+    "reviewCount": 18,
+    "inStock": true,
+    "specifications": {
+      "Material": "Premium",
+      "Dimensiuni": "10 x 20 x 30 cm",
+      "Greutate": "0.5 kg",
+      "Garanție": "24 luni",
+      "Țara de origine": "România"
+    },
+    "variants": [
+      "Opțiunea 1",
+      "Opțiunea 2",
+      "Opțiunea 3"
+    ],
+    "category": "categoria1",
+    "freeShipping": true
+  },
+  {
+    "id": "2",
+    "name": "Produs 2",
+    "price": 149,
+    "originalPrice": 179,
+    "discount": 17,
+    "description": "Descriere scurtă a produsului. Conținut clar și concis despre caracteristicile produsului.",
+    "fullDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "images": [
+      "https://via.placeholder.com/600x600",
+      "https://via.placeholder.com/600x600?text=Image+2"
+    ],
+    "thumbnail": "https://via.placeholder.com/300x300",
+    "rating": 3.5,
+    "reviewCount": 7,
+    "inStock": true,
+    "specifications": {
+      "Material": "Standard",
+      "Dimensiuni": "15 x 25 x 10 cm",
+      "Greutate": "0.7 kg",
+      "Garanție": "12 luni",
+      "Țara de origine": "România"
+    },
+    "variants": [
+      "Opțiunea 1",
+      "Opțiunea 2"
+    ],
+    "category": "categoria2",
+    "freeShipping": false
+  },
+  {
+    "id": "3",
+    "name": "Produs 3",
+    "price": 199,
+    "originalPrice": 249,
+    "discount": 20,
+    "description": "Descriere scurtă a produsului. Conținut clar și concis despre caracteristicile produsului.",
+    "fullDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "images": [
+      "https://via.placeholder.com/600x600",
+      "https://via.placeholder.com/600x600?text=Image+2",
+      "https://via.placeholder.com/600x600?text=Image+3"
+    ],
+    "thumbnail": "https://via.placeholder.com/300x300",
+    "rating": 5,
+    "reviewCount": 24,
+    "inStock": true,
+    "specifications": {
+      "Material": "Premium Plus",
+      "Dimensiuni": "20 x 30 x 15 cm",
+      "Greutate": "1.2 kg",
+      "Garanție": "36 luni",
+      "Țara de origine": "România"
+    },
+    "variants": [
+      "Opțiunea 1",
+      "Opțiunea 2",
+      "Opțiunea 3",
+      "Opțiunea 4"
+    ],
+    "category": "categoria1",
+    "freeShipping": true
+  },
+  {
+    "id": "4",
+    "name": "Produs 4",
+    "price": 129,
+    "originalPrice": 149,
+    "discount": 13,
+    "description": "Descriere scurtă a produsului. Conținut clar și concis despre caracteristicile produsului.",
+    "fullDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "images": [
+      "https://via.placeholder.com/600x600",
+      "https://via.placeholder.com/600x600?text=Image+2"
+    ],
+    "thumbnail": "https://via.placeholder.com/300x300",
+    "rating": 3,
+    "reviewCount": 9,
+    "inStock": true,
+    "specifications": {
+      "Material": "Ecologic",
+      "Dimensiuni": "12 x 18 x 8 cm",
+      "Greutate": "0.4 kg",
+      "Garanție": "12 luni",
+      "Țara de origine": "România"
+    },
+    "variants": [
+      "Opțiunea 1",
+      "Opțiunea 2"
+    ],
+    "category": "categoria3",
+    "freeShipping": false
+  }
+]

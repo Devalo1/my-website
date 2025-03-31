@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizare Comandă - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html">Magazin</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Finalizare Comandă</h1>
+                <p>Completează datele pentru a finaliza comanda</p>
+            </div>
+        </section>
+
+        <section class="checkout-section">
+            <div class="container">
+                <div class="checkout-grid">
+                    <!-- Formular comandă -->
+                    <div class="checkout-form-container">
+                        <form id="checkout-form" class="checkout-form">
+                            <div class="form-section">
+                                <h2>Informații personale</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="first-name">Prenume *</label>
+                                        <input type="text" id="first-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last-name">Nume *</label>
+                                        <input type="text" id="last-name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email *</label>
+                                    <input type="email" id="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Telefon *</label>
+                                    <input type="tel" id="phone" required>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Adresă de livrare</h2>
+                                <div class="form-group">
+                                    <label for="address">Adresă *</label>
+                                    <input type="text" id="address" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="city">Oraș *</label>
+                                        <input type="text" id="city" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postal-code">Cod poștal *</label>
+                                        <input type="text" id="postal-code" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="county">Județ *</label>
+                                    <select id="county" required>
+                                        <option value="">Selectează județul</option>
+                                        <option value="alba">Alba</option>
+                                        <option value="arad">Arad</option>
+                                        <option value="arges">Argeș</option>
+                                        <option value="bacau">Bacău</option>
+                                        <option value="bihor">Bihor</option>
+                                        <option value="bistrita-nasaud">Bistrița-Năsăud</option>
+                                        <option value="botosani">Botoșani</option>
+                                        <option value="brasov">Brașov</option>
+                                        <option value="braila">Brăila</option>
+                                        <option value="bucuresti">București</option>
+                                        <option value="buzau">Buzău</option>
+                                        <option value="caras-severin">Caraș-Severin</option>
+                                        <option value="calarasi">Călărași</option>
+                                        <option value="cluj">Cluj</option>
+                                        <option value="constanta">Constanța</option>
+                                        <option value="covasna">Covasna</option>
+                                        <option value="dambovita">Dâmbovița</option>
+                                        <option value="dolj">Dolj</option>
+                                        <option value="galati">Galați</option>
+                                        <option value="giurgiu">Giurgiu</option>
+                                        <option value="gorj">Gorj</option>
+                                        <option value="harghita">Harghita</option>
+                                        <option value="hunedoara">Hunedoara</option>
+                                        <option value="ialomita">Ialomița</option>
+                                        <option value="iasi">Iași</option>
+                                        <option value="ilfov">Ilfov</option>
+                                        <option value="maramures">Maramureș</option>
+                                        <option value="mehedinti">Mehedinți</option>
+                                        <option value="mures">Mureș</option>
+                                        <option value="neamt">Neamț</option>
+                                        <option value="olt">Olt</option>
+                                        <option value="prahova">Prahova</option>
+                                        <option value="satu-mare">Satu Mare</option>
+                                        <option value="salaj">Sălaj</option>
+                                        <option value="sibiu">Sibiu</option>
+                                        <option value="suceava">Suceava</option>
+                                        <option value="teleorman">Teleorman</option>
+                                        <option value="timis">Timiș</option>
+                                        <option value="tulcea">Tulcea</option>
+                                        <option value="vaslui">Vaslui</option>
+                                        <option value="valcea">Vâlcea</option>
+                                        <option value="vrancea">Vrancea</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Metodă de plată</h2>
+                                <div class="payment-methods">
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment-method" id="card" value="card" checked>
+                                        <label for="card">
+                                            <i class="fas fa-credit-card"></i>
+                                            Card bancar
+                                        </label>
+                                    </div>
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment-method" id="cash" value="cash">
+                                        <label for="cash">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                            Plata la livrare
+                                        </label>
+                                    </div>
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment-method" id="bank-transfer" value="bank-transfer">
+                                        <label for="bank-transfer">
+                                            <i class="fas fa-university"></i>
+                                            Transfer bancar
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="card-details" class="payment-details">
+                                    <div class="form-group">
+                                        <label for="card-number">Număr card *</label>
+                                        <input type="text" id="card-number" placeholder="XXXX XXXX XXXX XXXX">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="expiry-date">Data expirării *</label>
+                                            <input type="text" id="expiry-date" placeholder="MM/YY">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv">CVV *</label>
+                                            <input type="text" id="cvv" placeholder="123">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="card-name">Nume pe card *</label>
+                                        <input type="text" id="card-name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label for="order-notes">Note comandă (opțional)</label>
+                                    <textarea id="order-notes" rows="4" placeholder="Informații suplimentare despre comandă..."></textarea>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input type="checkbox" id="terms" required>
+                                    <label for="terms">Am citit și sunt de acord cu <a href="#">termenii și condițiile</a> *</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-checkout">Plasează comanda</button>
+                        </form>
+                    </div>
+
+                    <!-- Sumar comandă -->
+                    <div class="order-summary">
+                        <h2>Sumarul comenzii</h2>
+                        <div class="order-items" id="order-items">
+                            <!-- Produsele vor fi adăugate aici dinamic -->
+                        </div>
+                        <div class="order-totals">
+                            <div class="order-subtotal">
+                                <span>Subtotal:</span>
+                                <span id="order-subtotal">0.00 Lei</span>
+                            </div>
+                            <div class="order-shipping">
+                                <span>Livrare:</span>
+                                <span id="order-shipping">15.00 Lei</span>
+                            </div>
+                            <div class="order-total">
+                                <span>Total:</span>
+                                <span id="order-total">0.00 Lei</span>
+                            </div>
+                        </div>
+                        <div class="coupon-code">
+                            <input type="text" id="coupon" placeholder="Cod promoțional">
+                            <button class="btn-small" id="apply-coupon">Aplică</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Afiseaza produsele din cos in sumarul comenzii
+            function displayOrderItems() {
+                const orderItems = document.getElementById('order-items');
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let subtotal = 0;
+                
+                if (!orderItems) return;
+                
+                orderItems.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    orderItems.innerHTML = '<p class="empty-order">Nu există produse în coș.</p>';
+                    document.querySelector('.btn-checkout').disabled = true;
+                    return;
+                }
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    
+                    const orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    orderItem.innerHTML = `
+                        <div class="order-item-details">
+                            <span class="order-item-name">${item.name}</span>
+                            <span class="order-item-quantity">x ${item.quantity}</span>
+                        </div>
+                        <span class="order-item-price">${itemTotal.toFixed(2)} Lei</span>
+                    `;
+                    
+                    orderItems.appendChild(orderItem);
+                });
+                
+                // Actualizează subtotalul și totalul
+                const shipping = 15.00; // Preț fix pentru livrare
+                const total = subtotal + shipping;
+                
+                document.getElementById('order-subtotal').textContent = `${subtotal.toFixed(2)} Lei`;
+                document.getElementById('order-total').textContent = `${total.toFixed(2)} Lei`;
+            }
+            
+            // Afișează selectorul de metode de plată
+            const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+            const cardDetails = document.getElementById('card-details');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardDetails.style.display = 'block';
+                    } else {
+                        cardDetails.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Procesare formular checkout
+            const checkoutForm = document.getElementById('checkout-form');
+            if (checkoutForm) {
+                checkoutForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Aici ar trebui să trimiteți datele către server pentru procesare
+                    // Pentru demo, vom simula un succes
+                    
+                    // Verifică dacă există produse în coș
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    if (cart.length === 0) {
+                        showToast('Nu există produse în coș. Adaugă produse pentru a finaliza comanda.', 'error');
+                        return;
+                    }
+                    
+                    // Simulează procesarea comenzii
+                    setTimeout(function() {
+                        // Golește coșul după comandă
+                        localStorage.removeItem('cart');
+                        
+                        // Redirecționează către o pagină de confirmare
+                        window.location.href = 'order-confirmation.html';
+                    }, 1500);
+                });
+            }
+            
+            // Inițializare afișare produse
+            displayOrderItems();
+            
+            // Coupon code handling
+            const applyBtn = document.getElementById('apply-coupon');
+            if (applyBtn) {
+                applyBtn.addEventListener('click', function() {
+                    const couponInput = document.getElementById('coupon');
+                    const couponCode = couponInput.value.trim();
+                    
+                    if (!couponCode) {
+                        showToast('Introdu un cod promoțional valid.', 'error');
+                        return;
+                    }
+                    
+                    // Pentru demo, acceptăm doar un cod promoțional specific
+                    if (couponCode.toUpperCase() === 'DISCOUNT10') {
+                        // Aplicăm un discount de 10%
+                        const subtotalElem = document.getElementById('order-subtotal');
+                        const totalElem = document.getElementById('order-total');
+                        
+                        let subtotal = parseFloat(subtotalElem.textContent);
+                        let shipping = 15.00;
+                        
+                        // Calculăm discount-ul
+                        const discount = subtotal * 0.1;
+                        subtotal = subtotal - discount;
+                        
+                        // Actualizăm totalul
+                        const total = subtotal + shipping;
+                        
+                        subtotalElem.textContent = `${subtotal.toFixed(2)} Lei (Reducere aplicată)`;
+                        totalElem.textContent = `${total.toFixed(2)} Lei`;
+                        
+                        showToast('Codul promoțional a fost aplicat cu succes!', 'success');
+                        couponInput.disabled = true;
+                        applyBtn.disabled = true;
+                    } else {
+                        showToast('Cod promoțional invalid.', 'error');
+                    }
+                });
+            }
+            
+            // Funcție pentru afișarea notificărilor toast
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) return;
+                
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                
+                let icon = '';
+                switch(type) {
+                    case 'success':
+                        icon = '<i class="fas fa-check-circle toast-icon"></i>';
+                        break;
+                    case 'error':
+                        icon = '<i class="fas fa-exclamation-circle toast-icon"></i>';
+                        break;
+                    default:
+                        icon = '<i class="fas fa-info-circle toast-icon"></i>';
+                }
+                
+                toast.innerHTML = `
+                    ${icon}
+                    <div class="toast-message">${message}</div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Auto remove after 4 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

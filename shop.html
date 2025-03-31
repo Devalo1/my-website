@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazin - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html" class="active">Magazin</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Magazin Online</h1>
+                <p>Descoperă produsele noastre</p>
+            </div>
+        </section>
+
+        <!-- Shopping Cart Modal -->
+        <div id="cart-modal" class="cart-modal">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <h2>Coșul Tău</h2>
+                    <span class="close-cart">&times;</span>
+                </div>
+                <div id="cart-items" class="cart-items">
+                    <!-- Cart items will be added here dynamically -->
+                </div>
+                <div class="cart-footer">
+                    <div class="cart-total">
+                        <p>Total: <span id="cart-total-price">0.00</span> Lei</p>
+                    </div>
+                    <button id="checkout-btn" class="btn">Finalizează Comanda</button>
+                    <button id="clear-cart" class="btn-secondary">Golește Coșul</button>
+                </div>
+            </div>
+        </div>
+
+        <section class="product-section">
+            <div class="container">
+                <div class="shop-controls">
+                    <!-- Category Filters -->
+                    <div class="category-filters">
+                        <ul>
+                            <li><a href="#" class="category-filter active" data-category="all">Toate produsele</a></li>
+                            <li><a href="#" class="category-filter" data-category="categoria1">Categoria 1</a></li>
+                            <li><a href="#" class="category-filter" data-category="categoria2">Categoria 2</a></li>
+                            <li><a href="#" class="category-filter" data-category="categoria3">Categoria 3</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Search & Sort controls -->
+                    <div class="shop-actions">
+                        <div class="search-products">
+                            <input type="text" id="search-products" placeholder="Caută produse...">
+                        </div>
+                        
+                        <div class="product-filters">
+                            <select id="sort-products">
+                                <option value="default">Sortare implicită</option>
+                                <option value="price-low">Preț: mic la mare</option>
+                                <option value="price-high">Preț: mare la mic</option>
+                                <option value="name-asc">Nume: A-Z</option>
+                                <option value="name-desc">Nume: Z-A</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="product-grid" id="product-container">
+                    <!-- Produsele vor fi încărcate dinamic din JavaScript -->
+                    <div class="loading-products">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Se încarcă produsele...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script type="module" src="js/shop.ts"></script>
+</body>
+</html>

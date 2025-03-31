@@ -1,40 +1,29 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import Acasa from './pages/Acasa';
-import Produse from './pages/Produse';
-import DespreNoi from './pages/DespreNoi';
-import Contact from './pages/Contact';
-import Terapie from './pages/Terapie/terapie';
-import ONG from './pages/ONG';
-import LupulSiCorbul from './pages/LupulSiCorbul';
-import Consiliere from './pages/Consiliere';
-import Psihoterapie from './pages/Psihoterapie';
-import TerapiaPersonalizata from './pages/TerapiaPersonalizata';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import TherapyPage from './pages/TherapyPage';
+import Home from './pages/Home';
+// Import other pages as needed
+
+// Import styles with correct paths
+import './styles/globals.css';
+import './styles/navbar.css';
+import './styles/therapy.css';
 
 function App() {
+  // Get the base path from import.meta.env
+  const basePath = import.meta.env.BASE_URL || '/';
+
   return (
-    <div className="app-container">
-      <Router basename="/my-website">
-        <Navigation />
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Navigate to="/acasa" />} />
-            <Route path="/acasa" element={<Acasa />} />
-            <Route path="/produse" element={<Produse />} />
-            <Route path="/despre-noi" element={<DespreNoi />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/terapie" element={<Terapie />} />
-            <Route path="/ong" element={<ONG />} />
-            <Route path="/lupul-si-corbul" element={<LupulSiCorbul />} />
-            <Route path="/consiliere" element={<Consiliere />} />
-            <Route path="/psihoterapie" element={<Psihoterapie />} />
-            <Route path="/terapia-personalizata" element={<TerapiaPersonalizata />} />
-          </Routes>
-        </div>
-      </Router>
-    </div>
+    <Router basename={basePath}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/terapie/:type" element={<TherapyPage />} />
+        {/* Add other routes here */}
+        <Route path="*" element={<div>Page Not Found</div>} />
+      </Routes>
+    </Router>
   );
 }
 

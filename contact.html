@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html">Magazin</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Coșul Tău</h2>
+                <span class="close-cart">&times;</span>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be added here dynamically -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <p>Total: <span id="cart-total-price">0.00</span> Lei</p>
+                </div>
+                <button id="checkout-btn" class="btn">Finalizează Comanda</button>
+                <button id="clear-cart" class="btn-secondary">Golește Coșul</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Contact</h1>
+                <p>Contactează-ne pentru orice întrebare sau informație</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <!-- Contact Information -->
+                    <div class="contact-info">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Adresa noastră</h3>
+                                <p>Strada Exemplu, Nr. 123</p>
+                                <p>București, România</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Telefon</h3>
+                                <p><a href="tel:+40123456789">+40 123 456 789</a></p>
+                                <p>Luni - Vineri: 9:00 - 17:00</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Email</h3>
+                                <p><a href="mailto:contact@situlmeu.ro">contact@situlmeu.ro</a></p>
+                                <p>Răspundem în maxim 24 de ore</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Program</h3>
+                                <p>Luni - Vineri: 9:00 - 17:00</p>
+                                <p>Sâmbătă: 10:00 - 14:00</p>
+                                <p>Duminică: Închis</p>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <h3>Urmărește-ne</h3>
+                            <div class="social-icons">
+                                <a href="#" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                                <a href="#" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                                <a href="#" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <div class="contact-form-container">
+                        <h2>Trimite-ne un mesaj</h2>
+                        <form id="contact-form" class="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Nume *</label>
+                                    <input type="text" id="name" name="name" placeholder="Numele tău" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email *</label>
+                                    <input type="email" id="email" name="email" placeholder="Adresa ta de email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subiect *</label>
+                                <input type="text" id="subject" name="subject" placeholder="Subiectul mesajului" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mesaj *</label>
+                                <textarea id="message" name="message" rows="6" placeholder="Mesajul tău" required></textarea>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="consent" name="consent" required>
+                                <label for="consent">Sunt de acord cu <a href="#">Politica de confidențialitate</a> și procesarea datelor mele în scopul răspunderii la această solicitare. *</label>
+                            </div>
+                            <div id="form-error" class="error-message"></div>
+                            <button type="submit" class="btn">Trimite mesajul</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="map-section">
+            <div class="container">
+                <h2>Ne găsești aici</h2>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d91158.37366753316!2d26.0315201!3d44.43771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1f93abf3cad4f%3A0xac0632e37c9ca628!2sBucure%C8%99ti!5e0!3m2!1sro!2sro!4v1625673234532!5m2!1sro!2sro" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/script.js"></script>
+    <script type="module">
+        import { db } from './js/firebase-config.ts';
+        import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contact-form');
+            const errorMessage = document.getElementById('form-error');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Get form data
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value;
+                    const consent = document.getElementById('consent').checked;
+                    
+                    // Basic validation
+                    if (!name || !email || !subject || !message || !consent) {
+                        errorMessage.textContent = 'Te rugăm să completezi toate câmpurile obligatorii.';
+                        return;
+                    }
+                    
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        errorMessage.textContent = 'Te rugăm să introduci o adresă de email validă.';
+                        return;
+                    }
+                    
+                    try {
+                        // Clear error message
+                        errorMessage.textContent = '';
+                        
+                        // Disable submit button and show loading state
+                        const submitBtn = contactForm.querySelector('button[type="submit"]');
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Se trimite...';
+                        
+                        // Save message to Firestore
+                        await addDoc(collection(db, 'messages'), {
+                            name,
+                            email,
+                            subject,
+                            message,
+                            consent,
+                            createdAt: serverTimestamp()
+                        });
+                        
+                        // Reset form
+                        contactForm.reset();
+                        
+                        // Show success message
+                        showToast('Mesajul tău a fost trimis cu succes! Te vom contacta în curând.', 'success');
+                        
+                        // Reset button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Trimite mesajul';
+                        
+                    } catch (error) {
+                        console.error('Eroare la trimiterea mesajului:', error);
+                        errorMessage.textContent = 'A apărut o eroare la trimiterea mesajului. Te rugăm să încerci din nou.';
+                        
+                        // Reset button
+                        const submitBtn = contactForm.querySelector('button[type="submit"]');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Trimite mesajul';
+                        
+                        showToast('Eroare la trimiterea mesajului. Te rugăm să încerci din nou.', 'error');
+                    }
+                });
+            }
+            
+            // Toast notification function
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) return;
+                
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                
+                let icon = '';
+                switch(type) {
+                    case 'success':
+                        icon = '<i class="fas fa-check-circle toast-icon"></i>';
+                        break;
+                    case 'error':
+                        icon = '<i class="fas fa-exclamation-circle toast-icon"></i>';
+                        break;
+                    default:
+                        icon = '<i class="fas fa-info-circle toast-icon"></i>';
+                }
+                
+                toast.innerHTML = `
+                    ${icon}
+                    <div class="toast-message">${message}</div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Auto remove after 4 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

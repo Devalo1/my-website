@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandă confirmată - Site-ul Meu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Logo</a>
+            </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="despre.html">Despre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="shop.html">Magazin</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Comandă confirmată</h1>
+                <p>Mulțumim pentru achiziție!</p>
+            </div>
+        </section>
+
+        <section class="confirmation-section">
+            <div class="container">
+                <div class="confirmation-content">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Comanda ta a fost plasată cu succes!</h2>
+                    <p>Un email de confirmare cu detaliile comenzii a fost trimis la adresa ta de email.</p>
+                    
+                    <div class="order-details">
+                        <div class="order-info">
+                            <h3>Informații comandă</h3>
+                            <p><strong>Număr comandă:</strong> <span id="order-number">ORD-12345</span></p>
+                            <p><strong>Dată:</strong> <span id="order-date"></span></p>
+                            <p><strong>Status:</strong> <span class="status-processing">În procesare</span></p>
+                            <p><strong>Metodă de plată:</strong> Card bancar</p>
+                        </div>
+                        
+                        <div class="delivery-info">
+                            <h3>Informații livrare</h3>
+                            <p>Comanda ta va fi livrată în aproximativ 2-3 zile lucrătoare.</p>
+                            <p>Vei primi un email de confirmare când comanda ta va fi expediată.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <a href="shop.html" class="btn">Continuă cumpărăturile</a>
+                        <a href="#" class="btn-secondary">Urmărește comanda</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Site-ul Meu. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generează un număr aleatoriu pentru comandă
+            const orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('order-number').textContent = orderNumber;
+            
+            // Setează data curentă
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('order-date').textContent = now.toLocaleDateString('ro-RO', options);
+            
+            // Resetează coșul
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = '0';
+            }
+        });
+    </script>
+</body>
+</html>

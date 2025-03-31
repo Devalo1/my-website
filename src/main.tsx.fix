@@ -1,0 +1,3 @@
+import { fixAllPaths } from './utils/pathFixer.js';
+// Instead of:
+// import { fixAllPaths } from './utils/pathFixer';

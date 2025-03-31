@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site-ul Meu</title>
+    <title>Blog - Site-ul Meu</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,26 +13,19 @@
             <div class="logo">
                 <a href="index.html">Logo</a>
             </div>
-            <div class="user-actions">
-                <div class="profile-icon">
-                    <a href="login.html" id="profile-btn">
-                        <i class="fas fa-user"></i>
-                    </a>
-                </div>
-                <div class="cart-icon">
-                    <a href="#" id="cart-btn">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count">0</span>
-                    </a>
-                </div>
+            <div class="cart-icon">
+                <a href="#" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
             </div>
             <div class="menu-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
             </div>
             <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html" class="active">Acasă</a></li>
+                <li><a href="index.html">Acasă</a></li>
                 <li><a href="despre.html">Despre</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
                 <li><a href="shop.html">Magazin</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -60,34 +53,44 @@
     </div>
 
     <main>
-        <section class="hero" style="background-image: url('images/placeholders/hero-bg.jpg')">
+        <section class="page-header">
             <div class="container">
-                <h1>Bine ați venit pe site-ul nostru</h1>
-                <p>Conținut clar și modern, fără repetiții</p>
-                <a href="#" class="btn">Află mai multe</a>
+                <h1>Blog</h1>
+                <p>Cele mai recente articole și noutăți</p>
             </div>
         </section>
 
-        <section class="featured">
+        <section class="blog-grid">
             <div class="container">
-                <h2>Secțiuni evidențiate</h2>
-                <div class="featured-grid">
-                    <div class="card">
-                        <h3>Blog</h3>
-                        <p>Articole recente și informații utile</p>
-                        <a href="blog.html" class="btn-small">Citește</a>
+                <article class="blog-post">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/600x400" alt="Blog post 1">
                     </div>
-                    <div class="card">
-                        <h3>Magazin</h3>
-                        <p>Descoperă produsele noastre</p>
-                        <a href="shop.html" class="btn-small">Vizitează</a>
+                    <div class="post-content">
+                        <h2>Titlu articol blog</h2>
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar"></i> 15 Octombrie 2023</span>
+                            <span><i class="far fa-user"></i> Admin</span>
+                        </div>
+                        <p>Descriere scurtă a articolului de blog. Informații concise și relevante despre subiectul tratat...</p>
+                        <a href="blog-post.html" class="btn-small">Citește mai mult</a>
                     </div>
-                    <div class="card">
-                        <h3>Servicii</h3>
-                        <p>Ce oferim clienților noștri</p>
-                        <a href="#" class="btn-small">Detalii</a>
+                </article>
+
+                <article class="blog-post">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/600x400" alt="Blog post 2">
                     </div>
-                </div>
+                    <div class="post-content">
+                        <h2>Un alt titlu de articol</h2>
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar"></i> 10 Octombrie 2023</span>
+                            <span><i class="far fa-user"></i> Admin</span>
+                        </div>
+                        <p>Scurtă descriere care prezintă conținutul articolului într-un mod clar și fără repetiții...</p>
+                        <a href="blog-post.html" class="btn-small">Citește mai mult</a>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
@@ -101,6 +104,6 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script src="js/script.js" type="module"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
