@@ -1,0 +1,136 @@
+/* Styles for the home page */
+
+.home-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 3rem 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  color: #6b4423;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.about-section {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h2 {
+  color: #6b4423;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.about-section p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.about-section h3 {
+  color: #6b4423;
+  margin: 1.5rem 0 1rem;
+  font-size: 1.5rem;
+}
+
+.about-section ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-section li {
+  margin-bottom: 0.5rem;
+}
+
+.products-section, .services-section {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.products-section h2, .services-section h2 {
+  color: #6b4423;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.product-categories, .services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.category, .service {
+  background-color: rgba(255, 248, 240, 0.9);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.category:hover, .service:hover {
+  transform: translateY(-5px);
+}
+
+.category h3, .service h3 {
+  color: #6b4423;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.category p, .service p {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: #8b5a2b;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #6b4423;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .product-categories, .services {
+    grid-template-columns: 1fr;
+  }
+}

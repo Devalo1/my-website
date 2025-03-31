@@ -3,8 +3,9 @@
  */
 
 (function() {
-    // Flag pentru debugging
-    const DEBUG = true;
+    // Define DEBUG variable to enable console logging during development
+    const DEBUG = process.env.NODE_ENV === 'development' || false;
+    
     function debug(message) {
         if (DEBUG) console.log("Auth: " + message);
     }
@@ -48,7 +49,23 @@
             
             // Obține serviciile necesare
             auth = firebase.auth();
-            db = firebase.firestore();
+            
+            // Verificare și inițializare Firestore cu fallback
+            try {
+                if (typeof firebase.firestore === 'function') {
+                    db = firebase.firestore();
+                    debug("Firestore inițializat cu succes");
+                } else {
+                    debug("Firestore nu este disponibil, se folosește stocare locală");
+                    // Creează un mock pentru db
+                    db = createFirestoreMock();
+                }
+            } catch (firestoreError) {
+                debug("Eroare la inițializarea Firestore: " + firestoreError.message);
+                // Creează un mock pentru db
+                db = createFirestoreMock();
+            }
+            
             googleProvider = new firebase.auth.GoogleAuthProvider();
             
             // Configurare provider Google
@@ -65,6 +82,32 @@
             debug("Eroare la inițializarea Firebase: " + error.message);
             return false;
         }
+    }
+    
+    // Crează un mock pentru Firestore pentru a evita erorile
+    function createFirestoreMock() {
+        return {
+            collection: function(name) {
+                return {
+                    doc: function(id) {
+                        return {
+                            set: function() {
+                                return Promise.resolve();
+                            },
+                            get: function() {
+                                return Promise.resolve({
+                                    exists: false,
+                                    data: function() { return null; }
+                                });
+                            }
+                        };
+                    }
+                };
+            },
+            FieldValue: {
+                serverTimestamp: function() { return new Date().toISOString(); }
+            }
+        };
     }
     
     // Gestionează schimbările de autentificare
@@ -89,18 +132,24 @@
             }
             
             // Salvează utilizatorul în Firestore
-            db.collection('users').doc(user.uid).set({
-                name: user.displayName || 'Utilizator',
-                email: user.email || '',
-                photoURL: user.photoURL || '',
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true })
-            .then(() => {
-                debug("Utilizator actualizat în Firestore");
-            })
-            .catch((error) => {
-                debug("Eroare la actualizarea utilizatorului în Firestore: " + error.message);
-            });
+            try {
+                db.collection('users').doc(user.uid).set({
+                    name: user.displayName || 'Utilizator',
+                    email: user.email || '',
+                    photoURL: user.photoURL || '',
+                    lastLogin: typeof db.FieldValue.serverTimestamp === 'function' ? 
+                              db.FieldValue.serverTimestamp() : 
+                              new Date().toISOString()
+                }, { merge: true })
+                .then(() => {
+                    debug("Utilizator actualizat în Firestore");
+                })
+                .catch((error) => {
+                    debug("Eroare la actualizarea utilizatorului în Firestore: " + error.message);
+                });
+            } catch (dbError) {
+                debug("Eroare la salvarea în db (non-critică): " + dbError.message);
+            }
             
             // Actualizează UI-ul
             updateAuthUI(user);
@@ -209,11 +258,19 @@
                     displayName: name
                 }).then(() => {
                     debug("Profil actualizat");
-                    return db.collection('users').doc(user.uid).set({
-                        name: name,
-                        email: email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    try {
+                        // Try to update Firestore, but don't fail if it doesn't work
+                        return db.collection('users').doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            createdAt: typeof db.FieldValue.serverTimestamp === 'function' ? 
+                                      db.FieldValue.serverTimestamp() : 
+                                      new Date().toISOString()
+                        });
+                    } catch (dbError) {
+                        debug("Eroare la salvarea în db (non-critică): " + dbError.message);
+                        return Promise.resolve(); // Continue anyway
+                    }
                 });
             })
             .then(() => {

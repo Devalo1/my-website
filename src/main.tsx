@@ -1,57 +1,158 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './styles/styles.css';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { 
+  BrowserRouter, 
+  Routes, 
+  Route, 
+  Navigate
+} from 'react-router-dom'
+import App from './App'
 
-// Consolă de debugging îmbunătățită
-console.log('🚀 Aplicația se încarcă...');
+// Import router fix BEFORE importing routes to suppress warnings early
+import './fix-router.js'
 
-// Verifică dacă elementul root există
-const rootElement = document.getElementById('root');
-console.log('Element root găsit:', !!rootElement);
+// Import styles in the correct order
+import './styles/reset.css' // Reset CSS should come first
+import './index.css'
+import './styles/global.css'
+import './styles/styles.css'
+import './styles/main.css'
 
-if (rootElement) {
-  try {
-    console.log('Încercare de renderizare...');
-    const root = ReactDOM.createRoot(rootElement);
-    
-    // Înfășurarea într-un ErrorBoundary pentru a prinde erorile
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>,
-    );
-    console.log('✅ Aplicația a fost renderizată cu succes!');
-  } catch (error) {
-    console.error('❌ Eroare la renderizarea aplicației:', error);
-    
-    // Afișează un mesaj de eroare direct în pagină
-    rootElement.innerHTML = `
-      <div style="text-align: center; padding: 2rem; color: #8b5a2b;">
-        <h1>Eroare la încărcarea aplicației</h1>
-        <p>Am întâmpinat o problemă la încărcarea aplicației. Verifică consola pentru detalii.</p>
-        <pre style="background: #f5f5f5; padding: 1rem; text-align: left; overflow: auto;">${error}</pre>
-      </div>
-    `;
+// Import utility for checking resources
+import { verifyBackgroundImage, injectPlaceholders } from './utils/assetChecker'
+
+// Import all pages
+import Acasa from './pages/Acasa'
+import Produse from './pages/LupulSiCorbul' // Products page
+import ONG from './pages/Consiliere' // ONG page
+import Terapie from './pages/TerapiaPersonalizata' // Therapy page
+import Contact from './pages/Contact'
+import Login from './pages/login' // Fixed extension
+
+// Suppress React Router warnings by setting globals to disable them
+// TypeScript now knows about these properties due to our global.d.ts file
+window.__reactRouterReactVersion = React.version;
+window.__reactRouterIsSuppressed = true;
+window.__reactRouterIsSilent = true;
+window.__reactRouterDisableWarnings = true;
+
+// Load global scripts with error handling
+const loadGlobalScripts = () => {
+  // Create a safe script loader with proper types
+  const loadScript = (src: string, callback: () => void, errorCallback: (err: Error) => void) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = callback
+    script.onerror = errorCallback
+    document.head.appendChild(script)
   }
-} else {
-  console.error('❌ Elementul #root nu a fost găsit în pagină!');
-  
-  // Creăm un element root nou și încercăm din nou
-  const newRoot = document.createElement('div');
-  newRoot.id = 'root';
-  document.body.appendChild(newRoot);
-  
-  console.log('Am creat un nou element #root');
-  
-  try {
-    ReactDOM.createRoot(newRoot).render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
-    console.log('✅ Aplicația a fost renderizată după crearea unui nou root!');
-  } catch (error) {
-    console.error('❌ Eroare la a doua încercare de renderizare:', error);
+
+  // Check if Firebase is already loaded
+  if (window.firebase) {
+    console.log('Firebase already loaded, using existing instance')
+    loadSecondaryScripts()
+  } else {
+    // Load Firebase App first with retry mechanism
+    const loadFirebase = (retryCount = 0) => {
+      loadScript(
+        'https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js',
+        () => {
+          console.log('Firebase App loaded successfully')
+          
+          // Then load Firebase Auth
+          loadScript(
+            'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js',
+            () => {
+              console.log('Firebase Auth loaded successfully')
+              
+              // Load Firestore to avoid the mock
+              loadScript(
+                'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js',
+                () => {
+                  console.log('Firebase Firestore loaded successfully')
+                  loadSecondaryScripts()
+                },
+                (err) => {
+                  console.error('Failed to load Firebase Firestore:', err)
+                  loadSecondaryScripts() // Continue anyway
+                }
+              )
+            },
+            (err) => {
+              console.error('Failed to load Firebase Auth:', err)
+              loadSecondaryScripts() // Continue anyway
+            }
+          )
+        },
+        (err) => {
+          console.error('Failed to load Firebase App:', err)
+          if (retryCount < 2) {
+            console.log(`Retrying Firebase load (attempt ${retryCount + 1})...`)
+            setTimeout(() => loadFirebase(retryCount + 1), 1000)
+          } else {
+            loadSecondaryScripts() // Continue anyway after retries
+          }
+        }
+      )
+    }
+    
+    loadFirebase()
+  }
+
+  // Load our custom scripts
+  function loadSecondaryScripts() {
+    // First verify and fix background image
+    verifyBackgroundImage()
+    
+    // Create a debug tool for missing resources
+    if (process.env.NODE_ENV !== 'production') {
+      setTimeout(injectPlaceholders, 2000)
+    }
+
+    // Load custom scripts with dynamic imports
+    // Load Firebase config first
+    import('./services/firebase-config.js')
+      .then(() => {
+        console.log('Firebase config loaded successfully')
+        return import('./components/auth.js')
+      })
+      .then(() => {
+        console.log('Auth script loaded successfully')
+        return import('./components/responsive.js')
+      })
+      .then(() => {
+        console.log('Responsive script loaded successfully')
+        return import('./components/ultra-fix.js')
+      })
+      .then(() => {
+        console.log('Ultra-fix compatibility script loaded successfully')
+      })
+      .catch(err => {
+        console.error('Error loading scripts:', err)
+      })
   }
 }
+
+// Execute script loading
+loadGlobalScripts()
+
+// Determine the base URL from Vite environment or default to '/my-website/'
+const BASE_URL = import.meta.env.BASE_URL || '/my-website/'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter basename={BASE_URL}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Acasa />} />
+          <Route path="products" element={<Produse />} />
+          <Route path="ong" element={<ONG />} />
+          <Route path="therapy" element={<Terapie />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
+)

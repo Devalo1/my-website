@@ -4,8 +4,9 @@
 
 // Folosim obiectul Firebase global în loc de ES6 imports
 (function() {
-  // Flag pentru debugging
-  const DEBUG = true;
+  // Define DEBUG variable to control console output
+  const DEBUG = process.env.NODE_ENV === 'development' || false;
+  
   function debug(message) {
     if (DEBUG) console.log("FirebaseConfig: " + message);
   }
@@ -108,5 +109,34 @@
         clearInterval(checkInterval);
       }
     }, 10000);
+  }
+
+  // Adăugăm obiecte mock pentru Firestore în cazul în care nu este disponibil
+  if (typeof firebase !== 'undefined' && !firebase.firestore) {
+    firebase.firestore = function() {
+      debug('Utilizare Firestore mock (nu este disponibil)');
+      return {
+        collection: function(name) {
+          return {
+            doc: function(id) {
+              return {
+                set: function(data) {
+                  return Promise.resolve();
+                },
+                get: function() {
+                  return Promise.resolve({
+                    exists: false,
+                    data: function() { return null; }
+                  });
+                }
+              };
+            }
+          };
+        },
+        FieldValue: {
+          serverTimestamp: function() { return new Date().toISOString(); }
+        }
+      };
+    };
   }
 })();
