@@ -25,6 +25,16 @@ try {
     fs.mkdirSync('public/images', { recursive: true });
   }
   
+  // Copiază imaginea din src/assets la public/images dacă nu există deja
+  const coverSrcPath = path.join(__dirname, 'src', 'assets', 'cover.jpg');
+  const coverDestPath = path.join(__dirname, 'public', 'images', 'cover.jpeg');
+
+  if (fs.existsSync(coverSrcPath) && !fs.existsSync(coverDestPath)) {
+    console.log('Copiez imaginea de fundal din src/assets la public/images...');
+    fs.copyFileSync(coverSrcPath, coverDestPath);
+    console.log('Imagine de fundal copiată cu succes!');
+  }
+  
   // Verifică și copiază imaginea de background dacă există
   console.log('Verificare resurse de background...');
   

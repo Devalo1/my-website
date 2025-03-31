@@ -22,10 +22,12 @@
     "convert-images": "node scripts/convert-svg-to-img.js",
     "ensure-images": "node scripts/ensure-images.js",
     "repair-images": "node scripts/repair-images.js",
-    "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
+    "predev": "npm run copy-cover && powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
     "predev-npm": "npm run ensure-images && npm run repair-images",
     "preinstall": "",
-    "build:netlify": "NODE_OPTIONS=\"--max-old-space-size=4096\" node build-netlify.js"
+    "prebuild": "npm run copy-cover",
+    "build:netlify": "npm run copy-cover && NODE_OPTIONS=\"--max-old-space-size=4096\" node build-netlify.js",
+    "copy-cover": "node scripts/copy-cover-image.js"
   },
   "dependencies": {
     "react": "^18.2.0",

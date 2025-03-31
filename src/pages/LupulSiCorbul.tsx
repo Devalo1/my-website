@@ -1,13 +1,21 @@
-function LupulSiCorbul() {
+import React from 'react';
+import BackgroundImage from '../components/BackgroundVideo';
+import '../styles/LupulSiCorbul.css';
+
+const LupulSiCorbul: React.FC = () => {
   return (
-    <div className="lupul-si-corbul-page">
-      <h2>Lupul Si Corbul</h2>
-      <article>
-        <p>Here goes the content of your story or whatever you want to display on this page.</p>
-        {/* Your original content */}
-      </article>
+    <div className="lupul-corbul-page">
+      <BackgroundImage />
+      <div className="content">
+        <h1>Lupul și Corbul</h1>
+        <p>Bine ați venit pe pagina noastră!</p>
+        <div className="action-buttons">
+          <button className="action-button">Află mai multe</button>
+          <button className="action-button secondary">Contact</button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default LupulSiCorbul;

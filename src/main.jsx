@@ -1,16 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import LupulSiCorbul from './pages/LupulSiCorbul' // adjust the import path as needed
+import { BrowserRouter } from 'react-router-dom'
+import App from './App'
+
+// Importă reset CSS pentru a elimina stiluri nedorite
+import './styles/reset.css'
+// Importă stiluri globale
+import './index.css'
+// Importă utilitar pentru suprimarea console
+import './utils/consoleSilencer'
+import { silenceConsoleFor } from './utils/consoleSilencer'
+
+// Suprimă mesajele din consolă pentru primele 500ms
+silenceConsoleFor(500)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/lupul-si-corbul" />} />
-        <Route path="/lupul-si-corbul" element={<LupulSiCorbul />} />
-        {/* ...other routes... */}
-      </Routes>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 )

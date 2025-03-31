@@ -5,26 +5,6 @@
   overflow: hidden;
 }
 
-.background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-.fallback-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #2c3e50, #4ca1af);
-  z-index: -1;
-}
-
 .background-image {
   position: absolute;
   top: 0;
@@ -35,17 +15,46 @@
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  opacity: 0.3; /* Default opacity when video is playing */
-  transition: opacity 1s ease;
+  opacity: 1;
 }
 
-.background-image.image-only {
-  opacity: 1; /* Full opacity when no video is playing */
+.fallback-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #6b4423 0%, #8b5a2b 100%);
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 80%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.error-message h2 {
+  color: #6b4423;
+  margin-top: 0;
+}
+
+.error-message code {
+  background: #f0f0f0;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: monospace;
 }
 
 .content-container {
   position: relative;
-  z-index: 1; /* Asigură că conținutul este deasupra video/imagine */
+  z-index: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -55,60 +64,4 @@
   text-align: center;
   padding: 2rem;
   text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-}
-
-.debug-info {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 5px;
-  font-size: 12px;
-  z-index: 1000;
-  text-align: left;
-  max-width: 400px;
-  line-height: 1.4;
-}
-
-.video-error {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 400px;
-}
-
-.check-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.check-button:hover {
-  background-color: #45a049;
-}
-
-/* Media query pentru dispozitive mobile */
-@media (max-width: 768px) {
-  .background-video {
-    display: none; /* Nu încărca video pe mobile pentru performanță */
-  }
-  
-  .background-image {
-    opacity: 1;
-  }
 }
