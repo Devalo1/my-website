@@ -22,15 +22,25 @@ try {
     fs.mkdirSync('dist', { recursive: true });
   }
 
-  // Install dependencies with platform-specific flags
-  if (!isWindows) {
-    console.log('Installing dependencies with Linux-specific settings...');
-    execSync('npm ci --no-optional --ignore-scripts', { stdio: 'inherit' });
+  // Run platform-specific commands
+  if (isWindows) {
+    // Windows-specific build commands
+    console.log('Running Windows-specific build...');
+    execSync('npm run build', { stdio: 'inherit' });
+  } else {
+    // Linux-specific build commands for Netlify
+    console.log('Running Linux-specific build for Netlify...');
+    
+    // First ensure all needed files exist
+    console.log('Creating any required directories...');
+    if (!fs.existsSync('public/images')) {
+      fs.mkdirSync('public/images', { recursive: true });
+    }
+    
+    // Run the standard build command without any Windows-specific dependencies
+    console.log('Running build command...');
+    execSync('NODE_ENV=production vite build', { stdio: 'inherit' });
   }
-
-  // Run the build command
-  console.log('Running build command...');
-  execSync('npm run build', { stdio: 'inherit' });
 
   // Ensure netlify.toml is in the dist folder
   console.log('Copying netlify.toml to dist folder...');
