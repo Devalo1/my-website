@@ -2,5 +2,19 @@
   publish = "dist"
   command = "npm run build-netlify"
 
+[build.environment]
+  # Fix Sharp installation on Linux
+  SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
+  npm_config_arch = "x64"
+  npm_config_platform = "linux"
+  SHARP_DIST_BASE_URL = "https://npmmirror.com/mirrors/sharp-libvips"
+
+# Make sure we use the right Node.js version
 [context.production]
-  environment = { NODE_VERSION = "22" }
+  environment = { NODE_VERSION = "18" }
+
+# Configure redirects for Single Page Application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -13,7 +13,7 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "node scripts/run-dev.js",
-    "build-netlify": "vite build",
+    "build-netlify": "node build-netlify.js",
     "debug": "vite --debug --base=/my-website/",
     "update-deps": "node scripts/update-dependencies.js",
     "fix-package": "node scripts/fix-package-json.js",
