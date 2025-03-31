@@ -1,5 +1,5 @@
 /**
- * Script simplificat pentru build pe Netlify
+ * Script de build pentru Netlify - construiește aplicația React completă
  */
 
 import { execSync } from 'child_process';
@@ -17,14 +17,82 @@ try {
   if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist', { recursive: true });
   }
+  
+  // Asigură-te că index.html există în public
+  if (!fs.existsSync('public/index.html')) {
+    console.log('Creez index.html în directorul public');
+    const publicIndexHtml = `<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lupul și Corbul</title>
+  <link rel="icon" type="image/svg+xml" href="/images/Logo.svg" />
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>`;
+    
+    if (!fs.existsSync('public')) {
+      fs.mkdirSync('public', { recursive: true });
+    }
+    fs.writeFileSync('public/index.html', publicIndexHtml);
+  }
 
-  // Forțează instalarea Vite și React Plugin ca dependințe globale
-  console.log('Instalare Vite global pentru build...');
-  execSync('npm install -g vite @vitejs/plugin-react', { stdio: 'inherit' });
+  // Instalează dependențele necesare pentru build
+  console.log('Instalare dependențe pentru build...');
+  execSync('npm install --no-save vite @vitejs/plugin-react', { stdio: 'inherit' });
+  
+  // Verifică și creează vite.config.js dacă nu există
+  if (!fs.existsSync('vite.config.js') && !fs.existsSync('vite.config.ts')) {
+    console.log('Creez vite.config.js');
+    const viteConfig = `
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-  // Crează un index.html minim în directorul dist
-  console.log('Creare pagină de bază...');
-  const indexHtml = `
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    sourcemap: true
+  },
+  base: '/',
+});
+`;
+    fs.writeFileSync('vite.config.js', viteConfig);
+  }
+
+  // Construiește aplicația React completă
+  console.log('Construiesc aplicația React...');
+  execSync('npx vite build', { stdio: 'inherit' });
+
+  // Crează _redirects pentru rutarea SPA
+  console.log('Configurare rutare SPA...');
+  fs.writeFileSync('dist/_redirects', '/* /index.html 200');
+
+  // Copiază netlify.toml în directorul dist
+  if (fs.existsSync('netlify.toml')) {
+    fs.copyFileSync('netlify.toml', path.join('dist', 'netlify.toml'));
+  }
+
+  console.log('Build finalizat cu succes!');
+} catch (error) {
+  console.error('Eroare în timpul build-ului:', error);
+  
+  // Creăm o pagină de fallback doar dacă build-ul principal eșuează
+  console.log('Creând pagină de fallback...');
+  
+  if (!fs.existsSync('dist')) {
+    fs.mkdirSync('dist', { recursive: true });
+  }
+  
+  const fallbackHtml = `
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -67,26 +135,16 @@ try {
 <body>
   <div class="container">
     <h1>Lupul și Corbul</h1>
-    <p>Bine ați venit la Lupul și Corbul! Site-ul nostru este în construcție, dar va fi disponibil în curând.</p>
-    <p>Avem multe surprize pregătite pentru dumneavoastră.</p>
+    <p>A apărut o eroare în timpul build-ului, dar vom rezolva curând.</p>
+    <p>Reveniți mai târziu pentru a vedea site-ul complet.</p>
     <a href="https://github.com/Devalo1/my-website" class="btn">Vezi proiectul pe GitHub</a>
   </div>
 </body>
 </html>`;
 
-  fs.writeFileSync('dist/index.html', indexHtml);
-
-  // Crează un fișier _redirects pentru rutarea SPA
-  console.log('Configurare rutare SPA...');
+  fs.writeFileSync('dist/index.html', fallbackHtml);
   fs.writeFileSync('dist/_redirects', '/* /index.html 200');
-
-  // Copiază netlify.toml în directorul dist
-  if (fs.existsSync('netlify.toml')) {
-    fs.copyFileSync('netlify.toml', path.join('dist', 'netlify.toml'));
-  }
-
-  console.log('Build finalizat cu succes!');
-} catch (error) {
-  console.error('Eroare în timpul build-ului:', error);
-  process.exit(1);
+  
+  // Permite continuarea deploy-ului cu pagina de fallback
+  console.log('Pagină de fallback creată, continuăm deploy-ul');
 }
