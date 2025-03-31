@@ -2,6 +2,11 @@
   publish = "static-build"
   command = "bash -c 'chmod +x build-netlify.sh && ./build-netlify.sh'"
 
+[build.environment]
+  SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
+  DISABLE_SHARP = "true"
+  NODE_ENV = "production"
+
 # Configure redirects for Single Page Application
 [[redirects]]
   from = "/*"
