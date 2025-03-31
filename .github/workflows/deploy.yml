@@ -8,6 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SHARP_IGNORE_GLOBAL_LIBVIPS: "1"
+      npm_config_arch: x64
+      npm_config_platform: linux
 
     steps:
     - name: Checkout code
@@ -21,8 +25,14 @@ jobs:
     - name: Install Sharp dependencies
       run: sudo apt-get update && sudo apt-get install -y libvips-dev
 
+    - name: Clear npm cache
+      run: npm cache clean --force
+
     - name: Install dependencies
-      run: npm ci || npm install
+      run: |
+        npm config set sharp_binary_host "https://npmmirror.com/mirrors/sharp"
+        npm config set sharp_libvips_binary_host "https://npmmirror.com/mirrors/sharp-libvips"
+        npm install --no-optional
 
     - name: Build project
       run: npm run build
