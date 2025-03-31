@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagină Negăsită - Lupul și Corbul</title>
+  <script>
+    // Redirect to the homepage with the current path as a query parameter
+    const path = window.location.pathname;
+    window.location.href = '/my-website/?redirect=' + encodeURIComponent(path);
+  </script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f4e6;
+      color: #6b4423;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      background-color: #6b4423;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #8b5a2b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pagină Negăsită</h1>
+  <p>Ne pare rău, dar pagina pe care o cauți nu există sau a fost mutată.</p>
+  <a href="/my-website/" class="btn">Înapoi la pagina principală</a>
+</body>
+</html>

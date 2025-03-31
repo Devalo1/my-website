@@ -1,0 +1,18 @@
+IMPORTANT: Missing critical image - cover.jpeg
+
+This file should be a JPEG image used as the main background for the website.
+Please create an actual cover.jpeg file in this directory.
+
+Recommended specifications:
+- Size: 1920x1080 pixels
+- Format: JPEG
+- Content: A high-quality background image related to your site's theme
+
+You can use a stock photo from sites like Unsplash or Pexels.
+
+IMMEDIATE SOLUTION:
+1. Download or create a cover.jpeg image
+2. Place it in this directory (public/images/)
+3. Refresh your website - the background should appear
+
+If you continue to see a blank page, clear your browser cache and try again.

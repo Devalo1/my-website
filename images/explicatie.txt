@@ -1,0 +1,56 @@
+INSTRUCȚIUNI PENTRU REZOLVAREA PROBLEMELOR CU MENIUL MOBIL
+==========================================================
+
+Pentru ca meniul hamburger și butoanele de profil și coș să apară și să funcționeze corect
+pe mobil, urmați EXACT aceste instrucțiuni:
+
+1. IMPORTANT: În FIECARE pagină HTML, adăugați DOAR această linie la ÎNCEPUTUL secțiunii <head>,
+   ÎNAINTE de orice alt script sau stil:
+
+   <script src="auto-inject.js"></script>
+
+2. ȘTERGEȚI TOATE celelalte scripturi și stiluri related la meniul mobil, cum ar fi:
+   - ȘTERGEȚI orice script inline cu ID-ul "emergency-mobile-menu-script"
+   - ȘTERGEȚI orice stil inline cu ID-ul "emergency-mobile-menu-styles"
+   - ȘTERGEȚI referințele la "mobile-force.js" sau orice alt script similar
+   - ȘTERGEȚI toate blocurile <style> care conțin reguli pentru "#instant-mobile-menu", etc.
+
+3. NU modificați scriptul auto-inject.js! Acesta:
+   - Va crea automat butonul de meniu hamburger (în stânga)
+   - Va poziționa logo-ul în centru
+   - Va adăuga butoanele de profil și coș (în dreapta)
+   - Va gestiona deschiderea și închiderea meniului
+
+4. VERIFICAȚI ca fișierele de imagini să existe:
+   - images/Logo.png - pentru logo
+   - images/profi.png - pentru iconița de profil
+   - images/bag.png - pentru iconița de coș
+
+5. Dacă tot nu funcționează, verificați consola browserului (F12) pentru erori.
+
+6. Asigurați-vă că tagul <meta name="viewport"> este corect în fiecare pagină:
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ATENȚIE: Ordinea de încărcare a scripturilor este CRITICĂ! Script-ul auto-inject.js
+TREBUIE să fie primul script din <head> pentru a avea prioritate maximă.
+
+Exemplu de început corect pentru fiecare pagină HTML:
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- AUTO-INJECT MENIU MOBIL - TREBUIE SĂ FIE PRIMUL și SINGURUL script de meniu mobil! -->
+    <script src="auto-inject.js"></script>
+    
+    <!-- Restul stilurilor și scripturilor -->
+    <title>Pagina ta</title>
+    <link rel="stylesheet" href="styles.css">
+    ...
+</head>
+
+IMPORTANT: ȘTERGEȚI orice alt script sau stil care creează meniuri mobile pentru a evita 
+conflictele! Script-ul auto-inject.js este SINGURUL care trebuie să creeze și să gestioneze
+meniul mobil.

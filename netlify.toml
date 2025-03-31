@@ -1,0 +1,22 @@
+# Configurare pentru Netlify
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Handle SPA routing by redirecting all requests to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Correct paths for static assets
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
