@@ -8,6 +8,21 @@
  */
 
 (function() {
+  // Fix for duplicate paths that might be causing preload issues
+  function fixDuplicatePaths() {
+    // Fix any preload links with duplicate paths
+    document.querySelectorAll('link[rel="preload"]').forEach(link => {
+      if (link.href.includes('/my-website/my-website/')) {
+        const fixedHref = link.href.replace('/my-website/my-website/', '/my-website/');
+        link.href = fixedHref;
+        console.log('Fixed duplicate path in preload link');
+      }
+    });
+  }
+  
+  // Run path fix immediately
+  fixDuplicatePaths();
+  
   // Execute only on mobile devices
   if (window.innerWidth > 768) {
     console.log('Auto-inject: Desktop detected, script not executed');

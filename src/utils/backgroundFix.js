@@ -41,17 +41,37 @@ export function applyBackgroundFixes() {
  * Preload the background image for faster rendering
  */
 function preloadBackgroundImage() {
-  const imgUrl = '/my-website/images/cover.jpeg';
+  // Fix for duplicate path - ensure we don't add /my-website/ twice
+  const baseUrl = '/my-website';
+  const imgPath = '/images/cover.jpeg';
+  const imgUrl = baseUrl + imgPath;
   
-  // Only preload if not already done in HTML
-  if (!document.querySelector(`link[rel="preload"][href="${imgUrl}"]`)) {
+  // Check for any existing preload links for this image (with any path)
+  const existingPreloadsWithDuplicatePath = document.querySelectorAll('link[rel="preload"][href*="/my-website/my-website/"]');
+  
+  // Remove ALL preload links with incorrect duplicated paths
+  existingPreloadsWithDuplicatePath.forEach(link => {
+    console.log('Found and removing incorrect preload link with duplicated path:', link.href);
+    if (link.parentNode) {
+      link.parentNode.removeChild(link);
+    }
+  });
+  
+  // Get the correct preload links for our cover image
+  const correctPreloads = document.querySelectorAll(`link[rel="preload"][href="${imgUrl}"]`);
+  
+  // Only preload if not already done correctly in HTML
+  if (correctPreloads.length === 0) {
     const preloadLink = document.createElement('link');
     preloadLink.rel = 'preload';
     preloadLink.href = imgUrl;
     preloadLink.as = 'image';
     preloadLink.type = 'image/jpeg';
+    preloadLink.setAttribute('data-added-by', 'backgroundFix');
     document.head.appendChild(preloadLink);
-    console.log('Background image preload directive added');
+    console.log('Background image preload directive added with correct path:', imgUrl);
+  } else {
+    console.log('Correct preload link for cover image already exists');
   }
 }
 

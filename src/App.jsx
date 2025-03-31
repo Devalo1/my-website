@@ -12,11 +12,11 @@ function App() {
         <p className="error-info">
           Dacă nu vedeți videoclipul de fundal, cel mai probabil formatul MOV nu este suportat de browser.
           Vă recomandăm să:
-          <ol style={{textAlign: 'left'}}>
-            <li>Convertiți videoclipul în format MP4 folosind un convertor online</li>
-            <li>Salvați fișierul MP4 în directorul "public" cu numele "background.mp4"</li>
-          </ol>
         </p>
+        <ol style={{textAlign: 'left'}}>
+          <li>Convertiți videoclipul în format MP4 folosind un convertor online</li>
+          <li>Salvați fișierul MP4 în directorul "public" cu numele "background.mp4"</li>
+        </ol>
       </div>
     </div>
   );

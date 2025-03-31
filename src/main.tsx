@@ -11,6 +11,12 @@ import App from './App'
 // Import router fix BEFORE importing routes to suppress warnings early
 import './fix-router.js'
 
+// Import path fixer early to fix duplicate paths
+import { fixAllPaths } from './utils/pathFixer'
+
+// Fix duplicate paths immediately
+fixAllPaths();
+
 // Import styles in the correct order
 import './styles/reset.css' // Reset CSS should come first
 import './index.css'
@@ -25,6 +31,18 @@ import { injectCriticalStyles } from './utils/cssInjector'; // Import critical s
 
 // Import the consolidated background fix utility
 import { applyBackgroundFixes } from './utils/backgroundFix';
+
+// Add this near the top of the file after imports
+if (process.env.NODE_ENV === 'development') {
+  // Suppress React DevTools warning in development
+  const originalConsoleWarn = console.warn;
+  console.warn = (...args) => {
+    if (typeof args[0] === 'string' && args[0].includes('Download the React DevTools')) {
+      return; // Suppress this specific warning
+    }
+    originalConsoleWarn(...args);
+  };
+}
 
 // Apply styles immediately
 injectCriticalStyles();
