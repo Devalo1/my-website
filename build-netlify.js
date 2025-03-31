@@ -6,15 +6,26 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Set environment variable to skip installation of optional dependencies
+// Set environment variables for Sharp to prevent compilation issues
 process.env.SHARP_IGNORE_GLOBAL_LIBVIPS = 'true';
+process.env.DISABLE_SHARP_INSTALLATION = 'true';
+
+// Detect platform for platform-specific handling
+const isWindows = process.platform === 'win32';
 
 console.log('Starting Netlify build process...');
+console.log(`Running on platform: ${process.platform}`);
 
 try {
   // Ensure dist directory exists
   if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist', { recursive: true });
+  }
+
+  // Install dependencies with platform-specific flags
+  if (!isWindows) {
+    console.log('Installing dependencies with Linux-specific settings...');
+    execSync('npm ci --no-optional --ignore-scripts', { stdio: 'inherit' });
   }
 
   // Run the build command

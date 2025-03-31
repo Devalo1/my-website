@@ -25,7 +25,7 @@
     "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
     "predev-npm": "npm run ensure-images && npm run repair-images",
     "preinstall": "",
-    "build:netlify": "node build-netlify.js"
+    "build:netlify": "SHARP_IGNORE_GLOBAL_LIBVIPS=1 NODE_ENV=production node build-netlify.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -42,14 +42,12 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "glob": "^10.3.10",
-    "sharp": "0.33.5",
+    "sharp": "0.33.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
   "optionalDependencies": {
-    "@img/sharp-linux-x64": "^0.33.0",
-    "@img/sharp-win32-x64": "^0.33.0",
-    "@img/sharp-darwin-x64": "^0.33.0"
+    "@img/sharp-linux-x64": "^0.33.0"
   },
   "engines": {
     "node": ">=18"
