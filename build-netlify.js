@@ -2,13 +2,18 @@
  * Custom build script for Netlify deployment
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Set environment variables for Sharp to prevent compilation issues
 process.env.SHARP_IGNORE_GLOBAL_LIBVIPS = 'true';
 process.env.DISABLE_SHARP_INSTALLATION = 'true';
+
+// Get the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Detect platform for platform-specific handling
 const isWindows = process.platform === 'win32';
