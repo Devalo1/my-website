@@ -1,5 +1,5 @@
 /**
- * Script de build pentru Netlify - construiește aplicația React completă
+ * Script de build pentru Netlify cu suport îmbunătățit pentru resurse
  */
 
 import { execSync } from 'child_process';
@@ -18,27 +18,40 @@ try {
     fs.mkdirSync('dist', { recursive: true });
   }
   
-  // Asigură-te că index.html există în public
-  if (!fs.existsSync('public/index.html')) {
-    console.log('Creez index.html în directorul public');
-    const publicIndexHtml = `<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lupul și Corbul</title>
-  <link rel="icon" type="image/svg+xml" href="/images/Logo.svg" />
-</head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
-</html>`;
+  console.log('Verificare și pregătire resurse esențiale...');
+  
+  // Asigură-te că folderul public/images există
+  if (!fs.existsSync('public/images')) {
+    fs.mkdirSync('public/images', { recursive: true });
+  }
+  
+  // Verifică și copiază imaginea de background dacă există
+  console.log('Verificare resurse de background...');
+  
+  const backgroundVideoSource = path.join(__dirname, 'public', 'background.mp4');
+  const backgroundImageSource = path.join(__dirname, 'public', 'images', 'cover.jpeg');
+  
+  // Verificare fișier background.mp4
+  if (fs.existsSync(backgroundVideoSource)) {
+    console.log('Background video găsit: background.mp4');
+  } else {
+    console.log('Background video nu a fost găsit. Se va utiliza imaginea de fundal.');
+  }
+  
+  // Verificare imagine de fundal
+  if (fs.existsSync(backgroundImageSource)) {
+    console.log('Imagine de fundal găsită: cover.jpeg');
+  } else {
+    console.log('AVERTISMENT: Imagine de fundal lipsă!');
     
-    if (!fs.existsSync('public')) {
-      fs.mkdirSync('public', { recursive: true });
-    }
-    fs.writeFileSync('public/index.html', publicIndexHtml);
+    // Creează o imagine de fundal placeholder dacă nu există
+    const placeholderText = `IMPORTANT: Missing critical image - cover.jpeg
+
+This file should be a JPEG image used as the main background for the website.
+Please create an actual cover.jpeg file in this directory.`;
+    
+    fs.writeFileSync(path.join(__dirname, 'public', 'images', 'cover.jpeg.placeholder'), placeholderText);
+    console.log('Am creat un placeholder pentru cover.jpeg');
   }
 
   // Instalează dependențele necesare pentru build
@@ -60,7 +73,11 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
-    sourcemap: true
+    sourcemap: true,
+    // Excludem explicit 'vite' din bundle pentru a preveni erorile
+    rollupOptions: {
+      external: ['vite']
+    }
   },
   base: '/',
 });
@@ -70,18 +87,51 @@ export default defineConfig({
 
   // Construiește aplicația React completă
   console.log('Construiesc aplicația React...');
-  execSync('npx vite build', { stdio: 'inherit' });
+  try {
+    execSync('npx vite build', { stdio: 'inherit' });
+    console.log('Build Vite completat cu succes!');
+  } catch (buildError) {
+    console.error('Eroare în build Vite:', buildError);
+    throw buildError;
+  }
 
+  // Verifică dacă folderul dist conține index.html
+  if (!fs.existsSync('dist/index.html')) {
+    console.error('EROARE: index.html nu a fost generat în dist/');
+    throw new Error('Build incomplet - index.html lipsește');
+  }
+
+  // Copiem resursele importante
+  console.log('Copierea resurselor statice în dist...');
+  
   // Crează _redirects pentru rutarea SPA
-  console.log('Configurare rutare SPA...');
   fs.writeFileSync('dist/_redirects', '/* /index.html 200');
+  console.log('Fișier _redirects creat pentru rutare SPA');
 
   // Copiază netlify.toml în directorul dist
   if (fs.existsSync('netlify.toml')) {
     fs.copyFileSync('netlify.toml', path.join('dist', 'netlify.toml'));
+    console.log('netlify.toml copiat în dist/');
+  }
+  
+  // Crează folderul dist/images dacă nu există
+  if (!fs.existsSync('dist/images')) {
+    fs.mkdirSync('dist/images', { recursive: true });
+  }
+  
+  // Copiază imaginile esențiale dacă nu sunt deja copiate de Vite
+  if (fs.existsSync('public/images/cover.jpeg') && !fs.existsSync('dist/images/cover.jpeg')) {
+    fs.copyFileSync('public/images/cover.jpeg', 'dist/images/cover.jpeg');
+    console.log('cover.jpeg copiat în dist/images/');
+  }
+  
+  // Copiază background video dacă există
+  if (fs.existsSync('public/background.mp4') && !fs.existsSync('dist/background.mp4')) {
+    fs.copyFileSync('public/background.mp4', 'dist/background.mp4');
+    console.log('background.mp4 copiat în dist/');
   }
 
-  console.log('Build finalizat cu succes!');
+  console.log('Build finalizat cu succes! Toate resursele au fost procesate.');
 } catch (error) {
   console.error('Eroare în timpul build-ului:', error);
   
@@ -90,6 +140,17 @@ export default defineConfig({
   
   if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist', { recursive: true });
+  }
+  
+  // Creează folderul dist/images dacă nu există
+  if (!fs.existsSync('dist/images')) {
+    fs.mkdirSync('dist/images', { recursive: true });
+  }
+  
+  // Copiază totuși imaginea de fundal dacă există
+  if (fs.existsSync('public/images/cover.jpeg')) {
+    fs.copyFileSync('public/images/cover.jpeg', 'dist/images/cover.jpeg');
+    console.log('cover.jpeg copiat în dist/images/ pentru pagina de fallback');
   }
   
   const fallbackHtml = `
@@ -102,41 +163,51 @@ export default defineConfig({
   <style>
     body { 
       font-family: Arial, sans-serif; 
-      background: #f5f5f5; 
+      background: #6b4423 url('/images/cover.jpeg') center/cover no-repeat fixed;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .container {
-      background: white;
+      background: rgba(0, 0, 0, 0.6);
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       text-align: center;
       max-width: 600px;
+      backdrop-filter: blur(10px);
     }
-    h1 { color: #6b4423; margin-bottom: 1rem; }
-    p { color: #333; line-height: 1.6; }
+    h1 { color: #fff; margin-bottom: 1rem; font-size: 2.5rem; }
+    p { color: #eee; line-height: 1.6; font-size: 1.1rem; }
     .btn {
       display: inline-block;
       background: #8b5a2b;
       color: white;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 5px;
       text-decoration: none;
-      margin-top: 1rem;
-      transition: background 0.3s;
+      margin-top: 1.5rem;
+      transition: all 0.3s;
+      font-size: 1rem;
+      border: 2px solid transparent;
     }
-    .btn:hover { background: #6b4423; }
+    .btn:hover { 
+      background: #6b4423; 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.3);
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Lupul și Corbul</h1>
-    <p>A apărut o eroare în timpul build-ului, dar vom rezolva curând.</p>
-    <p>Reveniți mai târziu pentru a vedea site-ul complet.</p>
+    <p>Site-ul nostru este momentan în construcție și va fi disponibil în curând cu o experiență completă.</p>
+    <p>Între timp, puteți să ne vizitați proiectul pe GitHub pentru a urmări progresul nostru.</p>
     <a href="https://github.com/Devalo1/my-website" class="btn">Vezi proiectul pe GitHub</a>
   </div>
 </body>
@@ -145,6 +216,5 @@ export default defineConfig({
   fs.writeFileSync('dist/index.html', fallbackHtml);
   fs.writeFileSync('dist/_redirects', '/* /index.html 200');
   
-  // Permite continuarea deploy-ului cu pagina de fallback
   console.log('Pagină de fallback creată, continuăm deploy-ul');
 }

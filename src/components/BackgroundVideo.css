@@ -1,17 +1,18 @@
 .background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
-  z-index: -1;
+  height: 100vh;
   overflow: hidden;
 }
 
 .background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 0;
 }
 
 .fallback-background {
@@ -24,7 +25,6 @@
   z-index: -1;
 }
 
-/* Stilizare pentru imaginea de fundal */
 .background-image {
   position: absolute;
   top: 0;
@@ -34,8 +34,27 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.9; /* Facem imaginea puțin transparentă */
-  z-index: -1;
+  z-index: 0;
+  opacity: 0.3; /* Default opacity when video is playing */
+  transition: opacity 1s ease;
+}
+
+.background-image.image-only {
+  opacity: 1; /* Full opacity when no video is playing */
+}
+
+.content-container {
+  position: relative;
+  z-index: 1; /* Asigură că conținutul este deasupra video/imagine */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
 }
 
 .debug-info {
@@ -81,4 +100,15 @@
 
 .check-button:hover {
   background-color: #45a049;
+}
+
+/* Media query pentru dispozitive mobile */
+@media (max-width: 768px) {
+  .background-video {
+    display: none; /* Nu încărca video pe mobile pentru performanță */
+  }
+  
+  .background-image {
+    opacity: 1;
+  }
 }
