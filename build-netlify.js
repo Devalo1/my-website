@@ -29,8 +29,11 @@ try {
   }
 
   // Copy any required static files to public
-  // This ensures all required assets are available
   console.log('Setting up required files...');
+
+  // Install Vite explicitly since it's in devDependencies and might be skipped in production
+  console.log('Installing Vite and required packages...');
+  execSync('npm install --no-save vite @vitejs/plugin-react', { stdio: 'inherit' });
 
   // Running the actual build command
   console.log('Running build command...');
@@ -55,5 +58,5 @@ try {
   console.log('Build completed successfully!');
 } catch (error) {
   console.error('Build failed:', error);
-  process.exit(1); // Exit with error to ensure we don't use placeholder
+  process.exit(1);
 }

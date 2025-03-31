@@ -3,6 +3,8 @@
   publish = "dist"
 
 [build.environment]
+  # Ensure dev dependencies are installed for the build
+  NPM_FLAGS = "--include=dev"
   NODE_ENV = "production"
 
 # Handle SPA routing
