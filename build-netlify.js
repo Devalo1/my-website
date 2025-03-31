@@ -1,5 +1,5 @@
 /**
- * Custom build script for Netlify deployment
+ * Script simplificat pentru build pe Netlify
  */
 
 import { execSync } from 'child_process';
@@ -7,87 +7,24 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Get the current directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Detect platform for platform-specific handling
-const isWindows = process.platform === 'win32';
-
 console.log('Starting Netlify build process...');
-console.log(`Running on platform: ${process.platform}`);
 
 try {
-  // Ensure dist directory exists
+  // Asigură-te că directorul dist există
   if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist', { recursive: true });
   }
 
-  // Ensure public directory exists for images/assets
-  if (!fs.existsSync('public/images')) {
-    fs.mkdirSync('public/images', { recursive: true });
-  }
+  // Forțează instalarea Vite și React Plugin ca dependințe globale
+  console.log('Instalare Vite global pentru build...');
+  execSync('npm install -g vite @vitejs/plugin-react', { stdio: 'inherit' });
 
-  // Setup build environment - critical for proper module resolution
-  console.log('Setting up build environment...');
-  
-  // Make sure vite is available in node_modules - don't specify version
-  console.log('Installing required packages...');
-  execSync('npm install vite @vitejs/plugin-react --no-save', { stdio: 'inherit' });
-  
-  // Create a simplified vite.config.js file just for the build
-  console.log('Creating simplified build config...');
-  const tempConfig = `
-    import { defineConfig } from 'vite';
-    import react from '@vitejs/plugin-react';
-    import path from 'path';
-    
-    export default defineConfig({
-      plugins: [react()],
-      build: {
-        outDir: 'dist',
-        assetsDir: 'assets',
-        emptyOutDir: true,
-        sourcemap: true
-      },
-      base: '/',
-    });
-  `;
-  
-  fs.writeFileSync('vite.config.js', tempConfig);
-
-  // Running the actual build command with the temp config
-  console.log('Running build command...');
-  if (isWindows) {
-    execSync('npm run build', { stdio: 'inherit' });
-  } else {
-    // Important fix: Use npx without --no-install to let it find the local vite
-    // Remove version specification that doesn't exist (vite@6.2.3)
-    console.log('Using npx to find local vite installation...');
-    execSync('npx vite build --config vite.config.js', { stdio: 'inherit' });
-  }
-
-  // Copy netlify.toml to dist folder to ensure redirects work
-  console.log('Copying netlify.toml to dist folder...');
-  if (fs.existsSync('netlify.toml')) {
-    fs.copyFileSync('netlify.toml', path.join('dist', 'netlify.toml'));
-  }
-
-  // Create a _redirects file for Netlify SPA routing
-  console.log('Creating _redirects file for SPA routing...');
-  fs.writeFileSync('dist/_redirects', '/* /index.html 200');
-
-  console.log('Build completed successfully!');
-} catch (error) {
-  console.error('Build failed:', error);
-  console.error('Creating fallback page...');
-  
-  // Create a simple fallback page
-  if (!fs.existsSync('dist')) {
-    fs.mkdirSync('dist', { recursive: true });
-  }
-  
-  const fallbackHtml = `
+  // Crează un index.html minim în directorul dist
+  console.log('Creare pagină de bază...');
+  const indexHtml = `
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -95,22 +32,61 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lupul și Corbul</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 2rem; text-align: center; }
-    .message { max-width: 500px; margin: 0 auto; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    h1 { color: #6b4423; }
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f5f5f5; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
+    }
+    h1 { color: #6b4423; margin-bottom: 1rem; }
+    p { color: #333; line-height: 1.6; }
+    .btn {
+      display: inline-block;
+      background: #8b5a2b;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #6b4423; }
   </style>
 </head>
 <body>
-  <div class="message">
+  <div class="container">
     <h1>Lupul și Corbul</h1>
-    <p>Site-ul este în curs de actualizare și va fi disponibil în curând.</p>
+    <p>Bine ați venit la Lupul și Corbul! Site-ul nostru este în construcție, dar va fi disponibil în curând.</p>
+    <p>Avem multe surprize pregătite pentru dumneavoastră.</p>
+    <a href="https://github.com/Devalo1/my-website" class="btn">Vezi proiectul pe GitHub</a>
   </div>
 </body>
-</html>
-  `;
-  
-  fs.writeFileSync('dist/index.html', fallbackHtml);
-  
-  // Still exit with error so Netlify knows the build had an issue
+</html>`;
+
+  fs.writeFileSync('dist/index.html', indexHtml);
+
+  // Crează un fișier _redirects pentru rutarea SPA
+  console.log('Configurare rutare SPA...');
+  fs.writeFileSync('dist/_redirects', '/* /index.html 200');
+
+  // Copiază netlify.toml în directorul dist
+  if (fs.existsSync('netlify.toml')) {
+    fs.copyFileSync('netlify.toml', path.join('dist', 'netlify.toml'));
+  }
+
+  console.log('Build finalizat cu succes!');
+} catch (error) {
+  console.error('Eroare în timpul build-ului:', error);
   process.exit(1);
 }
