@@ -1,14 +1,7 @@
 [build]
-  publish = "static-build"
-  command = "bash -c 'chmod +x build-netlify.sh && ./build-netlify.sh'"
+  command = "npm run build"
+  publish = "dist"
 
-[build.environment]
-  SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
-  DISABLE_SHARP = "true"
-  NODE_ENV = "production"
-  NODE_VERSION = "18"
-
-# Configure redirects for Single Page Application
 [[redirects]]
   from = "/*"
   to = "/index.html"
