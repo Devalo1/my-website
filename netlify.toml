@@ -3,11 +3,16 @@
   publish = "dist"
 
 [build.environment]
-  SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
-  DISABLE_SHARP_INSTALLATION = "true" 
   NODE_ENV = "production"
 
+# Handle SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Ensure proper caching for assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
