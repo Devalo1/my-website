@@ -31,12 +31,11 @@ try {
   // Setup build environment - critical for proper module resolution
   console.log('Setting up build environment...');
   
-  // Make sure vite and its plugins are available globally during the build
-  // Using --force to ensure the packages are installed even with NODE_ENV=production
+  // Make sure vite is available in node_modules - don't specify version
   console.log('Installing required packages...');
-  execSync('npm install vite @vitejs/plugin-react --no-save --force', { stdio: 'inherit' });
+  execSync('npm install vite @vitejs/plugin-react --no-save', { stdio: 'inherit' });
   
-  // Create a simplified vite.config.js file just for the build if TS is causing issues
+  // Create a simplified vite.config.js file just for the build
   console.log('Creating simplified build config...');
   const tempConfig = `
     import { defineConfig } from 'vite';
@@ -62,8 +61,10 @@ try {
   if (isWindows) {
     execSync('npm run build', { stdio: 'inherit' });
   } else {
-    // For Netlify (Linux), use the direct path to vite binary
-    execSync('npx --no-install vite build --config vite.config.js', { stdio: 'inherit' });
+    // Important fix: Use npx without --no-install to let it find the local vite
+    // Remove version specification that doesn't exist (vite@6.2.3)
+    console.log('Using npx to find local vite installation...');
+    execSync('npx vite build --config vite.config.js', { stdio: 'inherit' });
   }
 
   // Copy netlify.toml to dist folder to ensure redirects work
