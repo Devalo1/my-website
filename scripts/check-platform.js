@@ -11,5 +11,5 @@ if (process.env.NETLIFY === 'true') {
   console.log('Architecture:', process.arch);
 }
 
-// Success, do nothing else
+// Ensure the script exits successfully without referencing cmd.exe
 process.exit(0);

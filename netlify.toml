@@ -6,6 +6,7 @@
   SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
   DISABLE_SHARP = "true"
   NODE_ENV = "production"
+  NODE_VERSION = "18"
 
 # Configure redirects for Single Page Application
 [[redirects]]

@@ -24,7 +24,7 @@
     "repair-images": "node scripts/repair-images.js",
     "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
     "predev-npm": "npm run ensure-images && npm run repair-images",
-    "preinstall": "node ./scripts/check-platform.js"
+    "preinstall": ""
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -49,5 +49,8 @@
     "@img/sharp-linux-x64": "^0.33.0",
     "@img/sharp-win32-x64": "^0.33.0",
     "@img/sharp-darwin-x64": "^0.33.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
