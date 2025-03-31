@@ -13,7 +13,7 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "node scripts/run-dev.js",
-    "build-netlify": "node build-netlify.js",
+    "build-netlify": "NODE_ENV=production DISABLE_SHARP=true node build-netlify.js",
     "debug": "vite --debug --base=/my-website/",
     "update-deps": "node scripts/update-dependencies.js",
     "fix-package": "node scripts/fix-package-json.js",
@@ -23,7 +23,8 @@
     "ensure-images": "node scripts/ensure-images.js",
     "repair-images": "node scripts/repair-images.js",
     "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
-    "predev-npm": "npm run ensure-images && npm run repair-images"
+    "predev-npm": "npm run ensure-images && npm run repair-images",
+    "preinstall": "node ./scripts/check-platform.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -43,5 +44,8 @@
     "sharp": "0.33.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
+  },
+  "optionalDependencies": {
+    "@img/sharp-linux-x64": "^0.33.0"
   }
 }
