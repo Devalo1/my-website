@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
+  <style>
+    body {
+      background-image: url('/my-website/images/cover.jpeg') !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      background-attachment: fixed !important;
+    }
+    
+    .background-image {
+      background-image: url('/my-website/images/cover.jpeg') !important;
+    }
+    
+    .site-cover {
+      background-image: url('/my-website/images/cover.jpeg') !important;
+    }
+    
+    .home-container {
+      background-image: url('/my-website/images/cover.jpeg') !important;
+    }
+  </style>
+  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Lupul și Corbul - Prăjituri artizanale și suplimente naturale din ingrediente naturale">
@@ -22,6 +44,9 @@
     <!-- Favicon -->
     <link rel="icon" href="/my-website/favicon.ico" type="image/x-icon">
     
+    <!-- Preload critical background image -->
+    <link rel="preload" href="/my-website/images/cover.jpeg" as="image" type="image/jpeg">
+    
     <style>
         /* Critical styling for initial load */
         body {
@@ -29,6 +54,11 @@
             padding: 0;
             background-color: #fff8f0;
             font-family: 'Roboto', sans-serif;
+            background-image: url('/my-website/images/cover.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         .loader {
             position: fixed;
@@ -60,8 +90,8 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-  <script type="module" crossorigin src="/my-website/assets/index-DoHhHzBV.js"></script>
-  <link rel="stylesheet" crossorigin href="/my-website/assets/index-CBEOID9O.css">
+  <script type="module" crossorigin src="/my-website/assets/index-JlxrGqUf.js"></script>
+  <link rel="stylesheet" crossorigin href="/my-website/assets/index-CQyoNo27.css">
 </head>
 <body>
     <!-- Loader for improved UX -->

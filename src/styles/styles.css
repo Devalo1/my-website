@@ -1,5 +1,4 @@
 :root {
-  --cover-url: url('/my-website/images/cover.jpeg');
   --primary-color: #8b5a2b;
   --secondary-color: #6b4423;
   --bg-light: #fff8f0;
@@ -24,7 +23,7 @@ html {
 body {
     background-color: var(--bg-light);
     animation: fadeIn 0.5s ease-out;
-    background-image: var(--cover-url);
+    background-image: url('/my-website/images/cover.jpeg'); /* Direct URL instead of var */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -861,4 +860,9 @@ nav a.active::after {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
+}
+
+/* Background image class */
+.background-image {
+  background-image: url('/my-website/images/cover.jpeg'); /* Direct URL instead of var */
 }

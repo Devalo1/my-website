@@ -9,7 +9,7 @@
     "check-resources": "node scripts/resource-checker.js",
     "free-ports": "node scripts/free-ports.js",
     "start-clean": "node scripts/run-dev.js",
-    "build": "vite build --base=/my-website/",
+    "build": "node scripts/fix-css-urls.js && node scripts/ensure-cover-image.js && vite build && node scripts/fix-html-paths.js && node scripts/verify-build.js",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "node scripts/run-dev.js",

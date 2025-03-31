@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-image: url('/my-website/images/cover.jpeg'); /* Use static URL */
 }
 
 h1 {

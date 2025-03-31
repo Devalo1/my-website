@@ -19,3 +19,8 @@ export function verifyBackgroundImage(): boolean;
  * Injects placeholders for missing images in the DOM
  */
 export function injectPlaceholders(): void;
+
+/**
+ * Verifies the existence of the cover image and logs the result
+ */
+export function verifyCoverImage(): void;

@@ -17,9 +17,25 @@ import './index.css'
 import './styles/global.css'
 import './styles/styles.css'
 import './styles/main.css'
+import './styles/css-reset.css'; // Import the CSS reset file
 
 // Import utility for checking resources
-import { verifyBackgroundImage, injectPlaceholders } from './utils/assetChecker'
+import { verifyBackgroundImage, injectPlaceholders, verifyCoverImage } from './utils/assetChecker'
+import { injectCriticalStyles } from './utils/cssInjector'; // Import critical styles injector
+
+// Import the consolidated background fix utility
+import { applyBackgroundFixes } from './utils/backgroundFix';
+
+// Apply styles immediately
+injectCriticalStyles();
+
+// Apply all background fixes at startup
+applyBackgroundFixes();
+
+// Add event listener to ensure styles are applied after DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  injectCriticalStyles();
+});
 
 // Import all pages
 import Acasa from './pages/Acasa'
@@ -39,11 +55,11 @@ window.__reactRouterDisableWarnings = true;
 // Load global scripts with error handling
 const loadGlobalScripts = () => {
   // Create a safe script loader with proper types
-  const loadScript = (src: string, callback: () => void, errorCallback: (err: Error) => void) => {
+  const loadScript = (src: string, callback: () => void, errorCallback: (event: string | Event) => void) => {
     const script = document.createElement('script')
     script.src = src
     script.onload = callback
-    script.onerror = errorCallback
+    script.onerror = errorCallback // Adjusted type
     document.head.appendChild(script)
   }
 
@@ -111,18 +127,18 @@ const loadGlobalScripts = () => {
 
     // Load custom scripts with dynamic imports
     // Load Firebase config first
-    import('./services/firebase-config.js')
+    import('./services/firebase-config')
       .then(() => {
         console.log('Firebase config loaded successfully')
-        return import('./components/auth.js')
+        return import('./components/auth')
       })
       .then(() => {
         console.log('Auth script loaded successfully')
-        return import('./components/responsive.js')
+        return import('./components/responsive')
       })
       .then(() => {
         console.log('Responsive script loaded successfully')
-        return import('./components/ultra-fix.js')
+        return import('./components/ultra-fix')
       })
       .then(() => {
         console.log('Ultra-fix compatibility script loaded successfully')
@@ -135,6 +151,9 @@ const loadGlobalScripts = () => {
 
 // Execute script loading
 loadGlobalScripts()
+
+// Verify the cover image during app initialization
+verifyCoverImage();
 
 // Determine the base URL from Vite environment or default to '/my-website/'
 const BASE_URL = import.meta.env.BASE_URL || '/my-website/'

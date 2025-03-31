@@ -1,0 +1,24 @@
+:root {
+  --cover-url: url('/my-website/images/cover.jpeg') !important;
+  --background-url: url('/my-website/images/cover.jpeg') !important;
+}
+
+body {
+  background-image: url('/my-website/images/cover.jpeg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+.background-image {
+  background-image: url('/my-website/images/cover.jpeg') !important;
+}
+
+.site-cover {
+  background-image: url('/my-website/images/cover.jpeg') !important;
+}
+
+.home-container {
+  background-image: url('/my-website/images/cover.jpeg') !important;
+}

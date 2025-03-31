@@ -4,9 +4,9 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  /* Vom elimina încărcarea imaginii de fundal de aici și o vom face în componenta React */
   background-color: #121212; /* Backup color if image fails to load */
   min-height: 100vh;
+  background-image: url('/my-website/images/cover.jpeg'); /* Use static URL */
 }
 
 #root {

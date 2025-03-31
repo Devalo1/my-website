@@ -1,7 +1,7 @@
 /* ...existing code... */
 
 .site-cover {
-  background-image: url('/my-website/images/cover.jpeg');
+  background-image: url('/my-website/images/cover.jpeg'); /* Use static URL */
   background-size: cover;
   background-position: center;
   width: 100%;

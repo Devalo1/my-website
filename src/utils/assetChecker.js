@@ -24,89 +24,13 @@ const DEBUG = false;
  * și oferă soluții alternative dacă nu este găsită
  */
 export function verifyBackgroundImage() {
-  // Încearcă să încarce imaginea folosind URL direct
   const img = new Image();
-  img.onload = () => DEBUG && console.log('Imaginea de fundal s-a încărcat cu succes!');
+  img.onload = () => console.log('Background image loaded successfully.');
   img.onerror = () => {
-    console.warn('ATENȚIE: Imaginea de fundal nu a putut fi încărcată, se aplică fundal alternativ');
-    
-    // Aplică un fundal alternativ la eroare
+    console.warn('Background image failed to load. Applying fallback.');
     document.body.style.background = 'linear-gradient(135deg, #8b5a2b 0%, #6b4423 100%)';
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundAttachment = 'fixed';
   };
-  
-  // Update paths to prioritize both SVG and JPEG formats
-  const paths = [
-    '/my-website/images/cover.jpeg',
-    '/my-website/images/cover.svg',
-    // Add inline SVG fallback
-    'data:image/svg+xml,' + encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-        <defs>
-          <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8b5a2b" />
-            <stop offset="100%" stop-color="#6b4423" />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#bgGradient)"/>
-        <text x="50%" y="50%" font-family="Arial" font-size="72" font-weight="bold" text-anchor="middle" fill="white">Lupul si Corbul</text>
-      </svg>
-    `)
-  ];
-  
-  // Verifică fiecare cale posibilă și raportează cea funcțională
-  let foundWorkingPath = false;
-  
-  paths.forEach(path => {
-    const testImg = new Image();
-    testImg.onload = () => {
-      // Only log success for the working path
-      if (!foundWorkingPath) {
-        console.log(`SUCCESS: Calea ${path} funcționează!`);
-        
-        foundWorkingPath = true;
-        document.body.style.backgroundImage = `url(${path})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        document.body.style.backgroundAttachment = 'fixed';
-        
-        // Notificăm alte componente despre calea corectă
-        document.dispatchEvent(new CustomEvent('backgroundImageFound', { 
-          detail: { path: path } 
-        }));
-      }
-    };
-    // Don't log all errors to reduce console noise
-    testImg.onerror = () => {};
-    testImg.src = path;
-  });
-  
-  // Timeout pentru a aplica un fundal de siguranță dacă nicio imagine nu se încarcă
-  setTimeout(() => {
-    if (!foundWorkingPath) {
-      console.warn('Nicio imagine de fundal nu s-a încărcat, se aplică fundal de siguranță');
-      document.body.style.background = 'linear-gradient(135deg, #8b5a2b 0%, #6b4423 100%)';
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundAttachment = 'fixed';
-      
-      // Apply fallback with inline SVG background with fixed syntax
-      const fallbackSvg = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-        <defs>
-          <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8b5a2b" />
-            <stop offset="100%" stop-color="#6b4423" />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#bgGradient)"/>
-        <text x="50%" y="50%" font-family="Arial" font-size="72" font-weight="bold" text-anchor="middle" fill="white">Lupul si Corbul</text>
-      </svg>`);
-      
-      document.body.style.backgroundImage = `url("data:image/svg+xml,${fallbackSvg}")`;
-    }
-  }, 1000);
-  
-  return foundWorkingPath;
+  img.src = '/my-website/images/cover.jpeg'; // Use static URL
 }
 
 /**
@@ -280,4 +204,14 @@ function generateMissingImages() {
   setTimeout(() => {
     console.log('Imagini placeholder generate cu succes!');
   }, 1000);
+}
+
+/**
+ * Verifică existența imaginii cover.jpeg în timpul rulării
+ */
+export function verifyCoverImage() {
+  const coverImage = new Image();
+  coverImage.src = '/my-website/images/cover.jpeg';
+  coverImage.onload = () => console.log('Cover image loaded successfully.');
+  coverImage.onerror = () => console.warn('Cover image is missing or cannot be loaded.');
 }
