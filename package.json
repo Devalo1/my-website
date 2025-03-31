@@ -25,7 +25,7 @@
     "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
     "predev-npm": "npm run ensure-images && npm run repair-images",
     "preinstall": "",
-    "build:netlify": "node build-netlify.js"
+    "build:netlify": "NODE_OPTIONS=\"--max-old-space-size=4096\" node build-netlify.js"
   },
   "dependencies": {
     "react": "^18.2.0",

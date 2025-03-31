@@ -15,6 +15,10 @@ export default defineConfig({
     assetsDir: 'assets',
     emptyOutDir: true,
     sourcemap: true,
+    rollupOptions: {
+      // Add external dependencies here to avoid bundling issues
+      external: ['vite']
+    }
   },
   base: process.env.NODE_ENV === 'production' ? '/' : '/my-website/',
   server: {

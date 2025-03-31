@@ -28,21 +28,42 @@ try {
     fs.mkdirSync('public/images', { recursive: true });
   }
 
-  // Copy any required static files to public
-  console.log('Setting up required files...');
+  // Setup build environment - critical for proper module resolution
+  console.log('Setting up build environment...');
+  
+  // Make sure vite and its plugins are available globally during the build
+  // Using --force to ensure the packages are installed even with NODE_ENV=production
+  console.log('Installing required packages...');
+  execSync('npm install vite @vitejs/plugin-react --no-save --force', { stdio: 'inherit' });
+  
+  // Create a simplified vite.config.js file just for the build if TS is causing issues
+  console.log('Creating simplified build config...');
+  const tempConfig = `
+    import { defineConfig } from 'vite';
+    import react from '@vitejs/plugin-react';
+    import path from 'path';
+    
+    export default defineConfig({
+      plugins: [react()],
+      build: {
+        outDir: 'dist',
+        assetsDir: 'assets',
+        emptyOutDir: true,
+        sourcemap: true
+      },
+      base: '/',
+    });
+  `;
+  
+  fs.writeFileSync('vite.config.js', tempConfig);
 
-  // Install Vite explicitly since it's in devDependencies and might be skipped in production
-  console.log('Installing Vite and required packages...');
-  execSync('npm install --no-save vite @vitejs/plugin-react', { stdio: 'inherit' });
-
-  // Running the actual build command
+  // Running the actual build command with the temp config
   console.log('Running build command...');
   if (isWindows) {
-    // Windows-specific build process
     execSync('npm run build', { stdio: 'inherit' });
   } else {
-    // Linux-specific build for Netlify
-    execSync('npx vite build', { stdio: 'inherit' });
+    // For Netlify (Linux), use the direct path to vite binary
+    execSync('npx --no-install vite build --config vite.config.js', { stdio: 'inherit' });
   }
 
   // Copy netlify.toml to dist folder to ensure redirects work
@@ -58,5 +79,37 @@ try {
   console.log('Build completed successfully!');
 } catch (error) {
   console.error('Build failed:', error);
+  console.error('Creating fallback page...');
+  
+  // Create a simple fallback page
+  if (!fs.existsSync('dist')) {
+    fs.mkdirSync('dist', { recursive: true });
+  }
+  
+  const fallbackHtml = `
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lupul și Corbul</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; text-align: center; }
+    .message { max-width: 500px; margin: 0 auto; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    h1 { color: #6b4423; }
+  </style>
+</head>
+<body>
+  <div class="message">
+    <h1>Lupul și Corbul</h1>
+    <p>Site-ul este în curs de actualizare și va fi disponibil în curând.</p>
+  </div>
+</body>
+</html>
+  `;
+  
+  fs.writeFileSync('dist/index.html', fallbackHtml);
+  
+  // Still exit with error so Netlify knows the build had an issue
   process.exit(1);
 }

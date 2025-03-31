@@ -3,9 +3,10 @@
   publish = "dist"
 
 [build.environment]
-  # Ensure dev dependencies are installed for the build
-  NPM_FLAGS = "--include=dev"
+  # Use correct NPM flags for CI environment
+  NPM_FLAGS = "--include=dev --legacy-peer-deps"
   NODE_ENV = "production"
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
 # Handle SPA routing
 [[redirects]]
