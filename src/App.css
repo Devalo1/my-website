@@ -6,7 +6,10 @@ body {
   line-height: 1.6;
   background-color: #121212; /* Backup color if image fails to load */
   min-height: 100vh;
-  background-image: url('/my-website/images/cover.jpeg'); /* Use static URL */
+  background-image: url('/my-website/cover.jpg'); /* Actualizează calea imaginii */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #root {
@@ -89,44 +92,73 @@ nav {
 
 nav ul {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-@media (min-width: 768px) {
-  nav ul {
-    flex-direction: row;
-  }
+  background-color: #6b4423;
 }
 
 nav ul li {
-  margin: 5px 0;
-}
-
-@media (min-width: 768px) {
-  nav ul li {
-    margin: 0 15px;
-  }
+  margin: 0 1rem;
 }
 
 nav ul li a {
+  color: white;
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s;
-  display: block;
-  padding: 5px 0;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s;
 }
 
 nav ul li a:hover {
-  color: #646cff;
+  background-color: #8b5a2b;
+  border-radius: 4px;
 }
 
 nav ul li.active a {
   color: #646cff;
   font-weight: bold;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6b4423;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.main-nav li {
+  margin: 0;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+}
+
+.main-nav a:hover {
+  background-color: #8b5a2b;
+  color: #fff8f0;
+}
+
+.main-nav a.active {
+  background-color: #fff8f0;
+  color: #6b4423;
 }
 
 /* Main Content */
@@ -155,8 +187,8 @@ footer {
   text-align: center;
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid #eaeaea;
-  color: #666;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 /* Add responsive styles */
@@ -179,14 +211,86 @@ footer {
   position: relative;
 }
 
-.content {
-  padding: 20px;
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   position: relative;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 70px; /* Compensează meniul fix */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
   z-index: 1;
+  position: relative;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   margin: 50px auto;
-  max-width: 800px;
+  max-width: 1200px; /* Ajustare pentru ecrane mari */
+  width: 90%; /* Ajustare pentru ecrane mici */
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.app-loaded {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+/* Base content card styling */
+.content-card {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.content-card h2 {
+  color: #6b4423;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.content-card p {
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Buttons styling */
+.btn {
+  background-color: #6b4423;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background-color: #8b5a2b;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #6b4423;
+  color: #6b4423;
+}
+
+.btn-outline:hover {
+  background-color: #6b4423;
+  color: white;
 }
 
 /* Background styles */
@@ -198,4 +302,44 @@ footer {
   height: 100%;
   z-index: -1;
   object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .content {
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .content-card {
+    padding: 1.5rem;
+  }
+
+  .content-card h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
+
+  .content {
+    max-width: 1400px; /* Mai mult spațiu pentru ecrane mari */
+  }
+
+  .content-card {
+    padding: 2.5rem;
+  }
+
+  .content-card h2 {
+    font-size: 2rem;
+  }
 }

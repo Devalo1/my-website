@@ -55,15 +55,20 @@ const Background: React.FC = () => {
       });
       
       // Listen for background image found event from assetChecker
-      document.addEventListener('backgroundImageFound', (e: CustomEvent) => {
-        const path = e.detail?.path;
-        if (path) {
-          console.log(`Background image found from event: ${path}`);
-          setImageSource(path);
-          setImageLoaded(true);
-          setError(null);
+      document.addEventListener(
+        'backgroundImageFound',
+        (e: Event) => {
+          const customEvent = e as CustomEvent;
+          console.log(customEvent.detail);
+          const path = customEvent.detail?.path;
+          if (path) {
+            console.log(`Background image found from event: ${path}`);
+            setImageSource(path);
+            setImageLoaded(true);
+            setError(null);
+          }
         }
-      });
+      );
     };
     img.src = imageSource;
     

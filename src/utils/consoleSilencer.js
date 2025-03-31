@@ -142,6 +142,116 @@ export function silenceConsoleFor(milliseconds) {
   }, milliseconds);
 }
 
+// Funcție pentru a grupa mesaje de log sub un anumit context
+export function createContextLogger(context, options = {}) {
+  const defaultOptions = {
+    showTimestamp: true,
+    enableColors: true,
+    logLevel: 'info', // 'debug', 'info', 'warn', 'error'
+    silent: false
+  };
+  
+  const settings = { ...defaultOptions, ...options };
+  
+  const logLevels = {
+    debug: 0,
+    info: 1,
+    warn: 2,
+    error: 3
+  };
+  
+  const selectedLogLevel = logLevels[settings.logLevel] || 1;
+  
+  const colors = {
+    debug: '\x1b[90m', // Grey
+    info: '\x1b[36m',  // Cyan
+    warn: '\x1b[33m',  // Yellow
+    error: '\x1b[31m', // Red
+    reset: '\x1b[0m'   // Reset
+  };
+  
+  function getTimestamp() {
+    if (!settings.showTimestamp) return '';
+    
+    const now = new Date();
+    return `[${now.toISOString()}] `;
+  }
+  
+  function applyColor(level, message) {
+    if (!settings.enableColors) return message;
+    
+    return `${colors[level]}${message}${colors.reset}`;
+  }
+  
+  function shouldLog(level) {
+    if (settings.silent) return false;
+    return logLevels[level] >= selectedLogLevel;
+  }
+  
+  return {
+    debug: function(...args) {
+      if (!shouldLog('debug')) return;
+      
+      const prefix = `${getTimestamp()}[${context}][DEBUG] `;
+      const coloredPrefix = applyColor('debug', prefix);
+      originalConsole.debug(coloredPrefix, ...args);
+    },
+    
+    info: function(...args) {
+      if (!shouldLog('info')) return;
+      
+      const prefix = `${getTimestamp()}[${context}][INFO] `;
+      const coloredPrefix = applyColor('info', prefix);
+      originalConsole.info(coloredPrefix, ...args);
+    },
+    
+    warn: function(...args) {
+      if (!shouldLog('warn')) return;
+      
+      const prefix = `${getTimestamp()}[${context}][WARN] `;
+      const coloredPrefix = applyColor('warn', prefix);
+      originalConsole.warn(coloredPrefix, ...args);
+    },
+    
+    error: function(...args) {
+      if (!shouldLog('error')) return;
+      
+      const prefix = `${getTimestamp()}[${context}][ERROR] `;
+      const coloredPrefix = applyColor('error', prefix);
+      originalConsole.error(coloredPrefix, ...args);
+    },
+    
+    group: function(title) {
+      if (settings.silent) return;
+      
+      const groupTitle = `${getTimestamp()}[${context}] ${title}`;
+      originalConsole.group(groupTitle);
+    },
+    
+    groupEnd: function() {
+      if (settings.silent) return;
+      
+      originalConsole.groupEnd();
+    },
+    
+    // Utility method to create a child logger with the same settings
+    createChildLogger: function(childContext, childOptions = {}) {
+      return createContextLogger(`${context}:${childContext}`, {
+        ...settings,
+        ...childOptions
+      });
+    }
+  };
+}
+
+// Example usage:
+// const logger = createContextLogger('App');
+// logger.info('Application started');
+// 
+// const apiLogger = logger.createChildLogger('API');
+// apiLogger.warn('API rate limit exceeded');
+
 export default {
-  silenceConsoleFor
+  silenceConsoleFor,
+  createContextLogger
 };

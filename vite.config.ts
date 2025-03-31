@@ -1,28 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    emptyOutDir: true,
-    sourcemap: true,
-    rollupOptions: {
-      // Add external dependencies here to avoid bundling issues
-      external: ['vite']
-    }
-  },
-  base: process.env.NODE_ENV === 'production' ? '/' : '/my-website/',
+  // Reminder: Dacă portul 5208 este ocupat, Vite va alege alt port pentru rulare
   server: {
-    port: 3000,
-    open: true,
-  }
+    host: 'localhost', // Rulează numai pe localhost
+    port: 5208,        // Portul dorit
+    strictPort: false, // Permite fallback la alt port dacă 5208 e ocupat
+  },
+  base: '/my-website/', // Baza URL-ului site-ului
+  plugins: [react()],
 });

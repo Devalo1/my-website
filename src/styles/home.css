@@ -1,7 +1,7 @@
 /* Styles for the home page */
 
 .home-container {
-  width: 100%;
+  width: 90%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
@@ -120,6 +120,50 @@
   background-color: #6b4423;
 }
 
+/* Styles for the pop-up */
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8); /* Fundal transparent */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+}
+
+.popup-content h1 {
+  font-size: 2rem;
+  color: #6b4423;
+  margin-bottom: 1rem;
+}
+
+.popup-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.close-popup {
+  background-color: #6b4423;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.close-popup:hover {
+  background-color: #8b5a2b;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .hero-section {
@@ -132,5 +176,19 @@
   
   .product-categories, .services {
     grid-template-columns: 1fr;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-section h1 {
+    font-size: 3rem;
+  }
+
+  .hero-section p {
+    font-size: 1.5rem;
   }
 }

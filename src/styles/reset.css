@@ -1,68 +1,99 @@
-/* Reset CSS pentru a elimina stiluri nedorite și a asigura consistența între browsere */
+/* Modern CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
+/* Remove default margin and padding */
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, address, cite, code, em, img, small, strike, strong, sub, sup,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+article, aside, canvas, details, embed, figure, figcaption, footer, header,
+menu, nav, output, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-weight: normal;
   vertical-align: baseline;
 }
 
-/* HTML5 display-role reset pentru browsere vechi */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
-
+/* Setup the body */
 body {
-  line-height: 1;
-  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Remove list styles */
 ol, ul {
   list-style: none;
 }
 
-blockquote, q {
-  quotes: none;
+/* Remove default styles from links */
+a {
+  text-decoration: none;
+  color: inherit;
+  background-color: transparent;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
+/* Make images easier to work with */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+/* Remove default styles from buttons */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
 }
 
-/* Eliminare specificitate pentru a evita text nedorit */
-body::before, 
-body::after,
-#root::before,
-#root::after,
-.app::before,
-.app::after {
-  content: none !important;
+/* Make form elements easier to work with */
+input, button, textarea, select {
+  font: inherit;
 }
 
-/* Resetare globală pentru a preveni text hardcodat */
-[data-demo-text],
-[data-placeholder] {
-  display: none !important;
+/* Remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Fix overflow issues */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

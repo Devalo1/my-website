@@ -1,11 +1,15 @@
-function Psihoterapie() {
+import React from 'react';
+
+const Psihoterapie = () => {
   return (
-    <div className="psihoterapie-page">
+    <div className="content-card">
       <h2>Psihoterapie</h2>
-      <p>Informații despre serviciile de psihoterapie.</p>
-      {/* Include your original content about psychotherapy here */}
+      <p>
+        Descoperă serviciile noastre de psihoterapie, adaptate pentru a te ajuta să depășești provocările 
+        și să îți atingi potențialul maxim.
+      </p>
     </div>
   );
-}
+};
 
 export default Psihoterapie;

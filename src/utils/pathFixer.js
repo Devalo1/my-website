@@ -136,6 +136,139 @@ export function fixBackgroundImagePaths() {
   return fixedCount;
 }
 
+// Add new advanced path fixing function to handle more complex path issues
+export function fixMultiLevelPaths() {
+  console.log('Path Fixer: Checking for multi-level path issues...');
+  
+  // Find elements with src or href attributes that might have multi-level path issues
+  const elementsWithPaths = document.querySelectorAll('[src], [href], [data-src]');
+  let fixedCount = 0;
+  
+  elementsWithPaths.forEach(element => {
+    // Handle src attributes (images, scripts, etc.)
+    if (element.hasAttribute('src') && !element.hasAttribute('data-path-fixed-ml')) {
+      const srcValue = element.getAttribute('src');
+      if (srcValue && (srcValue.includes('/my-website/my-website/') || 
+                       srcValue.includes('//my-website//') || 
+                       srcValue.match(/\/my-website\/{2,}/))) {
+        
+        const originalSrc = srcValue;
+        // Fix all forms of duplicate paths
+        const correctedSrc = srcValue
+          .replace(/\/my-website\/my-website\//g, '/my-website/')
+          .replace(/\/my-website\/+/g, '/my-website/')
+          .replace(/\/+/g, '/');
+        
+        element.setAttribute('src', correctedSrc);
+        element.setAttribute('data-path-fixed-ml', 'true');
+        console.log(`Path Fixer: Fixed complex path in src:\nFrom: ${originalSrc}\nTo: ${correctedSrc}`);
+        fixedCount++;
+      }
+    }
+    
+    // Handle href attributes (links, stylesheets, etc.)
+    if (element.hasAttribute('href') && !element.hasAttribute('data-path-fixed-ml')) {
+      const hrefValue = element.getAttribute('href');
+      if (hrefValue && (hrefValue.includes('/my-website/my-website/') || 
+                        hrefValue.includes('//my-website//') ||
+                        hrefValue.match(/\/my-website\/{2,}/))) {
+        
+        const originalHref = hrefValue;
+        // Fix all forms of duplicate paths
+        const correctedHref = hrefValue
+          .replace(/\/my-website\/my-website\//g, '/my-website/')
+          .replace(/\/my-website\/+/g, '/my-website/')
+          .replace(/\/+/g, '/');
+        
+        element.setAttribute('href', correctedHref);
+        element.setAttribute('data-path-fixed-ml', 'true');
+        console.log(`Path Fixer: Fixed complex path in href:\nFrom: ${originalHref}\nTo: ${correctedHref}`);
+        fixedCount++;
+      }
+    }
+    
+    // Handle data-src attributes (lazy loading images)
+    if (element.hasAttribute('data-src') && !element.hasAttribute('data-path-fixed-ml')) {
+      const dataSrcValue = element.getAttribute('data-src');
+      if (dataSrcValue && (dataSrcValue.includes('/my-website/my-website/') || 
+                          dataSrcValue.includes('//my-website//') ||
+                          dataSrcValue.match(/\/my-website\/{2,}/))) {
+        
+        const originalDataSrc = dataSrcValue;
+        // Fix all forms of duplicate paths
+        const correctedDataSrc = dataSrcValue
+          .replace(/\/my-website\/my-website\//g, '/my-website/')
+          .replace(/\/my-website\/+/g, '/my-website/')
+          .replace(/\/+/g, '/');
+        
+        element.setAttribute('data-src', correctedDataSrc);
+        element.setAttribute('data-path-fixed-ml', 'true');
+        console.log(`Path Fixer: Fixed complex path in data-src:\nFrom: ${originalDataSrc}\nTo: ${correctedDataSrc}`);
+        fixedCount++;
+      }
+    }
+  });
+  
+  if (fixedCount > 0) {
+    console.log(`Path Fixer: Fixed ${fixedCount} elements with complex path issues`);
+  } else {
+    console.log('Path Fixer: No complex path issues found');
+  }
+  
+  return fixedCount;
+}
+
+// Function to fix absolute vs relative path issues
+export function fixRelativePaths() {
+  console.log('Path Fixer: Checking for relative path issues...');
+  
+  const basePath = '/my-website/';
+  const elementsWithPaths = document.querySelectorAll('[src], [href]');
+  let fixedCount = 0;
+  
+  elementsWithPaths.forEach(element => {
+    // Only process elements that haven't been fixed by other functions
+    if (element.hasAttribute('data-path-fixed') || element.hasAttribute('data-path-fixed-ml')) {
+      return;
+    }
+    
+    // Check for relative paths that should be absolute
+    if (element.hasAttribute('src')) {
+      const srcValue = element.getAttribute('src');
+      if (srcValue && srcValue.startsWith('./') && !srcValue.includes(basePath)) {
+        const originalSrc = srcValue;
+        const correctedSrc = basePath + srcValue.substring(2); // Remove './' and add basePath
+        
+        element.setAttribute('src', correctedSrc);
+        element.setAttribute('data-path-fixed-rel', 'true');
+        console.log(`Path Fixer: Fixed relative path in src:\nFrom: ${originalSrc}\nTo: ${correctedSrc}`);
+        fixedCount++;
+      }
+    }
+    
+    if (element.hasAttribute('href')) {
+      const hrefValue = element.getAttribute('href');
+      if (hrefValue && hrefValue.startsWith('./') && !hrefValue.includes(basePath)) {
+        const originalHref = hrefValue;
+        const correctedHref = basePath + hrefValue.substring(2); // Remove './' and add basePath
+        
+        element.setAttribute('href', correctedHref);
+        element.setAttribute('data-path-fixed-rel', 'true');
+        console.log(`Path Fixer: Fixed relative path in href:\nFrom: ${originalHref}\nTo: ${correctedHref}`);
+        fixedCount++;
+      }
+    }
+  });
+  
+  if (fixedCount > 0) {
+    console.log(`Path Fixer: Fixed ${fixedCount} elements with relative path issues`);
+  } else {
+    console.log('Path Fixer: No relative path issues found');
+  }
+  
+  return fixedCount;
+}
+
 // Set up a MutationObserver to catch dynamically added elements with path issues
 function setupPathObserver() {
   // Skip if observer already set up
@@ -155,6 +288,8 @@ function setupPathObserver() {
       fixDuplicatePreloadPaths();
       fixImageSrcPaths();
       fixBackgroundImagePaths();
+      fixMultiLevelPaths();
+      fixRelativePaths();
     }
   });
   
@@ -211,6 +346,8 @@ export function fixAllPaths() {
   totalFixed += fixDuplicatePreloadPaths();
   totalFixed += fixImageSrcPaths();
   totalFixed += fixBackgroundImagePaths();
+  totalFixed += fixMultiLevelPaths(); // Add new multi-level path fixing
+  totalFixed += fixRelativePaths(); // Add new relative path fixing
   
   // If we fixed any paths, set up the observer
   if (totalFixed > 0) {
@@ -218,6 +355,58 @@ export function fixAllPaths() {
   }
   
   return totalFixed;
+}
+
+// Add path status checker for debugging
+export function getPathStatus() {
+  const brokenImages = [];
+  const suspiciousPaths = [];
+  
+  // Check images
+  document.querySelectorAll('img').forEach(img => {
+    if (!img.complete || img.naturalHeight === 0) {
+      brokenImages.push({
+        element: 'img',
+        src: img.src,
+        alt: img.alt || 'No alt text'
+      });
+    }
+    
+    if (img.src && (img.src.includes('//') || img.src.includes('/my-website/my-website/'))) {
+      suspiciousPaths.push({
+        element: 'img',
+        path: img.src
+      });
+    }
+  });
+  
+  // Check CSS background images
+  document.querySelectorAll('[style*="background"]').forEach(el => {
+    const style = el.getAttribute('style');
+    if (style && (style.includes('//') || style.includes('/my-website/my-website/'))) {
+      suspiciousPaths.push({
+        element: 'element with background style',
+        path: style
+      });
+    }
+  });
+  
+  // Check links
+  document.querySelectorAll('link[rel="preload"]').forEach(link => {
+    if (link.href && (link.href.includes('//') || link.href.includes('/my-website/my-website/'))) {
+      suspiciousPaths.push({
+        element: 'preload link',
+        path: link.href
+      });
+    }
+  });
+  
+  return {
+    brokenImages,
+    suspiciousPaths,
+    totalBroken: brokenImages.length,
+    totalSuspicious: suspiciousPaths.length
+  };
 }
 
 // Auto-run on script load if in browser environment

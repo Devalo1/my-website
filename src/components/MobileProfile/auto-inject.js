@@ -238,129 +238,129 @@
       
       /* Page specific adjustments */
       .page-home-mobile .hero,
-      .page-products-mobile .products-page,
-      .page-ong-mobile .ong-page,
-      .page-therapy-mobile .therapy-page,
-      .page-contact-mobile .contact-page {
+      .page-products-mobile .products-grid,
+      .page-ong-mobile .programs-grid,
+      .page-therapy-mobile .therapy-services,
+      .page-contact-mobile .contact-content {
         margin-top: 60px !important;
       }
     }
   `;
   
+  // Inject style into document head
   document.head.appendChild(style);
   
-  // Create mobile UI elements
-  function createMobileUI() {
-    // Hamburger button
+  // Function to detect current page
+  function detectCurrentPage() {
+    const path = window.location.pathname;
+    let pageName = 'home';
+    
+    if (path.includes('products')) pageName = 'products';
+    else if (path.includes('ong')) pageName = 'ong';
+    else if (path.includes('therapy')) pageName = 'therapy';
+    else if (path.includes('contact')) pageName = 'contact';
+    
+    // Add mobile class to the body to enable mobile-specific styles
+    document.body.classList.add(`page-${pageName}-mobile`);
+    return pageName;
+  }
+  
+  // Create mobile interface elements
+  function createMobileInterface() {
+    const currentPage = detectCurrentPage();
+    
+    // Create hamburger button
     const hamburgerButton = document.createElement('button');
     hamburgerButton.id = 'hamburger-button-v7';
     hamburgerButton.innerHTML = '☰';
-    hamburgerButton.setAttribute('aria-label', 'Menu');
+    hamburgerButton.setAttribute('aria-label', 'Meniu');
     document.body.appendChild(hamburgerButton);
     
-    // Logo
-    const logo = document.createElement('a');
-    logo.id = 'site-logo-v7';
-    logo.href = '/my-website/';
+    // Create logo
+    const logoContainer = document.createElement('div');
+    logoContainer.id = 'site-logo-v7';
     
-    const logoImg = document.createElement('img');
-    logoImg.src = '/my-website/images/Logo.png';
-    logoImg.alt = 'Site Logo';
-    logoImg.onerror = function() {
-      // Fallback if logo image doesn't exist
+    const logo = document.createElement('img');
+    logo.src = '/my-website/images/Logo.svg';
+    logo.alt = 'Lupul și Corbul';
+    logo.onerror = function() {
+      // Use text fallback if image doesn't load
       this.style.display = 'none';
-      logo.style.display = 'none';
+      logoContainer.innerHTML = '<div style="color: #6b4423; font-weight: bold; font-size: 16px;">Lupul și Corbul</div>';
     };
     
-    logo.appendChild(logoImg);
-    document.body.appendChild(logo);
+    logoContainer.appendChild(logo);
+    document.body.appendChild(logoContainer);
     
-    // Right buttons (profile and cart)
+    // Create right side buttons container (profile & cart)
     const rightButtons = document.createElement('div');
     rightButtons.id = 'right-buttons-v7';
     
     // Profile button
-    const profileButton = document.createElement('div');
+    const profileButton = document.createElement('button');
     profileButton.className = 'action-button-v7';
-    profileButton.id = 'profile-button-v7';
+    profileButton.id = 'profile-button-mobile-v7';
+    profileButton.setAttribute('aria-label', 'Profil');
     
     const profileImg = document.createElement('img');
     profileImg.src = '/my-website/images/profi.png';
-    profileImg.alt = 'Profile';
+    profileImg.alt = 'Profil';
     profileImg.onerror = function() {
-      this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236b4423"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+      this.outerHTML = '<i style="font-family: sans-serif;">👤</i>';
     };
     
     profileButton.appendChild(profileImg);
-    rightButtons.appendChild(profileButton);
     
     // Cart button
-    const cartButton = document.createElement('div');
+    const cartButton = document.createElement('button');
     cartButton.className = 'action-button-v7';
-    cartButton.id = 'cart-button-v7';
+    cartButton.setAttribute('aria-label', 'Coș cumpărături');
     
     const cartImg = document.createElement('img');
     cartImg.src = '/my-website/images/bag.png';
-    cartImg.alt = 'Cart';
+    cartImg.alt = 'Coș';
     cartImg.onerror = function() {
-      this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236b4423"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>';
+      this.outerHTML = '<i style="font-family: sans-serif;">🛒</i>';
     };
     
-    // Get cart count from localStorage
-    let cartCount = 0;
-    try {
-      const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-      cartCount = cartItems.reduce((total, item) => total + (item.quantity || 0), 0);
-    } catch (error) {
-      console.error('Error loading cart data:', error);
-    }
-    
-    // Add count badge if needed
-    if (cartCount > 0) {
-      const countBadge = document.createElement('div');
-      countBadge.id = 'cart-count-v7';
-      countBadge.textContent = cartCount > 9 ? '9+' : cartCount;
-      cartButton.appendChild(countBadge);
-    }
-    
     cartButton.appendChild(cartImg);
+    
+    // Optional: Add cart count badge
+    const cartCount = document.createElement('span');
+    cartCount.id = 'cart-count-v7';
+    cartCount.textContent = '0';
+    cartCount.style.display = 'none'; // Hide initially
+    cartButton.appendChild(cartCount);
+    
+    rightButtons.appendChild(profileButton);
     rightButtons.appendChild(cartButton);
     document.body.appendChild(rightButtons);
     
     // Create navigation menu
-    const navigationMenu = document.createElement('nav');
+    const navigationMenu = document.createElement('div');
     navigationMenu.id = 'navigation-menu-v7';
     
-    // Detect current page for menu highlighting
-    const path = window.location.pathname;
-    const isHomePage = path === '/' || path.endsWith('/my-website/') || path.includes('/index.html');
-    const isProductsPage = path.includes('/products');
-    const isOngPage = path.includes('/ong');
-    const isTherapyPage = path.includes('/therapy');
-    const isContactPage = path.includes('/contact');
-    
-    // Set appropriate page class on body
-    document.body.classList.add(isHomePage ? 'page-home-mobile' : 
-                                isProductsPage ? 'page-products-mobile' :
-                                isOngPage ? 'page-ong-mobile' :
-                                isTherapyPage ? 'page-therapy-mobile' :
-                                isContactPage ? 'page-contact-mobile' : 'page-other-mobile');
-    
-    navigationMenu.innerHTML = `
-      <div class="menu-header">
-        <h3>Meniu</h3>
-        <button id="close-menu-v7">&times;</button>
-      </div>
-      <a href="/my-website/" class="${isHomePage ? 'active' : ''}">Acasă</a>
-      <a href="/my-website/products" class="${isProductsPage ? 'active' : ''}">Produse</a>
-      <a href="/my-website/ong" class="${isOngPage ? 'active' : ''}">Făuritorii de Destin</a>
-      <a href="/my-website/therapy" class="${isTherapyPage ? 'active' : ''}">Terapie Personalizată</a>
-      <a href="/my-website/contact" class="${isContactPage ? 'active' : ''}">Contact</a>
+    const menuHeader = document.createElement('div');
+    menuHeader.className = 'menu-header';
+    menuHeader.innerHTML = `
+      <span>Meniu Navigare</span>
+      <button id="close-menu-v7">&times;</button>
     `;
     
+    const menuLinks = document.createElement('div');
+    menuLinks.innerHTML = `
+      <a href="/my-website/" class="${currentPage === 'home' ? 'active' : ''}">Acasă</a>
+      <a href="/my-website/products" class="${currentPage === 'products' ? 'active' : ''}">Produse</a>
+      <a href="/my-website/ong" class="${currentPage === 'ong' ? 'active' : ''}">Făuritorii de Destin</a>
+      <a href="/my-website/therapy" class="${currentPage === 'therapy' ? 'active' : ''}">Terapie Personalizată</a>
+      <a href="/my-website/contact" class="${currentPage === 'contact' ? 'active' : ''}">Contact</a>
+    `;
+    
+    navigationMenu.appendChild(menuHeader);
+    navigationMenu.appendChild(menuLinks);
     document.body.appendChild(navigationMenu);
     
-    // Create overlay
+    // Create overlay for menu background
     const menuOverlay = document.createElement('div');
     menuOverlay.id = 'menu-overlay-v7';
     document.body.appendChild(menuOverlay);
@@ -369,104 +369,65 @@
     hamburgerButton.addEventListener('click', function() {
       navigationMenu.classList.add('open');
       menuOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
     });
     
     document.getElementById('close-menu-v7').addEventListener('click', function() {
       navigationMenu.classList.remove('open');
       menuOverlay.classList.remove('open');
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; // Restore scrolling
     });
     
     menuOverlay.addEventListener('click', function() {
       navigationMenu.classList.remove('open');
       menuOverlay.classList.remove('open');
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; // Restore scrolling
     });
     
-    // Profile and cart button functionality
+    // Set up profile button functionality
     profileButton.addEventListener('click', function() {
-      // Check if user is logged in
-      let user = null;
-      try {
-        user = JSON.parse(localStorage.getItem('user'));
-      } catch (e) {}
-      
-      if (user) {
-        // Show profile options
-        alert(`Bun venit, ${user.name || user.email}!`);
-      } else {
-        // Show login options
-        if (confirm('Trebuie să fii autentificat pentru a vedea profilul tău. Vrei să te autentifici?')) {
-          window.location.href = '/my-website/login';
-        }
-      }
+      // Simple redirect to login page for now
+      // In a full implementation, you'd check login status and show dropdown
+      window.location.href = '/my-website/login';
     });
     
+    // Set up cart button functionality
     cartButton.addEventListener('click', function() {
-      // Show cart
-      let cartItems = [];
-      try {
-        cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-      } catch (e) {}
+      // Update and show cart count badge as a visual feedback
+      const count = parseInt(cartCount.textContent || '0');
+      cartCount.textContent = (count + 1).toString();
+      cartCount.style.display = 'flex';
       
-      if (cartItems.length === 0) {
-        alert('Coșul tău este gol.');
-      } else {
-        // Redirect to cart page or show cart popup
-        window.location.href = '/my-website/cart';
+      // Actual cart functionality would go here
+      alert('Coșul de cumpărături va fi implementat în curând!');
+    });
+    
+    console.log('Mobile navigation interface created successfully');
+  }
+  
+  // Set up observers to ensure our mobile interface stays on top
+  function setupMobileInterfaceObserver() {
+    const observer = new MutationObserver(function(mutations) {
+      // Re-establish our mobile elements if they were removed
+      if (!document.getElementById('hamburger-button-v7')) {
+        console.log('Mobile interface elements missing, recreating...');
+        createMobileInterface();
       }
     });
-  }
-  
-  // Hide any existing mobile menus to avoid conflicts
-  function hideExistingMobileMenus() {
-    const selectors = [
-      'nav.mobile', 
-      '#mobile-nav', 
-      '.mobile-nav',
-      '#mobile-menu',
-      '.hamburger-menu',
-      '#navigation-menu:not(#navigation-menu-v7)',
-      '.menu-toggle',
-      '.mobile-menu-toggle'
-    ];
     
-    selectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(el => {
-        if (el) {
-          el.style.display = 'none';
-          el.style.visibility = 'hidden';
-          el.style.opacity = '0';
-          el.style.pointerEvents = 'none';
-        }
-      });
+    // Start observing the document body for changes
+    observer.observe(document.body, { 
+      childList: true,
+      subtree: true
     });
+    
+    console.log('Mobile interface observer set up');
   }
   
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      createMobileUI();
-      hideExistingMobileMenus();
-    });
-  } else {
-    createMobileUI();
-    hideExistingMobileMenus();
-  }
+  // Initialize mobile interface
+  createMobileInterface();
+  setupMobileInterfaceObserver();
   
-  // Ensure mobile menu is visible even after script interference
-  window.addEventListener('load', function() {
-    hideExistingMobileMenus();
-    
-    // Ensure our buttons are visible
-    const hamburgerButton = document.getElementById('hamburger-button-v7');
-    const siteLogoV7 = document.getElementById('site-logo-v7');
-    const rightButtonsV7 = document.getElementById('right-buttons-v7');
-    
-    if (hamburgerButton) hamburgerButton.style.display = 'block';
-    if (siteLogoV7) siteLogoV7.style.display = 'block';
-    if (rightButtonsV7) rightButtonsV7.style.display = 'flex';
-  });
+  // Mark as initialized to prevent duplicate execution
+  window.mobileMenuInitialized = true;
 })();

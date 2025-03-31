@@ -1,112 +1,113 @@
 /**
- * Comprehensive fix for background image issues
- * This utility combines all the fixes we've created to ensure
- * the background image displays correctly in all environments
+ * Background Fix Utility
+ * Comprehensive solution for background image issues
  */
 
 import { injectCriticalStyles } from './cssInjector';
 import { verifyBackgroundImage, verifyCoverImage } from './assetChecker';
 
-/**
- * Apply all background fixes in the correct order
- */
+// Master function to apply all background fixes
 export function applyBackgroundFixes() {
   console.log('Applying comprehensive background image fixes...');
   
-  // Step 1: Inject critical CSS styles
+  // Step 1: Inject critical CSS for backgrounds
   injectCriticalStyles();
   
-  // Step 2: Verify background images exist
-  verifyBackgroundImage();
-  verifyCoverImage();
+  // Step 2: Verify background images and use fallbacks if needed
+  const imageVerified = verifyBackgroundImage();
   
-  // Step 3: Preload the background image
+  // Step 3: Preload the background image for faster loading
   preloadBackgroundImage();
   
-  // Step 4: Listen for DOM content loaded to reapply fixes
-  document.addEventListener('DOMContentLoaded', () => {
-    injectCriticalStyles();
-    checkBackgroundRendering();
-  });
+  // Step 4: Apply direct body background as fallback if verification failed
+  if (!imageVerified) {
+    applyDirectBodyBackground();
+  }
   
-  // Step 5: Final check after full page load
-  window.addEventListener('load', () => {
-    checkBackgroundRendering();
-  });
+  // Step 5: Set up continuous monitoring for background image loading
+  setupBackgroundLoadingMonitor();
   
   console.log('Background image fixes applied successfully');
+  
+  return true;
 }
 
-/**
- * Preload the background image for faster rendering
- */
+// Helper function to preload background image
 function preloadBackgroundImage() {
-  // Fix for duplicate path - ensure we don't add /my-website/ twice
-  const baseUrl = '/my-website';
-  const imgPath = '/images/cover.jpeg';
-  const imgUrl = baseUrl + imgPath;
+  // Check if there's already a preload link for our cover image
+  const existingPreload = document.querySelector('link[rel="preload"][href="/my-website/images/cover.jpeg"]');
   
-  // Check for any existing preload links for this image (with any path)
-  const existingPreloadsWithDuplicatePath = document.querySelectorAll('link[rel="preload"][href*="/my-website/my-website/"]');
-  
-  // Remove ALL preload links with incorrect duplicated paths
-  existingPreloadsWithDuplicatePath.forEach(link => {
-    console.log('Found and removing incorrect preload link with duplicated path:', link.href);
-    if (link.parentNode) {
-      link.parentNode.removeChild(link);
-    }
-  });
-  
-  // Get the correct preload links for our cover image
-  const correctPreloads = document.querySelectorAll(`link[rel="preload"][href="${imgUrl}"]`);
-  
-  // Only preload if not already done correctly in HTML
-  if (correctPreloads.length === 0) {
+  if (!existingPreload) {
+    // Create a preload link
     const preloadLink = document.createElement('link');
     preloadLink.rel = 'preload';
-    preloadLink.href = imgUrl;
+    preloadLink.href = '/my-website/images/cover.jpeg';
     preloadLink.as = 'image';
     preloadLink.type = 'image/jpeg';
-    preloadLink.setAttribute('data-added-by', 'backgroundFix');
+    preloadLink.importance = 'high'; // Mark as high importance
     document.head.appendChild(preloadLink);
-    console.log('Background image preload directive added with correct path:', imgUrl);
+    
+    console.log('Added preload link for cover image');
   } else {
     console.log('Correct preload link for cover image already exists');
   }
 }
 
-/**
- * Check if the background is properly rendered and apply fixes if not
- */
-function checkBackgroundRendering() {
-  // Wait a small amount of time to see if background is applied
-  setTimeout(() => {
-    const computedBg = window.getComputedStyle(document.body).backgroundImage;
-    
-    if (!computedBg || computedBg === 'none' || !computedBg.includes('cover.jpeg')) {
-      console.warn('Background image not properly applied, applying fallback');
-      applyDirectBodyBackground();
-    }
-  }, 500);
+// Helper function to apply background directly to body if needed
+export function applyDirectBodyBackground() {
+  // Apply the background directly to body with inline style
+  document.body.style.backgroundImage = 'url("/my-website/images/cover.jpeg")';
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundAttachment = 'fixed';
+  
+  // Try to load the image to see if it works
+  const img = new Image();
+  img.onload = () => {
+    console.log('Direct body background image loaded successfully');
+  };
+  img.onerror = () => {
+    console.warn('Direct body background image failed to load, trying SVG fallback');
+    // If JPEG fails, try an SVG fallback
+    const svgFallback = `
+      data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%238b5a2b'/%3E%3Cstop offset='1' stop-color='%236b4423'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpattern id='b' width='24' height='24' patternUnits='userSpaceOnUse'%3E%3Ccircle fill='%23ffffff10' cx='12' cy='12' r='3'/%3E%3C/pattern%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'/%3E%3Crect width='100%25' height='100%25' fill='url(%23b)'/%3E%3C/svg%3E
+    `;
+    document.body.style.backgroundImage = `url("${svgFallback}")`;
+  };
+  img.src = '/my-website/images/cover.jpeg';
 }
 
-/**
- * Set up direct background image for the body
- * This is a last resort fallback
- */
-export function applyDirectBodyBackground() {
-  document.body.style.backgroundImage = "url('/my-website/images/cover.jpeg')";
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundAttachment = "fixed";
-  console.log('Direct body background applied');
+// Helper function to set up continuous monitoring
+function setupBackgroundLoadingMonitor() {
+  // Set up an interval to check if the background image is loaded properly
+  let checkCount = 0;
+  const maxChecks = 10;
   
-  // If the image still fails to load, try the SVG fallback
-  const testImg = new Image();
-  testImg.onerror = () => {
-    document.body.style.backgroundImage = "url('/my-website/images/cover.svg')";
-    console.log('Switched to SVG fallback background');
-  };
-  testImg.src = '/my-website/images/cover.jpeg';
+  const checkInterval = setInterval(() => {
+    checkCount++;
+    
+    // Check if there's a computed background image on body or any container
+    const bodyStyle = window.getComputedStyle(document.body);
+    const bodyBg = bodyStyle.backgroundImage;
+    
+    if (bodyBg && bodyBg !== 'none' && !bodyBg.includes('linear-gradient')) {
+      console.log('Background image detected in computed style');
+      clearInterval(checkInterval);
+    } else if (checkCount >= maxChecks) {
+      console.log('Background checks completed, applying final fixes if needed');
+      // One last verification
+      verifyBackgroundImage();
+      verifyCoverImage();
+      clearInterval(checkInterval);
+    }
+  }, 1000);
+  
+  // Also check when all resources are loaded
+  window.addEventListener('load', () => {
+    verifyBackgroundImage();
+    clearInterval(checkInterval);
+  });
 }
+
+// Export default for easier imports
+export default { applyBackgroundFixes, applyDirectBodyBackground };

@@ -1,163 +1,177 @@
 /**
- * MOBILE PERFORMANCE OPTIMIZER
- * 
- * This script improves mobile performance by:
- * 1. Disabling heavy animations
- * 2. Replacing video with static images
- * 3. Implementing lazy loading for images
- * 4. Preventing unnecessary script execution
+ * Mobile Optimization Script
+ * Applies performance optimizations specifically for mobile devices
  */
 
 (function() {
+  // Check if we're on a mobile device
+  const isMobile = window.innerWidth <= 768 || 
+                  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   
-  console.log('Mobile optimization active');
-  
-  // REPLACE VIDEO BACKGROUNDS WITH STATIC IMAGES
-  function replaceVideos() {
-    const videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-      // Create placeholder with same dimensions
-      const placeholder = document.createElement('div');
-      placeholder.className = 'video-placeholder';
-      placeholder.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('/my-website/images/mobile-bg.jpg') center/cover no-repeat;
-        z-index: ${getComputedStyle(video).zIndex};
-      `;
-      
-      // Replace video with static image
-      if (video.parentNode) {
-        video.parentNode.insertBefore(placeholder, video);
-        video.style.display = 'none';
-        video.pause();
-        video.src = '';
-        video.load();
-      }
-    });
+  if (!isMobile) {
+    console.log('Mobile optimizations skipped: not a mobile device');
+    return;
   }
   
-  // OPTIMIZE IMAGES
+  console.log('Applying mobile optimizations...');
+  
+  // List of optimizations applied
+  const appliedOptimizations = [];
+  
+  // 1. Reduce image quality for faster loading
   function optimizeImages() {
-    const images = document.querySelectorAll('img');
+    const images = document.querySelectorAll('img:not([data-mobile-optimized])');
+    
     images.forEach(img => {
-      // Add loading="lazy" attribute to all images
-      img.setAttribute('loading', 'lazy');
+      // Skip small images and SVGs
+      if (img.src.includes('.svg') || img.width < 100) return;
       
-      // Add decoding="async" attribute
-      img.setAttribute('decoding', 'async');
+      // Mark as processed
+      img.setAttribute('data-mobile-optimized', 'true');
       
-      // Ensure alt text for accessibility
-      if (!img.alt) {
-        img.alt = 'Imagine website';
+      // Add loading="lazy" attribute for images below the fold
+      if (!isElementInViewport(img)) {
+        img.loading = 'lazy';
       }
+      
+      // Add event listeners for error handling
+      img.addEventListener('error', () => {
+        // If image fails to load, try a different format or show a placeholder
+        if (img.src.includes('.jpg') || img.src.includes('.jpeg')) {
+          // Try WebP version if available
+          const webpSrc = img.src.replace(/\.(jpg|jpeg)$/, '.webp');
+          const testImg = new Image();
+          testImg.onload = () => { img.src = webpSrc; };
+          testImg.src = webpSrc;
+        }
+      });
     });
+    
+    appliedOptimizations.push('Image optimization with lazy loading');
   }
   
-  // DETECT CURRENT PAGE
-  function getCurrentPage() {
-    const path = window.location.pathname;
-    if (path.includes('products')) return 'products';
-    if (path.includes('ong')) return 'ong';
-    if (path.includes('therapy')) return 'therapy';
-    if (path.includes('contact')) return 'contact';
-    return 'home';
-  }
-  
-  // OPTIMIZE PAGE SPECIFIC ELEMENTS
-  function optimizeCurrentPage() {
-    const page = getCurrentPage();
-    console.log(`Optimizing for page: ${page}`);
-    
-    // Add page-specific class to body for CSS targeting
-    document.body.classList.add(`page-${page}-mobile`);
-    
-    switch (page) {
-      case 'home':
-        // Optimize home page
-        const heroSection = document.querySelector('.hero');
-        if (heroSection) {
-          heroSection.style.height = '300px';
+  // 2. Reduce CSS animations for better performance
+  function reduceAnimations() {
+    // Create a style element to disable heavy animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @media (max-width: 768px) {
+        *, *::before, *::after {
+          animation-duration: 0.001s !important;
+          animation-delay: 0s !important;
+          transition-duration: 0.001s !important;
+          transition-delay: 0s !important;
         }
-        break;
         
-      case 'products':
-        // Optimize products page
-        const productCards = document.querySelectorAll('.produs-card');
-        productCards.forEach(card => {
-          // Reduce image quality for better performance
-          const img = card.querySelector('img');
-          if (img && !img.src.includes('placeholder')) {
-            // Store original src for potential high-quality view
-            img.dataset.highQualitySrc = img.src;
-            
-            // Use smaller placeholder for list view
-            if (img.src.includes('product')) {
-              img.src = img.src.replace(/\.(jpg|jpeg|png)/, '-small.$1');
-            }
-          }
-        });
-        break;
-        
-      case 'ong':
-        // Optimize ONG page
-        break;
-        
-      case 'therapy':
-        // Optimize therapy page
-        const contactForm = document.querySelector('.contact-form');
-        if (contactForm) {
-          // Make form inputs larger for better touch experience
-          const inputs = contactForm.querySelectorAll('input, textarea');
-          inputs.forEach(input => {
-            input.style.padding = '12px';
-            input.style.fontSize = '16px'; // Prevent zoom on iOS
-          });
+        /* Allow specific light animations (like menu toggle) */
+        .menu-toggle, .navigation-menu-v7, .menu-overlay-v7 {
+          transition-duration: 0.3s !important;
         }
-        break;
-        
-      case 'contact':
-        // Optimize contact page
-        break;
-    }
-  }
-  
-  // Optimize font loading
-  function optimizeFonts() {
-    // Add preconnect for Google Fonts if used
-    const linkPreconnect = document.createElement('link');
-    linkPreconnect.rel = 'preconnect';
-    linkPreconnect.href = 'https://fonts.googleapis.com';
-    document.head.appendChild(linkPreconnect);
-    
-    // Add font-display: swap to any inline font styles
-    const styleElements = document.querySelectorAll('style');
-    styleElements.forEach(style => {
-      if (style.textContent.includes('@font-face')) {
-        style.textContent = style.textContent.replace(
-          /@font-face\s*{([^}]*)}/g, 
-          '@font-face{$1;font-display:swap;}'
-        );
       }
+    `;
+    document.head.appendChild(style);
+    
+    appliedOptimizations.push('Reduced animations');
+  }
+  
+  // 3. Simplify DOM by removing non-essential elements on mobile
+  function simplifyDOM() {
+    // Find and remove decorative elements not needed on mobile
+    const decorativeElements = document.querySelectorAll('.decorative, .desktop-only, .background-animation');
+    decorativeElements.forEach(el => {
+      el.style.display = 'none';
     });
+    
+    // Simplify complex layouts
+    const complexLayouts = document.querySelectorAll('.complex-grid, .masonry-layout');
+    complexLayouts.forEach(layout => {
+      layout.style.display = 'flex';
+      layout.style.flexDirection = 'column';
+    });
+    
+    appliedOptimizations.push('Simplified DOM structure');
   }
   
-  // Execute optimizations
-  function runOptimizations() {
-    replaceVideos();
-    optimizeImages();
-    optimizeCurrentPage();
-    optimizeFonts();
-    console.log('Mobile optimizations complete');
+  // 4. Reduce text content length on mobile
+  function simplifyContent() {
+    // Find long paragraphs and add a "Read more" button
+    const longParagraphs = Array.from(document.querySelectorAll('p')).filter(p => p.textContent.length > 200);
+    
+    longParagraphs.forEach(p => {
+      if (p.hasAttribute('data-simplified')) return;
+      
+      const originalText = p.textContent;
+      const shortText = originalText.substring(0, 200) + '...';
+      
+      p.setAttribute('data-original-text', originalText);
+      p.setAttribute('data-simplified', 'true');
+      p.textContent = shortText;
+      
+      // Add read more button
+      const readMore = document.createElement('button');
+      readMore.className = 'read-more-btn';
+      readMore.textContent = 'Citește mai mult';
+      readMore.style.display = 'block';
+      readMore.style.margin = '10px 0';
+      readMore.style.padding = '5px 10px';
+      readMore.style.background = '#6b4423';
+      readMore.style.color = 'white';
+      readMore.style.border = 'none';
+      readMore.style.borderRadius = '4px';
+      
+      let expanded = false;
+      readMore.addEventListener('click', () => {
+        if (expanded) {
+          p.textContent = shortText;
+          readMore.textContent = 'Citește mai mult';
+          expanded = false;
+        } else {
+          p.textContent = originalText;
+          readMore.textContent = 'Citește mai puțin';
+          expanded = true;
+        }
+      });
+      
+      p.parentNode.insertBefore(readMore, p.nextSibling);
+    });
+    
+    appliedOptimizations.push('Content simplification');
   }
   
-  // Run optimizations on page load
+  // Helper function to check if element is in viewport
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+  
+  // Run optimizations after DOM is fully loaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', runOptimizations);
   } else {
     runOptimizations();
+  }
+  
+  function runOptimizations() {
+    // Apply all optimizations
+    optimizeImages();
+    reduceAnimations();
+    simplifyDOM();
+    simplifyContent();
+    
+    // Mark mobile optimizations as applied
+    window.mobileOptimizationsApplied = true;
+    
+    // Dispatch event to notify other scripts
+    const event = new CustomEvent('mobileOptimizationsApplied', {
+      detail: { optimizations: appliedOptimizations }
+    });
+    document.dispatchEvent(event);
+    
+    console.log('Mobile optimizations applied:', appliedOptimizations);
   }
 })();

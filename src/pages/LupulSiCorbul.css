@@ -1,0 +1,24 @@
+.fable-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 8px;
+  color: #333;
+  margin-top: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.fable-container h1 {
+  color: #6b4423;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.fable-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.fable-content p {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
