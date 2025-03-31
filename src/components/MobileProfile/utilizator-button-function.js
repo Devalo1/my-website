@@ -7,8 +7,9 @@
  */
 
 (function() {
-    // Flag pentru debugging
-    const DEBUG = true;
+    // Define DEBUG variable to control console output
+    const DEBUG = process.env.NODE_ENV === 'development' || false;
+    
     function debug(message) {
         if (DEBUG) console.log("ProfileButton: " + message);
     }

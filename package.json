@@ -24,7 +24,8 @@
     "repair-images": "node scripts/repair-images.js",
     "predev": "powershell -ExecutionPolicy Bypass -File scripts/predev.ps1",
     "predev-npm": "npm run ensure-images && npm run repair-images",
-    "preinstall": ""
+    "preinstall": "",
+    "build:netlify": "node build-netlify.js"
   },
   "dependencies": {
     "react": "^18.2.0",
