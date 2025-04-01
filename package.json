@@ -15,7 +15,10 @@
     "start": "vite",
     "type-check": "tsc --noEmit",
     "update-deps": "node scripts/update-dependencies.js",
-    "upload-products": "node scripts/upload-products-to-firebase.js"
+    "upload-products": "node scripts/upload-products-to-firebase.js",
+    "check": "npm run lint && npm run format:check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "firebase": "10.14.1",
@@ -35,6 +38,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "glob": "^10.3.10",
+    "prettier": "3.5.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
