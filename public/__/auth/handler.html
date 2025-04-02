@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Handler - Lupul și Corbul</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .loading {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #4285F4;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <h2>Procesare autentificare...</h2>
+        <p>Vă rugăm să așteptați, veți fi redirecționat automat.</p>
+        <div id="status"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        document.getElementById('status').textContent = 'Inițializare Firebase...';
+        console.log("Auth Handler: Initializing Firebase");
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZEWoZn-c7NSH1AGbetWEbtxwEz-iaMR4",
+            authDomain: "lupulcorbul.firebaseapp.com",
+            projectId: "lupul-si-corbul",
+            storageBucket: "lupul-si-corbul.appspot.com",
+            messagingSenderId: "974647648168",
+            appId: "1:974647648168:web:8b7c6a5cb53509c9a23b1a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                document.getElementById('status').textContent = 'Verificare rezultat redirecționare...';
+                console.log("Verificare rezultat redirecționare în handler...");
+                
+                const result = await getRedirectResult(auth);
+                console.log("Rezultat redirecționare în handler:", result);
+                
+                if (result && result.user) {
+                    document.getElementById('status').textContent = 'Autentificare reușită! Redirecționare...';
+                    console.log("Autentificare reușită în handler:", result.user);
+                    
+                    // Salvăm datele utilizatorului în localStorage
+                    localStorage.setItem('user', JSON.stringify({
+                        uid: result.user.uid,
+                        email: result.user.email,
+                        displayName: result.user.displayName,
+                        photoURL: result.user.photoURL
+                    }));
+                    
+                    // Redirecționăm către pagina principală cu un parametru de succes
+                    setTimeout(() => {
+                        window.location.href = '/index.html?authSuccess=true';
+                    }, 1000);
+                } else {
+                    document.getElementById('status').textContent = 'Nu s-a găsit niciun rezultat. Redirecționare către login...';
+                    console.log("Nu s-a găsit niciun rezultat de autentificare în handler");
+                    
+                    // Redirecționăm către login
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                }
+            } catch (error) {
+                document.getElementById('status').textContent = `Eroare: ${error.message}`;
+                console.error("Eroare la procesarea redirecționării în handler:", error);
+                
+                // Redirecționăm către login după eroare
+                setTimeout(() => {
+                    window.location.href = '/login.html?error=' + encodeURIComponent(error.message);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

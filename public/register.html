@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare - Lupul și Corbul</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .register-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .register-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .register-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .register-container input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .register-container button {
+            padding: 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .register-container button:hover {
+            background-color: #357AE8;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>Înregistrare</h1>
+        <form id="register-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Parolă" required>
+            <button type="submit">Înregistrează-te</button>
+        </form>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        console.log("Initializing Firebase in register.html");
+        
+        // Your web app's Firebase configuration - configurație completă
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZEWoZn-c7NSH1AGbetWEbtxwEz-iaMR4",
+            authDomain: "lupulcorbul.firebaseapp.com", // Actualizat conform domeniilor autorizate
+            projectId: "lupul-si-corbul",
+            storageBucket: "lupul-si-corbul.appspot.com",
+            messagingSenderId: "974647648168",
+            appId: "1:974647648168:web:8b7c6a5cb53509c9a23b1a"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Adăugăm un script pentru înregistrare
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerForm = document.getElementById('register-form');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    try {
+                        console.log("Încercare de înregistrare cu:", email);
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        console.log("Utilizator înregistrat cu succes:", userCredential.user);
+                        alert('Înregistrare reușită!');
+                        // Redirecționează către pagina de login sau dashboard
+                        window.location.href = '/login.html';
+                    } catch (error) {
+                        console.error("Eroare la înregistrare:", error);
+                        alert(`Eroare la înregistrare: ${error.message}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

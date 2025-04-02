@@ -15,5 +15,8 @@
 <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Eliminăm inițializarea Firebase de aici, deoarece o facem deja în config.ts -->
+    <!-- Scripturile Firebase vor fi importate corect prin bundler (Webpack/Vite) -->
 </body>
 </html>

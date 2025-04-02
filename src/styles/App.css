@@ -11,3 +11,70 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Stiluri de bază pentru aplicație */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+/* Stilizare pentru spinner */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #1890ff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Stiluri pentru logo-ul din dashboard */
+.logo {
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 16px 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Stiluri pentru hover stare butoane */
+.ant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Stiluri pentru pagină de eroare */
+.error-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* Stil pentru hovering pe card-uri */
+.ant-card-hoverable:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}

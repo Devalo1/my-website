@@ -16,19 +16,16 @@
 
     /* Linting */
     "strict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    
+    "noFallthroughCasesInSwitch": true,
+
     /* Paths */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "js"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

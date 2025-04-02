@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Lupul și Corbul</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .user-profile {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 20px;
+            overflow: hidden;
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .user-info p {
+            margin: 0;
+            color: #666;
+        }
+        .logout-btn {
+            margin-left: auto;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .content-area {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .content-area h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="user-profile">
+            <div class="user-avatar">
+                <!-- Folosim o sursă URL encoded pentru a evita erori de căutare -->
+                <img id="user-photo" src="data:image/png;base64,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" alt="Profil utilizator">
+            </div>
+            <div class="user-info">
+                <h1 id="user-name">Încărcare...</h1>
+                <p id="user-email">Încărcare...</p>
+            </div>
+            <button id="logout-btn" class="logout-btn">Deconectare</button>
+        </div>
+        
+        <div class="content-area">
+            <h2>Bine ai venit la Lupul și Corbul!</h2>
+            <p>Acesta este panoul tău de control. De aici poți gestiona contul și comenzile tale.</p>
+            
+            <div id="auth-status"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        console.log("Initializing Firebase in dashboard.html");
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZEWoZn-c7NSH1AGbetWEbtxwEz-iaMR4",
+            authDomain: "lupulcorbul.firebaseapp.com",
+            projectId: "lupul-si-corbul",
+            storageBucket: "lupul-si-corbul.appspot.com",
+            messagingSenderId: "974647648168",
+            appId: "1:974647648168:web:8b7c6a5cb53509c9a23b1a"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Verificăm starea autentificării și actualizăm interfața
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Verificăm starea autentificării...");
+            console.log("localStorage user:", localStorage.getItem('user'));
+            
+            // Încercăm să încărcăm utilizatorul din localStorage
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                try {
+                    const userData = JSON.parse(savedUser);
+                    console.log("User data from localStorage:", userData);
+                    updateUIWithUserData(userData);
+                    
+                    // Arătăm starea autentificării
+                    document.getElementById('auth-status').innerHTML = `
+                        <div style="background-color: #e8f5e9; padding: 10px; border-radius: 4px; margin-top: 20px;">
+                            <h3>Stare autentificare</h3>
+                            <p>Date încărcate din localStorage</p>
+                            <pre style="background-color: #f5f5f5; padding: 10px; overflow: auto;">${JSON.stringify(userData, null, 2)}</pre>
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error("Eroare la parsarea datelor utilizator:", e);
+                }
+            } else {
+                console.log("Nu există date utilizator în localStorage");
+            }
+            
+            // Verificăm starea autentificării în Firebase
+            onAuthStateChanged(auth, (user) => {
+                console.log("Auth state changed:", user);
+                
+                if (user) {
+                    // Utilizator autentificat
+                    const userData = {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
+                    };
+                    
+                    // Actualizăm localStorage cu datele noi
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    
+                    // Actualizăm UI
+                    updateUIWithUserData(userData);
+                    document.getElementById('auth-status').textContent = 'Autentificat cu Firebase';
+                } else {
+                    // Utilizator neautentificat, redirecționăm la login
+                    console.log("Utilizator neautentificat, redirecționare către login...");
+                    document.getElementById('auth-status').textContent = 'Sesiune expirată. Redirecționare...';
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                }
+            });
+            
+            // Adăugăm handler pentru butonul de deconectare
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        await signOut(auth);
+                        localStorage.removeItem('user');
+                        alert('Ai fost deconectat cu succes!');
+                        window.location.href = '/login.html';
+                    } catch (error) {
+                        console.error("Eroare la deconectare:", error);
+                        alert('Eroare la deconectare: ' + error.message);
+                    }
+                });
+            }
+        });
+        
+        // Funcție pentru actualizarea UI cu datele utilizatorului
+        function updateUIWithUserData(userData) {
+            document.getElementById('user-name').textContent = userData.displayName || 'Utilizator';
+            document.getElementById('user-email').textContent = userData.email || '';
+            
+            if (userData.photoURL) {
+                document.getElementById('user-photo').src = userData.photoURL;
+            }
+        }
+    </script>
+</body>
+</html>

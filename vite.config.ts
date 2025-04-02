@@ -5,32 +5,57 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
+  base: '/lupul-si-corbul/',
+  
+  // Ensure all static assets are properly served
+  publicDir: 'public',
+  
+  // Adăugăm suport pentru fișierele statice (HTML, imagini, etc.)
+  assetsInclude: ['**/*.html', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.svg', '**/*.mp3', '**/*.wav'],
+  
+  // Optimizări pentru build
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    // Copy images from public directory to dist
-    assetsInlineLimit: 4096, // 4kb
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-      },
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
-        },
-      },
-    },
+    emptyOutDir: true,
+    assetsInlineLimit: 4096,
+    // Asigurăm că toate fișierele statice sunt copiate corect
+    copyPublicDir: true,
+    sourcemap: true,
+    commonjsOptions: {
+      include: [/node_modules/],
+      extensions: ['.js', '.jsx', '.ts', '.tsx']
+    }
   },
+  
+  // Rezolvăm problemele cu rutarea SPA
   server: {
-    open: true,
     port: 3000,
+    open: true,
+    cors: true,
+    strictPort: true,
+    host: true,
+    historyApiFallback: true
   },
-  base: '/my-website/',
-  publicDir: 'public',
+  
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
+  },
+  
+  optimizeDeps: {
+    include: [
+      'react', 
+      'react-dom', 
+      'react-router-dom',
+      'firebase/app',
+      'firebase/auth',
+      'firebase/firestore',
+      'firebase/storage',
+      'antd'
+    ],
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  }
 });

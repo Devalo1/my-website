@@ -1,48 +1,58 @@
 {
-  "name": "my-website",
-  "private": true,
+  "name": "lupul-si-corbul",
   "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite --base=/my-website/",
-    "check-files": "node scripts/check-missing-files.js",
-    "check-resources": "node scripts/resource-checker.js",
-    "free-ports": "node scripts/free-ports.js",
-    "start-clean": "node scripts/run-dev.js",
-    "build": "tsc && node scripts/fix-image-paths.js && vite build && node scripts/verify-build.js",
-    "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start": "vite",
-    "type-check": "tsc --noEmit",
-    "update-deps": "node scripts/update-dependencies.js",
-    "upload-products": "node scripts/upload-products-to-firebase.js",
-    "check": "npm run lint && npm run format:check",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
+  "private": true,
   "dependencies": {
-    "firebase": "10.14.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "6.30.0"
+    "@ant-design/charts": "^1.4.2",
+    "@ant-design/icons": "^5.0.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.16.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "antd": "^5.4.6",
+    "firebase": "^9.21.0",
+    "moment": "^2.29.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.1.1",
+    "react-router-dom": "^6.11.0",
+    "typescript": "^4.9.5",
+    "web-vitals": "^3.3.1"
+  },
+  "scripts": {
+    "start": "vite --base=/lupul-si-corbul/",
+    "dev": "vite --host --base=/lupul-si-corbul/ --port=3000",
+    "build": "vite build --base=/lupul-si-corbul/",
+    "serve": "node server.js",
+    "preview": "vite --base=/lupul-si-corbul/ preview",
+    "clean": "rimraf dist node_modules",
+    "reinstall": "npm run clean && npm install",
+    "reset": "npm run clean && npm install && npm run build",
+    "analyze": "node project-analyzer.js",
+    "fix-config": "node fix-config.js",
+    "copy-assets": "node copy-static-assets.js",
+    "deploy": "node deploy.js"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@types/node": "^20.12.0",
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "@vitejs/plugin-react": "4.3.4",
-    "eslint": "8.57.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "glob": "^10.3.10",
-    "prettier": "3.5.3",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.8"
-  },
-  "engines": {
-    "node": ">=18"
+    "@vitejs/plugin-react": "^4.3.4",
+    "react-refresh": "0.17.0",
+    "vite": "^6.2.4"
   }
 }

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lupul și Corbul</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-container input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-container button {
+            padding: 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #357AE8;
+        }
+        .login-container .google-login {
+            background-color: #DB4437;
+            margin-top: 10px;
+        }
+        .login-container .google-login:hover {
+            background-color: #C23321;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Parolă" required>
+            <button type="submit">Autentificare</button>
+        </form>
+        <button id="google-login" class="google-login">Autentificare cu Google</button>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        console.log("Initializing Firebase in login.html");
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZEWoZn-c7NSH1AGbetWEbtxwEz-iaMR4",
+            authDomain: "lupulcorbul.firebaseapp.com",
+            projectId: "lupul-si-corbul",
+            storageBucket: "lupul-si-corbul.appspot.com",
+            messagingSenderId: "974647648168",
+            appId: "1:974647648168:web:8b7c6a5cb53509c9a23b1a"
+        };
+
+        console.log("Firebase config:", firebaseConfig);
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        const saveAuthAttempt = () => {
+            sessionStorage.setItem('auth_attempt', 'google');
+            sessionStorage.setItem('auth_time', Date.now().toString());
+        };
+
+        const testFirebaseConnection = async () => {
+            try {
+                console.log("Testare conexiune Firebase...");
+                const currentUser = auth.currentUser;
+                console.log("Utilizator curent:", currentUser);
+                return true;
+            } catch (error) {
+                console.error("Eroare la testarea conexiunii:", error);
+                return false;
+            }
+        };
+
+        const pageExists = async (url) => {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.status !== 404;
+            } catch (e) {
+                console.error("Eroare la verificarea paginii:", e);
+                return false;
+            }
+        };
+
+        const showUserProfileInPage = (userData) => {
+            console.log("Afișez profilul utilizatorului direct în pagina de login:", userData);
+            
+            const container = document.querySelector('.login-container');
+            container.innerHTML = `
+                <h1>Profilul tău</h1>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 15px;">
+                        <img src="${userData.photoURL || 'data:image/png;base64,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'}" 
+                            style="width: 100%; height: 100%; object-fit: cover;" alt="Poză de profil">
+                    </div>
+                    <h2 style="margin: 0 0 5px;">${userData.displayName || 'Utilizator'}</h2>
+                    <p style="margin: 0 0 20px; color: #555;">${userData.email || ''}</p>
+                </div>
+                
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0;">Informații cont</h3>
+                    <p><strong>ID utilizator:</strong> ${userData.uid}</p>
+                    <p><strong>Autentificat cu:</strong> Google</p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button id="edit-profile-btn" style="width: 100%; padding: 10px; background-color: #4285F4; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">Completează profilul</button>
+                    <button id="logout-btn" style="width: 100%; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Deconectare</button>
+                </div>
+            `;
+            
+            document.getElementById('logout-btn').addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    localStorage.removeItem('user');
+                    alert('Ai fost deconectat cu succes!');
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Eroare la deconectare:", error);
+                    alert('Eroare la deconectare: ' + error.message);
+                }
+            });
+            
+            document.getElementById('edit-profile-btn').addEventListener('click', () => {
+                const formHTML = `
+                    <h1>Completează profilul tău</h1>
+                    <form id="profile-form" style="margin-top: 20px;">
+                        <div style="margin-bottom: 15px;">
+                            <label for="name" style="display: block; margin-bottom: 5px; font-weight: bold;">Nume complet</label>
+                            <input type="text" id="name" value="${userData.displayName || ''}" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label for="phone" style="display: block; margin-bottom: 5px; font-weight: bold;">Telefon</label>
+                            <input type="tel" id="phone" placeholder="07xx xxxxxx" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label for="address" style="display: block; margin-bottom: 5px; font-weight: bold;">Adresă</label>
+                            <textarea id="address" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                        </div>
+                        
+                        <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">Salvează profilul</button>
+                        <button type="button" id="cancel-btn" style="width: 100%; padding: 10px; background-color: #9e9e9e; color: white; border: none; border-radius: 4px; cursor: pointer;">Anulează</button>
+                    </form>
+                `;
+                
+                container.innerHTML = formHTML;
+                
+                document.getElementById('cancel-btn').addEventListener('click', () => {
+                    showUserProfileInPage(userData);
+                });
+                
+                document.getElementById('profile-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const updatedUserData = {
+                        ...userData,
+                        displayName: document.getElementById('name').value,
+                        phone: document.getElementById('phone').value,
+                        address: document.getElementById('address').value
+                    };
+                    
+                    localStorage.setItem('user', JSON.stringify(updatedUserData));
+                    
+                    alert('Profilul a fost actualizat cu succes!');
+                    showUserProfileInPage(updatedUserData);
+                });
+            });
+        };
+
+        const showWelcomePopup = (userData) => {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            document.body.appendChild(overlay);
+            
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                background-color: white;
+                border-radius: 10px;
+                padding: 30px;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(20px);
+                opacity: 0;
+                transition: transform 0.4s ease, opacity 0.4s ease;
+                position: relative;
+                overflow: hidden;
+            `;
+            
+            const decorationTop = document.createElement('div');
+            decorationTop.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 5px;
+                background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335);
+            `;
+            popup.appendChild(decorationTop);
+            
+            const profileImg = document.createElement('div');
+            profileImg.style.cssText = `
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin: 10px auto 20px;
+                overflow: hidden;
+                border: 3px solid #f0f0f0;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            `;
+            const img = document.createElement('img');
+            img.src = userData.photoURL || 'data:image/png;base64,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';
+            img.style.cssText = `width: 100%; height: 100%; object-fit: cover;`;
+            profileImg.appendChild(img);
+            popup.appendChild(profileImg);
+            
+            const title = document.createElement('h2');
+            title.textContent = 'Bine ai venit!';
+            title.style.cssText = `
+                color: #333;
+                margin: 0 0 10px;
+                font-size: 24px;
+            `;
+            popup.appendChild(title);
+            
+            const message = document.createElement('p');
+            message.innerHTML = `<strong>${userData.displayName || 'Utilizator'}</strong>, ne bucurăm să te revedem pe <br>Lupul și Corbul!`;
+            message.style.cssText = `
+                color: #666;
+                margin-bottom: 25px;
+                font-size: 16px;
+                line-height: 1.5;
+            `;
+            popup.appendChild(message);
+            
+            const continueBtn = document.createElement('button');
+            continueBtn.textContent = 'Continuă la site';
+            continueBtn.style.cssText = `
+                background: linear-gradient(135deg, #4285F4, #0F9D58);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 30px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+                font-weight: bold;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            `;
+            
+            continueBtn.onmouseover = () => {
+                continueBtn.style.transform = 'translateY(-2px)';
+                continueBtn.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
+            };
+            continueBtn.onmouseout = () => {
+                continueBtn.style.transform = 'translateY(0)';
+                continueBtn.style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.1)';
+            };
+            
+            continueBtn.onclick = () => {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(overlay);
+                    window.location.href = '/index.html';
+                }, 300);
+            };
+            popup.appendChild(continueBtn);
+            
+            overlay.appendChild(popup);
+            
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                popup.style.transform = 'translateY(0)';
+                popup.style.opacity = '1';
+            }, 10);
+            
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(overlay);
+                        window.location.href = '/index.html';
+                    }, 300);
+                }
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log("DOM loaded, checking for redirect result");
+            
+            const connected = await testFirebaseConnection();
+            console.log("Firebase conectat:", connected);
+            
+            const authAttempt = sessionStorage.getItem('auth_attempt');
+            const authTime = parseInt(sessionStorage.getItem('auth_time') || '0');
+            const currentTime = Date.now();
+            
+            console.log("Auth attempt:", authAttempt);
+            console.log("Auth time:", new Date(authTime).toISOString());
+            console.log("Current time:", new Date(currentTime).toISOString());
+            
+            const dashboardExists = await pageExists('/dashboard.html');
+            console.log("Dashboard page exists:", dashboardExists);
+            
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                try {
+                    const userData = JSON.parse(savedUser);
+                    console.log("Utilizator găsit în localStorage:", userData);
+                    showUserProfileInPage(userData);
+                } catch (error) {
+                    console.error("Eroare la parsarea datelor utilizator din localStorage:", error);
+                }
+            }
+            
+            try {
+                const result = await getRedirectResult(auth);
+                console.log("Redirect result:", result);
+                
+                sessionStorage.removeItem('auth_attempt');
+                sessionStorage.removeItem('auth_time');
+                
+                if (result && result.user) {
+                    console.log('Autentificare reușită după redirecționare:', result.user);
+                    console.log('User email:', result.user.email);
+                    console.log('User display name:', result.user.displayName);
+                    
+                    const userData = {
+                        uid: result.user.uid,
+                        email: result.user.email,
+                        displayName: result.user.displayName,
+                        photoURL: result.user.photoURL
+                    };
+                    
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    
+                    showWelcomePopup(userData);
+                } else if (authAttempt === 'google' && (currentTime - authTime) < 60000) {
+                    console.log("Redirectarea a eșuat. Încercăm cu popup...");
+                    try {
+                        const provider = new GoogleAuthProvider();
+                        provider.addScope('profile');
+                        provider.addScope('email');
+                        
+                        const popupResult = await signInWithPopup(auth, provider);
+                        console.log("Popup result:", popupResult);
+                        
+                        if (popupResult && popupResult.user) {
+                            console.log('Autentificare cu popup reușită:', popupResult.user);
+                            const userData = {
+                                uid: popupResult.user.uid,
+                                email: popupResult.user.email,
+                                displayName: popupResult.user.displayName,
+                                photoURL: popupResult.user.photoURL
+                            };
+                            
+                            localStorage.setItem('user', JSON.stringify(userData));
+                            
+                            showWelcomePopup(userData);
+                        }
+                    } catch (popupError) {
+                        console.error("Eroare la autentificarea cu popup:", popupError);
+                        alert(`Nu s-a putut finaliza autentificarea: ${popupError.message}`);
+                    }
+                }
+            } catch (error) {
+                console.error('Eroare la verificarea redirecționării:', error);
+                console.log('Cod eroare:', error.code);
+                if (error.code === 'auth/redirect-cancelled-by-user') {
+                    console.log('Utilizatorul a anulat redirecționarea');
+                } else if (error.code === 'auth/redirect-uri-mismatch') {
+                    console.error('Eroare URI de redirecționare incompatibil. Verifică configurația în Firebase și Google Cloud Console.');
+                    alert('Eroare de configurare: URI de redirecționare incompatibil. Contactați administratorul.');
+                } else {
+                    alert(`Eroare la autentificare după redirecționare: ${error.message}`);
+                }
+            }
+
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        alert('Autentificare reușită!');
+                        window.location.href = '/dashboard.html';
+                    } catch (error) {
+                        alert(`Eroare la autentificare: ${error.message}`);
+                    }
+                });
+            }
+
+            const googleBtn = document.getElementById('google-login');
+            if (googleBtn) {
+                googleBtn.addEventListener('click', async () => {
+                    try {
+                        saveAuthAttempt();
+                        
+                        const provider = new GoogleAuthProvider();
+                        provider.addScope('profile');
+                        provider.addScope('email');
+                        
+                        console.log('Încercare autentificare Google cu popup...');
+                        try {
+                            console.log("Provider config:", provider);
+                            
+                            const result = await signInWithPopup(auth, provider);
+                            console.log("Popup result:", result);
+                            
+                            if (result && result.user) {
+                                console.log('Autentificare cu popup reușită:', result.user);
+                                const userData = {
+                                    uid: result.user.uid,
+                                    email: result.user.email,
+                                    displayName: result.user.displayName,
+                                    photoURL: result.user.photoURL
+                                };
+                                
+                                localStorage.setItem('user', JSON.stringify(userData));
+                                
+                                showWelcomePopup(userData);
+                                return;
+                            }
+                        } catch (popupError) {
+                            console.warn("Popup nu a funcționat, detalii eroare:", popupError);
+                            console.warn("Cod eroare:", popupError.code);
+                            console.warn("Mesaj eroare:", popupError.message);
+                            
+                            if (popupError.code === 'auth/popup-blocked') {
+                                alert('Popup-ul a fost blocat de browser. Vă rugăm să permiteți popup-urile pentru acest site.');
+                            } else if (popupError.code === 'auth/popup-closed-by-user') {
+                                alert('Ați închis fereastra de autentificare înainte de finalizare.');
+                            } else {
+                                console.log('Inițiere autentificare Google cu redirecționare (fallback)...');
+                                const redirectProvider = new GoogleAuthProvider();
+                                redirectProvider.addScope('profile');
+                                redirectProvider.addScope('email');
+                                
+                                redirectProvider.setCustomParameters({
+                                    prompt: 'select_account',
+                                    login_hint: 'user@gmail.com',
+                                    redirect_uri: window.location.origin + '/__/auth/handler'
+                                });
+                                
+                                await signInWithRedirect(auth, redirectProvider);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Eroare la inițierea autentificării cu Google:", error);
+                        alert(`Eroare la autentificare cu Google: ${error.message}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

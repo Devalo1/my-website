@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "lupul_si_corbul",
+    "package_name": "com.lupulsicorbul.app",
+    "sha256_cert_fingerprints": [""]
+  }
+}]
